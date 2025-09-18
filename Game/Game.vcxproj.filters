@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="system">
+      <UniqueIdentifier>{22dd8095-74f9-46df-81a1-36675a040b1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{d21bd762-085b-4171-aebf-12fb4c98a6fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="actor">
+      <UniqueIdentifier>{65f4f515-ac8c-453a-af53-f8569b0bcebe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{ebe65237-e05a-485c-b83e-3fc7c0b52a2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="json">
+      <UniqueIdentifier>{eda6e6a5-9e90-4624-bd29-cea6eee954ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="collision">
+      <UniqueIdentifier>{e4c78dca-097b-496d-be96-463374703c8e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="system\system.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="Actor\Player.cpp">
+      <Filter>actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\PlayerIState.cpp">
+      <Filter>actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Actor.cpp">
+      <Filter>actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Character.cpp">
+      <Filter>actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\ActorStatus.cpp">
+      <Filter>actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\PlayerController.cpp">
+      <Filter>actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\StateMachine.cpp">
+      <Filter>actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Types.cpp" />
+    <ClCompile Include="Actor\ActorTypes.cpp">
+      <Filter>actor</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="core\ParameterManager.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="actor\Gimmick.cpp">
+      <Filter>actor</Filter>
+    </ClCompile>
+    <ClCompile Include="actor\Plate.cpp">
+      <Filter>actor</Filter>
+    </ClCompile>
+    <ClCompile Include="core\SceneLoader.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\TransformHelper.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\CollisionManager.cpp">
+      <Filter>collision</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="system\system.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="Actor\Player.h">
+      <Filter>actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\PlayerIState.h">
+      <Filter>actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Actor.h">
+      <Filter>actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Character.h">
+      <Filter>actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\ActorStatus.h">
+      <Filter>actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\PlayerController.h">
+      <Filter>actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\StateMachine.h">
+      <Filter>actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h" />
+    <ClInclude Include="Actor\ActorTypes.h">
+      <Filter>actor</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h" />
+    <ClInclude Include="core\ParameterManager.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json.hpp">
+      <Filter>json</Filter>
+    </ClInclude>
+    <ClInclude Include="util\CRC32.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="actor\Gimmick.h">
+      <Filter>actor</Filter>
+    </ClInclude>
+    <ClInclude Include="actor\Plate.h">
+      <Filter>actor</Filter>
+    </ClInclude>
+    <ClInclude Include="core\SceneLoader.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\TransformHelper.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\CollisionManager.h">
+      <Filter>collision</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

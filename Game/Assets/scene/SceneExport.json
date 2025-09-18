@@ -1,0 +1,52 @@
+{
+  "objects": [
+    {
+      "name": "Prop_Fridge_03",
+      "Transform": {
+        "position": {
+          "x": -4.73,
+          "y": 0.0,
+          "z": 2.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/ground.tkm"
+      }
+    },
+    {
+      "name": "Prop_Fridge_03 (1)",
+      "Transform": {
+        "position": {
+          "x": 5.83,
+          "y": 0.0,
+          "z": 2.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/ground.tkm"
+      }
+    }
+  ]
+}
