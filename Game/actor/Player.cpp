@@ -53,7 +53,7 @@ bool Player::Start()
 	//m_modelRender.Init("Assets/modelData/player/GhostModel.tkm", *m_animationClipList.data(),enModelUpAxisZ);
 	m_modelRender.Init("Assets/modelData/player/ghost.tkm",* m_animationClipList.data(), enModelUpAxisY);
 	// キャラクターコントローラー生成
-	m_characterController.Init(GetPlayerStatus()->GetRadius(), GetPlayerStatus()->GetHeight(), m_position);
+	m_characterController.Init(GetPlayerStatus()->GetRadius(), GetPlayerStatus()->GetHeight(), m_transform.m_position);
 
 	return true;
 }
@@ -65,19 +65,21 @@ void Player::Update()
 	m_stateMachine->Update();
 
 	// ステートマシンから情報を取得
-	m_position = m_stateMachine->GetPosition();
-	m_scale    = m_stateMachine->GetScale();
-	m_rotation = m_stateMachine->GetRotation();
+	m_transform.m_localPosition = m_stateMachine->GetPosition();
+	m_transform.m_localScale    = m_stateMachine->GetScale();
+	m_transform.m_localRotation = m_stateMachine->GetRotation();
+
+	m_transform.UpdateTransform();
 
 	// @todo for 判定処理を後で入れる
-	m_characterController.SetPosition(m_position);
+	m_characterController.SetPosition(m_transform.m_position);
 	Vector3 moveSpeed = Vector3::Zero;
 	m_characterController.Execute(moveSpeed, 0.0f);
 
 	// キャラクター描画に情報を設定
-	m_modelRender.SetPosition(m_position);
-	m_modelRender.SetRotation(m_rotation);
-	m_modelRender.SetScale(m_scale);
+	m_modelRender.SetPosition(m_transform.m_position);
+	m_modelRender.SetRotation(m_transform.m_rotation);
+	m_modelRender.SetScale(m_transform.m_scale);
 	m_modelRender.Update();
 }
 

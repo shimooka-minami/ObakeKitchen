@@ -37,6 +37,9 @@ public:
 
 
 
+/**********************************/
+
+
 /**
  * 加工前の食材が乗った皿
  * ※投げることができる
@@ -58,6 +61,11 @@ public:
 
 
 public:
+	/** 座標の設定 お皿の位置 */
+	void SetPosition(const Vector3& position);
+
+
+public:
 	/**
 	 * 皿を投げる
 	 */
@@ -66,4 +74,23 @@ public:
 
 public:
 	FoodStatus* GetStatus() { return dynamic_cast<FoodStatus*>(m_status); }
+};
+
+
+
+
+/**********************************/
+
+
+class CoockedFoodPlate : public FoodPlate
+{
+	using SuperClass = FoodPlate;
+
+public:
+	CoockedFoodPlate();
+	~CoockedFoodPlate();
+
+	virtual bool Start() override;
+	virtual void Update() override;
+	virtual void Render(RenderContext& rc) override;
 };

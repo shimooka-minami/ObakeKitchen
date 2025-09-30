@@ -102,13 +102,6 @@ public:
 /***********************/
 
 
-
-
-
-
-/**********************/
-
-
 /**
  * 皿にのった物のステータス
  */
@@ -153,6 +146,31 @@ private:
 public:
 	FoodStatus();
 	~FoodStatus();
+
+	/** 初期化 */
+	virtual void Setup() override;
+
+
+public:
+	/** 追加される力の強さのゲッター */
+	float GetAddForcePower() const { return m_addForcePower; }
+};
+
+
+
+
+/**********************/
+
+
+class CoockedFoodStatus : public FoodStatus
+{
+private:
+	float m_addForcePower = 0.0f;	// 追加される力の強さ
+
+
+public:
+	CoockedFoodStatus();
+	~CoockedFoodStatus();
 
 	/** 初期化 */
 	virtual void Setup() override;

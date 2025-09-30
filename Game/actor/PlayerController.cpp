@@ -36,16 +36,24 @@ bool PlayerController::Start()
 void PlayerController::Update()
 {
 	auto* targetStateMachine = m_target->GetStateMachine();
+	
+	// Aボタンで皿を拾う
+	//m_target->GetStateMachine()->SetNearFood(true);
+	targetStateMachine->ActionButtonA(g_pad[0]->IsTrigger(enButtonA));
 
-	// 左スティックの入力量を取得
-	targetStateMachine->SetDirection(GetStickL());
 	// Bボタンでダッシュ TODO:ボタンが変わる可能性あり
 	targetStateMachine->SetDash(g_pad[0]->IsPress(enButtonB));
 	// 回転
-	if (IsInputStickL()) {
-		// 左スティックが入力されたら
+	if (IsInputStickL())
+	{
+		// 左スティックの方向
 		targetStateMachine->SetRotation(ComputeRotation());
+		// 左スティックの入力量を取得
+		targetStateMachine->SetDirection(GetStickL());
 	}
+	// スティックの入力量を設定する
+	// 0～1の範囲
+	targetStateMachine->SetStickLAmount(GetStickL().Length());
 }
 
 
@@ -73,7 +81,11 @@ Vector3 PlayerController::GetStickL() const
 	right *= stickL.x;
 	forward *= stickL.y;
 
-	return right + forward;
+	Vector3 direction = right + forward;
+	// 0～1の範囲に変更
+	direction.Normalize();
+
+	return direction;
 }
 
 
@@ -81,13 +93,9 @@ Quaternion PlayerController::ComputeRotation() const
 {
 	// スティックの方向
 	Vector3 direction = GetStickL();
-	// 0～1の範囲に変更
-	direction.Normalize();
-
 	// スティック入力を使ってY軸回転の情報を得る
 	Quaternion q;
 	q.SetRotationYFromDirectionXZ(direction);
 
 	return q;
 }
-

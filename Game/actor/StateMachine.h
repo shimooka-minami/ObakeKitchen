@@ -6,11 +6,16 @@ class PlayerStatus;
 class IState;
 class IdleState;
 
+class FoodPlate;
+
+
 enum enPlayerState
 {
 	enPlayerIdle,
 	enPlayerWalk,
 	enPlayerDash,
+	enPlayerHavePlate,
+	enPlayerThrow,
 	enPlayerNum,
 };
 
@@ -33,13 +38,29 @@ private:
 	/** 回転 */
 	Quaternion m_rotation = Quaternion::Identity;
 
+	/** 皿の位置 */
+	Vector3 m_platePos = Vector3::Zero;
+
 	/** 主人を持つ ※基本触らない! */
 	Player* m_owner = nullptr;
 	/** 主人のステータスを持つ */
 	PlayerStatus* m_ownerStatus = nullptr;
 
+	/** フードプレートクラスのポインタ */
+	FoodPlate* m_targetFood = nullptr;
+
+	/** 左スティックの入力量 */
+	float m_stickLAmount = 0.0f;
+
 	/** ダッシュできるかどうか */
 	bool m_isDash = false;
+	/** 皿を持つと投げるの両立 */
+	bool m_actionButtonA = false;
+
+	/** 皿が近くにあるか */
+	bool m_isNearFood = false;
+	/** 皿が目の前にあるか */
+	bool m_isForwardFood = false;
 
 
 public:
@@ -53,6 +74,21 @@ public:
 
 
 private:
+	/** ステートの追加をラップした関数 */
+	template<typename T>
+	void AddState(enPlayerState state)
+	{
+		m_stateList[state] = new T(this);
+	}
+
+	/** 指定した状態か */
+	inline bool IsEqualCurrentState(enPlayerState state) const
+	{
+		return m_currentState == m_stateList[state];
+	}
+
+
+private:
 	/** 変更するステートを取得 */
 	IState* GetChangeState() const;
 
@@ -60,6 +96,11 @@ private:
 	bool CanChangeWalk() const;
 	/** 走る状態に変更できるか */ 
 	bool CanChangeDash() const; 
+	/** 皿を持った状態に変更できるか */
+	bool ChangeHavePlate() const;
+	/** 皿を持ったままに変更する */
+	bool CanChangeThrow() const;
+
 
 
 public:
@@ -67,6 +108,9 @@ public:
 	void Setup(Player* owner);
 
 public:
+	/** 主人取得 */
+	Player* GetOwner() { return m_owner; }
+
 	/** 主人のステータス取得 */
 	PlayerStatus* GetOwnerStatus() { return m_ownerStatus; }
 
@@ -111,5 +155,71 @@ public:
 	 * ダッシュの設定
 	 */
 	inline void SetDash(const bool isDash) { m_isDash = isDash; }
+
+	/**
+	 * 皿の位置を取得
+	 */
+	inline Vector3 GetPlatePosition() const { return m_platePos; }
+
+	/**
+	 * 皿の位置を設定 いるか分からんけど一応
+	 */
+	inline void SetPlatePosition(const Vector3 platePos) { m_platePos = platePos; }
+
+
+	/**
+	 * アクションAボタン 持つと投げるを両立
+	 */
+	inline void ActionButtonA(const bool actionButtonA) { m_actionButtonA = actionButtonA; }
+
+	/**
+	 * 入力量を設定
+	 */
+	inline void SetStickLAmount(const float stickLAmount) { m_stickLAmount = stickLAmount; }
+	
+	/**
+	 * 入力量の取得
+	 */ 
+	inline float GetStickLAmount() const { return m_stickLAmount; }
+
+
+	/**
+	 * 近くのフードの設定 設定だけ取得は作るな
+	 */
+	inline void SetNearFood(const bool isNearFood) { m_isNearFood = isNearFood; }
+
+	/**
+	 * 近くのフードの真偽設定 
+	 */
+	inline bool IsNearFood() const { return m_isNearFood; }
+
+
+	/**
+	 * 角度の設定
+	 */
+	inline bool IsForwardFood() const { return m_isForwardFood; }
+
+	/**
+	 * 角度の取得
+	 */
+	inline void SetForwardFood(const bool isForwardFood) { m_isForwardFood = isForwardFood; }
+
+
+	/**
+	 * 自分の持てる状態
+	 */
+	inline bool CanHasState() const { return m_currentState == m_stateList[enPlayerIdle] || m_currentState == m_stateList[enPlayerWalk] || m_currentState == m_stateList[enPlayerDash]; }
+
+
+public:
+	/**
+	 * フードプレートクラスの設定
+	 */
+	inline void SetTargetFood(FoodPlate* targetFood) { m_targetFood = targetFood; }
+
+	/**
+	 * フードプレートクラスの取得
+	 */ 
+	inline FoodPlate* GetTargetFood() { return m_targetFood; }
 };
 

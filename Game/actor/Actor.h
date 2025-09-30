@@ -12,13 +12,15 @@
  */
 class Actor : public IGameObject
 {
+public:
+	/**
+	 * トランスフォーム(座標(position)、拡縮(scale)、回転(rotation))
+	 * NOTE:例外的にpublicにしている
+	 */
+	Transform m_transform;
+
+	//[]
 protected:
-	/** 座標 */
-	Vector3 m_position;
-	/** 拡縮 */
-	Vector3 m_scale;
-	/** 回転 */
-	Quaternion m_rotation;
 	/** モデル描画 */
 	ModelRender m_modelRender;
 	/** ステータス */
@@ -37,33 +39,4 @@ public:
 public:
 	/** モデル描画機能を取得 */
 	ModelRender* GetModelRender() { return &m_modelRender; }
-
-
-public:
-	/**
-	 * 座標取得
-	 */
-	inline const Vector3& GetPosition() const { return m_position; }
-	/**
-	 * 座標設定
-	 */
-	inline void SetPosition(const Vector3& position) { m_position = position; }
-
-	/**
-	 * 拡縮取得
-	 */
-	inline const Vector3& GetScale() const { return m_scale; }
-	/**
-	 * 拡縮設定
-	 */
-	inline void SetScale(const Vector3& scale) { m_scale = scale; }
-
-	/**
-	 * 回転取得
-	 */
-	inline const Quaternion& GetRotation() const { return m_rotation; }
-	/**
-	 * 回転設定
-	 */
-	inline void SetRotation(const Quaternion& rotation) { m_rotation = rotation; }
 };

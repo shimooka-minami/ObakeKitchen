@@ -20,9 +20,12 @@ void Plate::Render(RenderContext& rc)
 
 void Plate::Initialize(const char* modelName, const Vector3& position, const Vector3 scale, const Quaternion& rotation)
 {
-	m_position = position;
-	m_scale = scale;
-	m_rotation = rotation;
+	m_transform.m_localPosition = position;
+	m_transform.m_localScale = scale;
+	m_transform.m_localRotation = rotation;
+
+	// 座標更新
+	m_transform.UpdateTransform();
 
 	// 見た目のみ
 	m_modelRender.Init(modelName);
@@ -33,6 +36,8 @@ void Plate::Initialize(const char* modelName, const Vector3& position, const Vec
 
 
 
+
+/**********************************/
 
 
 FoodPlate::FoodPlate()
@@ -53,9 +58,9 @@ FoodPlate::~FoodPlate()
 bool FoodPlate::Start()
 {
 	// 物理当たり判定の初期化
-	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_position);
+	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_transform.m_position);
 	// 物体ではない当たり判定の初期化
-	m_collisionObject.CreateSphere(m_position, Quaternion::Identity, GetStatus()->GetRadius());
+	m_collisionObject.CreateSphere(m_transform.m_position, Quaternion::Identity, GetStatus()->GetRadius());
 
 	return true;
 }
@@ -69,11 +74,15 @@ void FoodPlate::Update()
 	// TODO:いい感じの処理に修正予定
 	m_addForce.Scale(0.8f);
 	// 物理当たり判定を実行
-	m_position = m_characterController.Execute(m_addForce, deltaTime);
+	if (!m_transform.HasParent()) {
+		m_transform.m_localPosition = m_characterController.Execute(m_addForce, deltaTime);
+	}
+	// 座標を更新
+	m_transform.UpdateTransform();
 	// 物理的ではない当たり判定の座標を更新
-	m_collisionObject.SetPosition(m_position);
+	m_collisionObject.SetPosition(m_transform.m_position);
 	// モデルの座標を更新する
-	m_modelRender.SetPosition(m_position);
+	m_modelRender.SetPosition(m_transform.m_position);
 	m_modelRender.Update();
 }
 
@@ -81,6 +90,15 @@ void FoodPlate::Update()
 void FoodPlate::Render(RenderContext& rc)
 {
 	m_modelRender.Draw(rc);
+}
+
+
+void FoodPlate::SetPosition(const Vector3& position)
+{
+	m_transform.m_localPosition = position;
+	m_transform.UpdateTransform();
+	m_characterController.SetPosition(m_transform.m_position);
+	m_collisionObject.SetPosition(m_transform.m_position);
 }
 
 
@@ -93,4 +111,47 @@ void FoodPlate::Throw(const Vector3& direction)
 
 	const float addForcePower = GetStatus()->GetAddForcePower();
 	m_addForce = direction * addForcePower;
+}
+
+
+
+
+/**********************************/
+
+
+CoockedFoodPlate::CoockedFoodPlate()
+{
+	m_status = CreateStatus<CoockedFoodStatus>();
+}
+
+
+CoockedFoodPlate::~CoockedFoodPlate()
+{
+	if (m_status) {
+		delete m_status;
+		m_status = nullptr;
+	}
+}
+
+
+bool CoockedFoodPlate::Start()
+{
+	// 物理当たり判定の初期化
+	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_transform.m_position);
+	// 物体ではない当たり判定の初期化
+	m_collisionObject.CreateSphere(m_transform.m_position, Quaternion::Identity, GetStatus()->GetRadius());
+
+	return true;
+}
+
+
+void CoockedFoodPlate::Update()
+{
+	SuperClass::Update();
+}
+
+
+void CoockedFoodPlate::Render(RenderContext& rc)
+{
+	SuperClass::Render(rc);
 }

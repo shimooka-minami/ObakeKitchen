@@ -7,3 +7,5 @@ using namespace nsK2Engine;
 
 #include "Types.h"
 #include "json/json.hpp"
+
+#include "Transform.h"

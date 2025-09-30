@@ -50,6 +50,32 @@ public:
 };
 
 
+class HavePlate : public IState
+{
+public:
+	HavePlate(StateMachine* owner);
+	~HavePlate();
+
+	void Enter() override;
+	void Update() override;
+	void Exit() override;
+};
+
+
+
+
+class ThrowState : public IState
+{
+public:
+	ThrowState(StateMachine* owner);
+	~ThrowState();
+
+	void Enter() override;
+	void Update() override;
+	void Exit() override;
+};
+
+
 
 
 class IdleState : public IState
@@ -62,33 +88,3 @@ public:
 	void Update() override;
 	void Exit() override;
 };
-
-
-
-
-//
-//class PlayerIState
-//{
-//public:
-//	PlayerIState();
-//	~PlayerIState();
-//
-//	bool Start() override;
-//	void Update() override;	
-//	void Render(RenderContext&rc) override;
-//
-//	void PlayerMove(); //移動
-//	void Dash(); //ダッシュ
-//	void Have(); //所持
-//	void Thorw(); //投げる
-//	void Cut(); //切る
-//	void Wash(); //洗う
-//	void Grill(); //焼く
-//
-//private:
-//	AnimationClip m_animationClips[enPlayerAnimClip_Num]; //プレイヤーアニメーション
-//
-//private:	//変数
-//	Vector3 m_moveSpeed; //移動速度
-//
-//};

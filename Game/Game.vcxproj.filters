@@ -72,6 +72,7 @@
     <ClCompile Include="collision\CollisionManager.cpp">
       <Filter>collision</Filter>
     </ClCompile>
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -130,5 +131,6 @@
     <ClInclude Include="collision\CollisionManager.h">
       <Filter>collision</Filter>
     </ClInclude>
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
 </Project>
