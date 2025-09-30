@@ -41,6 +41,4 @@ void CollisionHitManager::Update()
 			m_player->GetStateMachine()->SetTargetFood(m_foodPlate);
 		}
 	}
-
-	
 }

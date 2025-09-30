@@ -63,7 +63,7 @@ bool Game::Start()
 			// ParseTransformComponents‚ğQl‚É
 			// êŠ‚Í”C‚¹‚é
 			const auto& staticMeshComponent = j["StaticMeshExportComponent"];
-			const std::string assetPath = staticMeshComponent.at("assetPath").get<std::string > ();
+			const std::string assetPath = staticMeshComponent.at("assetPath").get<std::string>();
 
 			staticGimmick->Initialize(assetPath.c_str(), pos, scale, rot);
 
