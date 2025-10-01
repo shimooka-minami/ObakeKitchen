@@ -9,8 +9,58 @@
 CollisionHitManager* CollisionHitManager::m_instance = nullptr;
 
 
+CollisionHitManager::CollisionHitManager()
+{
+	m_collisionInfoList.clear();
+	m_collisionPairList.clear();
+}
+
+
+CollisionHitManager::~CollisionHitManager()
+{
+	m_collisionInfoList.clear();
+	m_collisionPairList.clear();
+}
+
+
 void CollisionHitManager::Update()
 {
+	// ヒットするオブジェクトのペアを作る
+	const uint32_t colSize = static_cast<uint32_t>(m_collisionInfoList.size());
+	for (uint32_t i = 0; i < colSize; ++i) {
+		for (uint32_t j = i; j < colSize; ++j) {
+			CollisionInfo* infoA = &m_collisionInfoList[i];
+			CollisionInfo* infoB = &m_collisionInfoList[j];
+
+			if(infoA->m_collision->IsHit(infoB->m_collision) || infoB->m_collision->IsHit(infoA->m_collision))
+			{
+				m_collisionPairList.push_back(CollisionPair(infoA, infoB));
+			}
+		}
+	}
+	// ペアでかぶった情報があれば省く
+	for(auto it = m_collisionPairList.begin(); it != m_collisionPairList.end(); )
+	{
+		auto nextIt = std::next(it);
+		bool erased = false;
+		for(auto jt = nextIt; jt != m_collisionPairList.end(); ++jt)
+		{
+			if((it->m_infoA == jt->m_infoA && it->m_infoB == jt->m_infoB) ||
+			   (it->m_infoA == jt->m_infoB && it->m_infoB == jt->m_infoA))
+			{
+				it = m_collisionPairList.erase(it);
+				erased = true;
+				break;
+			}
+		}
+		if(!erased)
+		{
+			++it;
+		}
+	}
+
+
+
 	// @todo for test 当たったら
 	if (m_foodPlate->GetCollisionObject()->IsHit(*m_player->GetCharacterController()))
 	{
@@ -39,6 +89,26 @@ void CollisionHitManager::Update()
 
 			// フードクラスをターゲットに設定
 			m_player->GetStateMachine()->SetTargetFood(m_foodPlate);
+		}
+	}
+}
+
+
+void CollisionHitManager::RegisterCollisionObject(EnCollisionType type, IGameObject* object, CollisionObject* collision)
+{
+	CollisionInfo info(type, object, collision);
+	m_collisionInfoList.push_back(std::move(info));
+}
+
+
+void CollisionHitManager::UnregisterCollisionObject(IGameObject* object)
+{
+	for(auto it = m_collisionInfoList.begin(); it != m_collisionInfoList.end(); ++it)
+	{
+		if(it->m_object == object)
+		{
+			m_collisionInfoList.erase(it);
+			break;
 		}
 	}
 }

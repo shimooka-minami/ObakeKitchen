@@ -72,7 +72,9 @@ bool Game::Start()
 
 	// TODO: 仮で投げるオブジェクトを置く
 	auto* foodPlate = NewGO<FoodPlate>(0, "foodPlate");
-	foodPlate->Initialize("Assets/modelData/Ground/ground.tkm", Vector3(200.0f, 20.0f, 0.0f), Vector3(0.3f, 0.5f, 0.3f), Quaternion::Identity);
+	//foodPlate->Initialize("Assets/modelData/Ground/ground.tkm", Vector3(200.0f, 20.0f, 0.0f), Vector3(0.3f, 0.5f, 0.3f), Quaternion::Identity);
+	foodPlate->Initialize("Assets/modelData/food/tomato.tkm", Vector3(200.0f, 20.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
+
 
 	// @todo for test
 	// 判定管理生成
@@ -80,7 +82,7 @@ bool Game::Start()
 	CollisionHitManager::Get().SetPlayer(m_playerList[0]);
 	CollisionHitManager::Get().SetFoodPlate(foodPlate);
 	// @todo for test
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	return true;
 }

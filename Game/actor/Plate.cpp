@@ -93,6 +93,14 @@ void FoodPlate::Render(RenderContext& rc)
 }
 
 
+void FoodPlate::Initialize(const char* modelName, const char* coockedModelName, const Vector3& position, const Vector3 scale, const Quaternion& rotation)
+{
+	SuperClass::Initialize(modelName, position, scale, rotation);
+
+	m_coockedFoodModelName = coockedModelName;
+}
+
+
 void FoodPlate::SetPosition(const Vector3& position)
 {
 	m_transform.m_localPosition = position;

@@ -25,7 +25,7 @@ public:
 
 
 public:
-	void Initialize(const char* modelName, const Vector3& position, const Vector3 scale, const Quaternion& rotation);
+	virtual void Initialize(const char* modelName, const Vector3& position, const Vector3 scale, const Quaternion& rotation);
 
 	/**
 	 * 当たり判定チェックのため取得
@@ -46,9 +46,14 @@ public:
  */
 class FoodPlate : public Plate
 {
+	using SuperClass = Plate;
+
+
 protected:
 	/** 投げる際に加えられる力 */
 	Vector3 m_addForce;
+	/** 食材をカット等した後のモデル名 */
+	std::string m_coockedFoodModelName;
 
 
 public:
@@ -61,6 +66,8 @@ public:
 
 
 public:
+	void Initialize(const char* modelName, const char* coockedModelName, const Vector3& position, const Vector3 scale, const Quaternion& rotation);
+
 	/** 座標の設定 お皿の位置 */
 	void SetPosition(const Vector3& position);
 
