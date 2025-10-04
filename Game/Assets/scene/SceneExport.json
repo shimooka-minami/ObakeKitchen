@@ -1,18 +1,18 @@
 {
   "objects": [
     {
-      "name": "Prop_Fridge_03",
+      "name": "Prop_KitchenCabinet_01 (1)",
       "Transform": {
         "position": {
-          "x": -4.73,
+          "x": 100.0,
           "y": 0.0,
-          "z": 2.0
+          "z": 300.0
         },
         "rotation": {
           "x": 0.0,
-          "y": 0.0,
+          "y": -1.0,
           "z": 0.0,
-          "w": 1.0
+          "w": 0.0
         },
         "scale": {
           "x": 1.0,
@@ -21,22 +21,30 @@
         }
       },
       "StaticMeshExportComponent": {
-        "assetPath": "Assets/modelData/Ground/ground.tkm"
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      },
+      "InteractExportComponent": {
+        "position": {
+          "x": 0.0,
+          "y": 0.3,
+          "z": 0.96
+        },
+        "radius": 0.66
       }
     },
     {
-      "name": "Prop_Fridge_03 (1)",
+      "name": "Prop_KitchenCabinet_01",
       "Transform": {
         "position": {
-          "x": 5.83,
+          "x": -15.0,
           "y": 0.0,
-          "z": 2.0
+          "z": 300.0
         },
         "rotation": {
           "x": 0.0,
-          "y": 0.0,
+          "y": -1.0,
           "z": 0.0,
-          "w": 1.0
+          "w": 0.0
         },
         "scale": {
           "x": 1.0,
@@ -45,7 +53,63 @@
         }
       },
       "StaticMeshExportComponent": {
-        "assetPath": "Assets/modelData/Ground/ground.tkm"
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      },
+      "InteractExportComponent": {
+        "position": {
+          "x": 0.0,
+          "y": 0.3,
+          "z": 0.96
+        },
+        "radius": 0.66
+      }
+    },
+    {
+      "name": "Prop_Knife_04",
+      "Transform": {
+        "position": {
+          "x": 0.0,
+          "y": 105.0,
+          "z": 290.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "C:\\git\\ObakeKitcen_new\\ObakeKitchen\\Game\\Assets\\modelData\\Ground\\knife.tkm"
+      }
+    },
+    {
+      "name": "Prop_CuttingPlate",
+      "Transform": {
+        "position": {
+          "x": -25.0,
+          "y": 105.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "C:\\git\\ObakeKitcen_new\\ObakeKitchen\\Game\\Assets\\modelData\\Ground\\manaita.tkm"
       }
     }
   ]

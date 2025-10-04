@@ -15,6 +15,7 @@ enum EnCollisionType
 {
 	enCollisionType_Player,
 	enCollisionType_FoodPlate,
+	enCollisionType_CookingSpace,	// 料理スペース
 };
 
 
@@ -58,12 +59,6 @@ private:
 	std::vector<CollisionPair> m_collisionPairList;
 
 
-	// @todo for test
-	// 仮の処理
-	Player* m_player = nullptr;
-	FoodPlate* m_foodPlate = nullptr;
-	// ここまで仮
-
 private:
 	CollisionHitManager();
 	~CollisionHitManager();
@@ -73,16 +68,35 @@ public:
 	void Update();
 
 
-	// @todo for test
-	// 仮の処理
 public:
-	void SetPlayer(Player* player) { m_player = player; }
-	void SetFoodPlate(FoodPlate* foodPlate) { m_foodPlate = foodPlate; }
-	//ここまで仮
-
 	/** 判定処理をしたいオブジェクトを登録 */
 	void RegisterCollisionObject(EnCollisionType type, IGameObject* object, CollisionObject* collision);
 	void UnregisterCollisionObject(IGameObject* object);
+
+
+private:
+	bool UpdateHitCookingSpace(CollisionPair& pair);
+	bool UpdateHitFoodPlate(CollisionPair& pair);
+
+
+private:
+	/**
+	 * 指定したクラスを取得する
+	 * NOTE: 指定したクラスが存在しない場合はnullptrを返す
+	 */
+	template <typename T>
+	T* GetTargetObject(CollisionPair& pair, const EnCollisionType targetType)
+	{
+		if (pair.m_left->m_type == targetType)
+		{
+			return static_cast<T*>(pair.m_left->m_object);
+		}
+		else if (pair.m_right->m_type == targetType)
+		{
+			return static_cast<T*>(pair.m_right->m_object);
+		}
+		return nullptr;
+	}
 
 
 private:

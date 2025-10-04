@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Plate.h"
+#include "collision/CollisionManager.h"
 
 
 bool Plate::Start()
@@ -52,15 +53,19 @@ FoodPlate::~FoodPlate()
 		delete m_status;
 		m_status = nullptr;
 	}
+	CollisionHitManager::Get().UnregisterCollisionObject(this);
 }
 
 
 bool FoodPlate::Start()
 {
 	// 物理当たり判定の初期化
-	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_transform.m_position);
+	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_transform.m_position, enCollsiionAttr_Food);
 	// 物体ではない当たり判定の初期化
 	m_collisionObject.CreateSphere(m_transform.m_position, Quaternion::Identity, GetStatus()->GetRadius());
+
+	// コリジョンを登録
+	CollisionHitManager::Get().RegisterCollisionObject(enCollisionType_FoodPlate, this, &m_collisionObject);
 
 	return true;
 }
@@ -110,6 +115,16 @@ void FoodPlate::SetPosition(const Vector3& position)
 }
 
 
+void FoodPlate::CreateCoockedFood()
+{
+	// 食材が切り替わるので、加工前は削除する
+	DeleteGO(this);
+
+	auto* coocked = NewGO<CoockedFoodPlate>(0, "coockedFoodPlate");
+	coocked->Initialize(m_coockedFoodModelName.c_str(), "", m_transform.m_position, m_transform.m_scale, m_transform.m_rotation);
+}
+
+
 void FoodPlate::Throw(const Vector3& direction)
 {
 	if (m_addForce.LengthSq() >= 0.01f) {
@@ -145,7 +160,7 @@ CoockedFoodPlate::~CoockedFoodPlate()
 bool CoockedFoodPlate::Start()
 {
 	// 物理当たり判定の初期化
-	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_transform.m_position);
+	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_transform.m_position, enCollsiionAttr_Food);
 	// 物体ではない当たり判定の初期化
 	m_collisionObject.CreateSphere(m_transform.m_position, Quaternion::Identity, GetStatus()->GetRadius());
 

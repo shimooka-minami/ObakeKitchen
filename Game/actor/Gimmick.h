@@ -23,7 +23,7 @@ public:
 	virtual void Render(RenderContext& renderContect) override;
 
 public:
-	void Initialize(const char* assetName, const Vector3& position, const Vector3& scale, const Quaternion& rotation);
+	virtual void Initialize(const char* assetName, const Vector3& position, const Vector3& scale, const Quaternion& rotation);
 };
 
 
@@ -34,6 +34,10 @@ public:
 
 class StaticGimmick : public Gimmick
 {
+protected:
+	PhysicsStaticObject m_physicalObject;
+
+
 public:
 	StaticGimmick() {}
 	~StaticGimmick() {}
@@ -41,4 +45,8 @@ public:
 	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& renderContect) override;
+
+
+public:
+	virtual void Initialize(const char* assetName, const Vector3& position, const Vector3& scale, const Quaternion& rotation) override;
 };

@@ -50,11 +50,11 @@ public:
 };
 
 
-class HavePlate : public IState
+class HavePlateState : public IState
 {
 public:
-	HavePlate(StateMachine* owner);
-	~HavePlate();
+	HavePlateState(StateMachine* owner);
+	~HavePlateState();
 
 	void Enter() override;
 	void Update() override;
@@ -69,6 +69,20 @@ class ThrowState : public IState
 public:
 	ThrowState(StateMachine* owner);
 	~ThrowState();
+
+	void Enter() override;
+	void Update() override;
+	void Exit() override;
+};
+
+
+
+
+class CoockingState : public IState
+{
+public:
+	CoockingState(StateMachine* owner);
+	~CoockingState();
 
 	void Enter() override;
 	void Update() override;

@@ -11,8 +11,9 @@ StateMachine::StateMachine()
 	AddState<IdleState>(enPlayerIdle);
 	AddState<DashState>(enPlayerDash);
 	AddState<WalkState>(enPlayerWalk);
-	AddState<HavePlate>(enPlayerHavePlate);
+	AddState<HavePlateState>(enPlayerHavePlate);
 	AddState<ThrowState>(enPlayerThrow);
+	AddState<CoockingState>(enPlayerCoocking);
 	K2_ASSERT(ARRAYSIZE(m_stateList) == enPlayerNum, "AddStateを呼んでください");
 
 	//初期ステート
@@ -35,6 +36,9 @@ void StateMachine::Update()
 	ChangeState();
 	//ステートの更新
 	m_currentState->Update();
+
+	// １フレームだけの情報を初期化する
+	m_isInCookingSpace = false;
 }
 
 
@@ -59,8 +63,13 @@ IState* StateMachine::GetChangeState() const
 	// ステートの切り替わり
 	//
 
-	// 皿を持っている状態なら、投げる状態に変わるかチェック
+	// 皿を持っている状態なら
 	if (IsEqualCurrentState(enPlayerHavePlate)) {
+		// 料理する状態に変わるかチェック
+		if (CanChangeCooking()) {
+			return m_stateList[enPlayerCoocking];
+		}
+		// 投げる状態に変わるかチェック
 		if (CanChangeThrow()) {
 			return m_stateList[enPlayerThrow];
 		}
@@ -142,6 +151,21 @@ bool StateMachine::CanChangeThrow() const
 	if (m_actionButtonA) {
 		return true;
 	}
+	return false;
+}
+
+
+bool StateMachine::CanChangeCooking() const
+{
+	if (!m_isInCookingSpace){
+		return false;
+	}
+	// Aボタンを押したら
+	if (m_actionButtonA)
+	{
+		return true;
+	}
+	// 料理スペースにいるけど、Aボタンを押していないとき
 	return false;
 }
 

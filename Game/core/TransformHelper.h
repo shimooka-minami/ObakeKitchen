@@ -1,8 +1,15 @@
 #pragma once
 #include <tuple>
 
-namespace nsK2EngineLow
+namespace json
 {
+    struct Transform
+    {
+        Vector3 position;
+        Vector3 scale;
+        Quaternion rotation;
+    };
+
 
     static Vector3 ParseVector3(const nlohmann::json& j)
     {
@@ -16,13 +23,13 @@ namespace nsK2EngineLow
     }
 
 
-    using TransformTuple = std::tuple<Vector3, Quaternion, Vector3>;
-    static TransformTuple ParseTransformComponents(const nlohmann::json& transformJson)
+    static Transform ParseTransformComponents(const nlohmann::json& transformJson)
     {
-        Vector3 position = ParseVector3(transformJson.at("position"));
-        Quaternion rotation = ParseQuaternion(transformJson.at("rotation"));
-        Vector3 scale = ParseVector3(transformJson.at("scale"));
-        return std::make_tuple(position, rotation, scale);
+        Transform transform;
+        transform.position = ParseVector3(transformJson.at("position"));
+        transform.rotation = ParseQuaternion(transformJson.at("rotation"));
+        transform.scale = ParseVector3(transformJson.at("scale"));
+        return transform;
     }
 
 }

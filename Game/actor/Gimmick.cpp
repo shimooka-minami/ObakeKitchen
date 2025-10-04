@@ -63,3 +63,11 @@ void StaticGimmick::Render(RenderContext& renderContect)
 {
 	m_modelRender.Draw(renderContect);
 }
+
+
+void StaticGimmick::Initialize(const char* assetName, const Vector3& position, const Vector3& scale, const Quaternion& rotation)
+{
+	Gimmick::Initialize(assetName, position, scale, rotation);
+
+	m_physicalObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix(), 0.0f);
+}

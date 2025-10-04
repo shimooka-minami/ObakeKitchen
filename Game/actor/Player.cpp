@@ -3,6 +3,7 @@
 #include "actor/Player.h"
 #include "actor/StateMachine.h"
 #include "ActorTypes.h"
+#include "collision/CollisionManager.h"
 
 
 namespace
@@ -36,6 +37,8 @@ Player::~Player()
 {
 	delete m_status;
 	m_status = nullptr;
+
+	CollisionHitManager::Get().UnregisterCollisionObject(this);
 }
 
 
@@ -54,6 +57,10 @@ bool Player::Start()
 	m_modelRender.Init("Assets/modelData/player/ghost.tkm",* m_animationClipList.data(), enModelUpAxisY);
 	// キャラクターコントローラー生成
 	m_characterController.Init(GetPlayerStatus()->GetRadius(), GetPlayerStatus()->GetHeight(), m_transform.m_position);
+	// 物理的ではない判定を生成
+	m_collisionObject.CreateCapsule(m_transform.m_position, m_transform.m_rotation, GetPlayerStatus()->GetRadius(), GetPlayerStatus()->GetHeight());
+	// 判定処理に登録
+	CollisionHitManager::Get().RegisterCollisionObject(enCollisionType_Player, this, &m_collisionObject);
 
 	return true;
 }
@@ -64,18 +71,18 @@ void Player::Update()
 	//ステートマシンの更新を持ってくる
 	m_stateMachine->Update();
 
-	// ステートマシンから情報を取得
-	m_transform.m_localPosition = m_stateMachine->GetPosition();
-	m_transform.m_localScale    = m_stateMachine->GetScale();
-	m_transform.m_localRotation = m_stateMachine->GetRotation();
-
+	// 判定処理をする
+	Vector3 move = m_stateMachine->GetMoveVector();
+	const Vector3& position = m_characterController.Execute(move, 1.0f);	// あえて1.0f
+	
+	// 判定処理結果の座標を設定
+	m_transform.m_localPosition = position;
 	m_transform.UpdateTransform();
 
-	// @todo for 判定処理を後で入れる
-	m_characterController.SetPosition(m_transform.m_position);
-	Vector3 moveSpeed = Vector3::Zero;
-	m_characterController.Execute(moveSpeed, 0.0f);
-
+	// ステートマシンに座標設定
+	m_stateMachine->SetPosition(m_transform.m_position);
+	// ゴーストの判定に座標設定
+	m_collisionObject.SetPosition(m_transform.m_position);
 	// キャラクター描画に情報を設定
 	m_modelRender.SetPosition(m_transform.m_position);
 	m_modelRender.SetRotation(m_transform.m_rotation);

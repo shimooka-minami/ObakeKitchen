@@ -76,6 +76,17 @@ namespace nsK2EngineLow {
 					//自分に衝突した。or 地面に衝突した。
 					return 0.0f;
 				}
+
+				// 今回のゲーム用に改造する
+				// TODO: あとでキャラクターコントローラー自体に判定対象となる属性の設定をするようにしたい
+				const int collisionAttr = convexResult.m_hitCollisionObject->getUserIndex();
+				if (me->getUserIndex() == enCollisionAttr_Character && collisionAttr == enCollsiionAttr_Food) {
+					return 0.0f;
+				}
+				if (me->getUserIndex() == enCollsiionAttr_Food && collisionAttr == enCollisionAttr_Character) {
+					return 0.0f;
+				}
+
 				//衝突点の法線を引っ張ってくる。
 				Vector3 hitNormalTmp;
 				Vector3CopyFrom(hitNormalTmp, convexResult.m_hitNormalLocal);
@@ -107,7 +118,7 @@ namespace nsK2EngineLow {
 	}
 
 
-	void CharacterController::Init(float radius, float height, const Vector3& position)
+	void CharacterController::Init(float radius, float height, const Vector3& position, const EnCollisionAttr enCollisionAttr)
 	{
 		m_position = position;
 		//コリジョン作成。
@@ -124,7 +135,7 @@ namespace nsK2EngineLow {
 		//剛体の位置を更新。
 		trans.setOrigin(btVector3(position.x, position.y + m_height * 0.5f + m_radius, position.z));
 		//@todo 未対応。trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
-		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
+		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr);
 		m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 
 		m_isInited = true;

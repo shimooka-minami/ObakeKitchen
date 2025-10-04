@@ -29,8 +29,9 @@ namespace nsK2EngineLow {
 			*@param[in]	radius		カプセルコライダーの半径。
 			*@param[in]	height		カプセルコライダーの高さ。
 			*@param[in]	position	初期位置。
+			*@param[in]	enCollisionAttr	衝突判定属性。
 			*/
-		void Init(float radius, float height, const Vector3& position);
+		void Init(float radius, float height, const Vector3& position, const EnCollisionAttr enCollisionAttr = enCollisionAttr_Character);
 		/*!
 			* @brief	実行。
 			*@param[in, out]	moveSpeed		移動速度。

@@ -25,8 +25,6 @@ WalkState::~WalkState()
 }
 
 
-
-
 void WalkState::Enter()
 {
 	m_owner->PlayAnimation(static_cast<uint8_t>(PlayerAnimationType::Walk));
@@ -35,7 +33,6 @@ void WalkState::Enter()
 
 void WalkState::Update()
 {
-	// TODO:後でコメント
 	if (m_owner->GetStickLAmount() < 0.01f) {
 		return;
 	}
@@ -44,16 +41,15 @@ void WalkState::Update()
 	const Vector3& moveDirection = m_owner->GetDirection();
 	// NOTE:移動速度を後で入れよう
 	const Vector3 move = moveDirection * m_owner->GetOwnerStatus()->GetSpeed();
-	// 現在の座標を取得
-	const Vector3& currentPosition = m_owner->GetPosition();
-
 	// 座標設定
-	m_owner->SetPosition(currentPosition + move);
+	m_owner->SetMoveVector(move);
 }
 
 
 void WalkState::Exit()
 {
+	// 移動終わり
+	m_owner->SetMoveVector(Vector3::Zero);
 }
 
 
@@ -95,17 +91,15 @@ void DashState::Update()
 	const float moveDashSpeed  = moveSpeed * dashSpeed;
 	// 移動方向にどれだけ進むかを求める
 	const Vector3 move = moveDirection * moveDashSpeed;
-	// 現在の座標を取得
-	const Vector3& currentPosition = m_owner->GetPosition();
-
 	// 座標設定
-	m_owner->SetPosition(currentPosition + move);
+	m_owner->SetMoveVector(move);
 }
 
 
 void DashState::Exit()
 {
-
+	// 移動終わり
+	m_owner->SetMoveVector(Vector3::Zero);
 }
 
 
@@ -114,28 +108,31 @@ void DashState::Exit()
 /******************************************/ 
 
 
-HavePlate::HavePlate(StateMachine* owner)
+HavePlateState::HavePlateState(StateMachine* owner)
 	:IState(owner)
 {
 }
 
 
-HavePlate::~HavePlate()
+HavePlateState::~HavePlateState()
 {
-
 }
 
 
-void HavePlate::Enter()
+void HavePlateState::Enter()
 {
+	// プレイヤーの情報を取得
 	Player* player = m_owner->GetOwner();
+	// 食べ物の情報を取得
 	FoodPlate* targetFood = m_owner->GetTargetFood();
+	// 食べ物をプレイヤーの子にする
 	targetFood->m_transform.SetParent(&player->m_transform);
+	// 食べ物をプレイヤーの前に配置 (持っている表現)
 	targetFood->SetPosition(m_owner->GetDirection() * 5.0f);
 }
 
 
-void HavePlate::Update()
+void HavePlateState::Update()
 {
 	// 左スティックに少しでも入力量があったら
 	if (m_owner->GetStickLAmount() < 0.01f) {
@@ -146,21 +143,21 @@ void HavePlate::Update()
 	const Vector3& moveDirection = m_owner->GetDirection();
 	// NOTE:移動速度を後で入れよう
 	const Vector3 move = moveDirection * m_owner->GetOwnerStatus()->GetSpeed();
-	// 現在の座標を取得
-	const Vector3& currentPosition = m_owner->GetPosition();
-
 	// 座標設定
-	m_owner->SetPosition(currentPosition + move);
+	m_owner->SetMoveVector(move);
 }
 
 
-void HavePlate::Exit()
+void HavePlateState::Exit()
 {
 	Player* player = m_owner->GetOwner();
 	FoodPlate* targetFood = m_owner->GetTargetFood();
 	player->m_transform.RemoveChild(&targetFood->m_transform);
 
 	targetFood->SetPosition(targetFood->m_transform.m_position);
+
+	// 移動終わり
+	m_owner->SetMoveVector(Vector3::Zero);
 }	
 
 
@@ -204,6 +201,48 @@ void ThrowState::Update()
 void ThrowState::Exit()
 {
 
+}
+
+
+
+
+/********************************************/
+
+
+CoockingState::CoockingState(StateMachine* owner)
+	: IState(owner)
+{
+}
+
+
+CoockingState::~CoockingState()
+{
+}
+
+
+void CoockingState::Enter()
+{
+	// 投げる
+	FoodPlate* targetFood = m_owner->GetTargetFood();
+	K2_ASSERT(targetFood, "食べ物を持っていません。\n");
+	if (targetFood)
+	{
+		m_owner->SetNearFood(false);
+		m_owner->SetForwardFood(false);
+		m_owner->SetTargetFood(nullptr);
+		// 料理済みにする
+		targetFood->CreateCoockedFood();
+	}
+}
+
+
+void CoockingState::Update()
+{
+}
+
+
+void CoockingState::Exit()
+{
 }
 
 

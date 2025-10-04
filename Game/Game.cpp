@@ -1,17 +1,78 @@
 #include "stdafx.h"
 #include "Game.h"
 
-#include "actor/Player.h"
-#include "actor/PlayerController.h"
 #include "GameCamera.h"
 #include "BackGround.h"
 #include "core/SceneLoader.h"
 
+#include "actor/Player.h"
+#include "actor/PlayerController.h"
 #include "actor/Gimmick.h"
 #include "actor/Plate.h"
 
-// @todo for test
+#include "gimmick/CoockingSpace.h"
 #include "collision/CollisionManager.h"
+
+
+namespace
+{
+	// シーンから読み込んだオブジェクトの名前が完全一致か
+	bool IsMatchObjectName(const char* jsonNameA, const char* nameB)
+	{
+		if (strcmp(jsonNameA, nameB) == 0) {
+			// 完全一致
+			return true;
+		}
+		// 一致しない
+		return false;
+	}
+
+	// 先頭から len 文字分が一致しているか判定する関数
+	// オブジェクト同士1：1で名前が一致しているかを調べる
+	bool IsForwardMatchObjectName(const char* jsonNameA, const char* nameB)
+	{
+		auto len = strlen(nameB);
+		auto namelen = strlen(jsonNameA);
+		if (len > namelen) {
+			//名前が長い。不一致。
+			return false;
+		}
+		if (strncmp(jsonNameA, nameB, len) == 0) {
+			// 完全一致
+			return true;
+		}
+		// 一致しない
+		return false;
+	}
+
+
+	/**
+	 * jsonから情報を取得する処理を下記に書く
+	 */
+
+
+	/** 静的なオブジェクトの情報取得 */
+	std::string ParseStaticMeshExportComponent(const nlohmann::json& j)
+	{
+		const std::string assetPath = j.at("assetPath").get<std::string>();
+		return assetPath;
+	}
+
+
+	/** インタラクト情報の取得 */
+	struct InteractExportInfo
+	{
+		Vector3 position;
+		float radius;
+	};
+	InteractExportInfo ParseInteractExportComponent(const nlohmann::json& j)
+	{
+		InteractExportInfo info;
+		info.position = json::ParseVector3(j.at("position"));
+		info.radius = j.at("radius").get<float>();
+		return info;
+	}
+}
 
 
 //Game::Game()
@@ -52,35 +113,47 @@ bool Game::Start()
 			//object->SetModelName(j["modelName"]);
 			//object->SetPosition(j["position"]);
 
-			// TODO: 仮でオブジェクトを置けるかテスト
-			auto* staticGimmick = NewGO<StaticGimmick>(0, "backGround");
-			Vector3 pos;
-			Quaternion rot;
-			Vector3 scale;
-			std::tie(pos, rot, scale) = ParseTransformComponents(j["Transform"]);
+			// Unityで配置しているオブジェクトの名前
+			const std::string& name = j["name"];
+			// 座標
+			json::Transform transform = json::ParseTransformComponents(j["Transform"]);
 
-			// StaticMeshExportComponentのパーサをつくって 
-			// ParseTransformComponentsを参考に
-			// 場所は任せる
-			const auto& staticMeshComponent = j["StaticMeshExportComponent"];
-			const std::string assetPath = staticMeshComponent.at("assetPath").get<std::string>();
+			// キッチン
+			if (IsForwardMatchObjectName(name.c_str(), "Prop_KitchenCabinet_01")) {
+				auto* staticGimmick = NewGO<StaticGimmick>(0, "kitchen");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
 
-			staticGimmick->Initialize(assetPath.c_str(), pos, scale, rot);
+				if (j.contains("InteractExportComponent")) {
+					InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
 
+					auto* cookingSpace = NewGO<CoockingSpace>(0, "coockingSpace");
+					cookingSpace->m_transform.SetParent(&staticGimmick->m_transform);
+					cookingSpace->m_transform.m_localPosition = info.position;
+					cookingSpace->SetRadius(info.radius);
+				}
+				return true;
+			}
+			if (IsForwardMatchObjectName(name.c_str(), "Prop_CuttingPlate")) {
+				auto* staticGimmick = NewGO<StaticGimmick>(0, "cookingBoard");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			}
+			if (IsForwardMatchObjectName(name.c_str(), "Prop_Knife_04")) {
+				auto* staticGimmick = NewGO<StaticGimmick>(0, "knife");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			}
 			return true;
 		});
 
 	// TODO: 仮で投げるオブジェクトを置く
 	auto* foodPlate = NewGO<FoodPlate>(0, "foodPlate");
-	//foodPlate->Initialize("Assets/modelData/Ground/ground.tkm", Vector3(200.0f, 20.0f, 0.0f), Vector3(0.3f, 0.5f, 0.3f), Quaternion::Identity);
-	foodPlate->Initialize("Assets/modelData/food/tomato.tkm", Vector3(200.0f, 20.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
-
+	foodPlate->Initialize("Assets/modelData/food/tomato.tkm", "Assets/modelData/food/cut_tomato.tkm", Vector3(200.0f, 00.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
 
 	// @todo for test
 	// 判定管理生成
 	CollisionHitManager::Create();
-	CollisionHitManager::Get().SetPlayer(m_playerList[0]);
-	CollisionHitManager::Get().SetFoodPlate(foodPlate);
 	// @todo for test
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 

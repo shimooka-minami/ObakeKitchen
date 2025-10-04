@@ -71,6 +71,13 @@ public:
 	/** 座標の設定 お皿の位置 */
 	void SetPosition(const Vector3& position);
 
+	/**
+	 * @todo for あとで処理を変えると思う
+	 * この関数が呼ばれたら食材を加工済みにする
+	 * 本当は別クラスを作って、その中で切り替える処理にしたい
+	 */
+	void CreateCoockedFood();
+
 
 public:
 	/**

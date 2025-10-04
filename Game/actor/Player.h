@@ -9,6 +9,7 @@ class Player : public Character
 {
 private:
 	std::unique_ptr<StateMachine> m_stateMachine;
+	CollisionObject m_collisionObject;
 
 
 public:

@@ -19,6 +19,9 @@
     <Filter Include="collision">
       <UniqueIdentifier>{e4c78dca-097b-496d-be96-463374703c8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="gimmick">
+      <UniqueIdentifier>{284f73f8-8832-47c1-837d-40d7b98c6f3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -73,6 +76,9 @@
       <Filter>collision</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="gimmick\CoockingSpace.cpp">
+      <Filter>gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -132,5 +138,8 @@
       <Filter>collision</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="gimmick\CoockingSpace.h">
+      <Filter>gimmick</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

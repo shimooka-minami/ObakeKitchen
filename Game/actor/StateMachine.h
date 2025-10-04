@@ -16,6 +16,7 @@ enum enPlayerState
 	enPlayerDash,
 	enPlayerHavePlate,
 	enPlayerThrow,
+	enPlayerCoocking,
 	enPlayerNum,
 };
 
@@ -30,6 +31,9 @@ private:
 
 	/** プレイヤーの方向を取る変数(スティック入力の方向) */
 	Vector3 m_direction = Vector3::Zero;
+
+	/** 移動ベクトル */
+	Vector3 m_moveVector = Vector3::Zero;
 
 	/** 座標 */
 	Vector3 m_position = Vector3::Zero;
@@ -61,6 +65,9 @@ private:
 	bool m_isNearFood = false;
 	/** 皿が目の前にあるか */
 	bool m_isForwardFood = false;
+
+	/** 料理スペースに入った */
+	bool m_isInCookingSpace = false;
 
 
 public:
@@ -100,7 +107,8 @@ private:
 	bool ChangeHavePlate() const;
 	/** 皿を持ったままに変更する */
 	bool CanChangeThrow() const;
-
+	/** 料理する状態に変更できるか */
+	bool CanChangeCooking() const;
 
 
 public:
@@ -123,6 +131,15 @@ public:
 	const Vector3& GetDirection() { return m_direction; }
 	/** 方向のセッター */
 	void SetDirection(const Vector3& direction) { m_direction = direction; }
+
+	/**
+	 * 移動ベクトル取得
+	 */
+	inline const Vector3& GetMoveVector() const { return m_moveVector; }
+	/**
+	 * 移動ベクトル設定
+	 */
+	inline void SetMoveVector(const Vector3& moveVector) { m_moveVector = moveVector; }
 
 	/**
 	 * 座標取得
@@ -159,7 +176,7 @@ public:
 	/**
 	 * 皿の位置を取得
 	 */
-	inline Vector3 GetPlatePosition() const { return m_platePos; }
+	inline const Vector3& GetPlatePosition() const { return m_platePos; }
 
 	/**
 	 * 皿の位置を設定 いるか分からんけど一応
@@ -204,11 +221,10 @@ public:
 	 */
 	inline void SetForwardFood(const bool isForwardFood) { m_isForwardFood = isForwardFood; }
 
-
 	/**
-	 * 自分の持てる状態
+	 * 料理スペースに入ったか
 	 */
-	inline bool CanHasState() const { return m_currentState == m_stateList[enPlayerIdle] || m_currentState == m_stateList[enPlayerWalk] || m_currentState == m_stateList[enPlayerDash]; }
+	inline void SetInCookingSpace(const bool inSpace) { m_isInCookingSpace = inSpace; }
 
 
 public:

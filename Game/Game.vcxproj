@@ -240,6 +240,7 @@
     <ClCompile Include="core\TransformHelper.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="gimmick\CoockingSpace.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -268,6 +269,7 @@
     <ClInclude Include="core\TransformHelper.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="gimmick\CoockingSpace.h" />
     <ClInclude Include="json\json.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
