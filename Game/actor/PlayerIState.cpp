@@ -5,6 +5,7 @@
 #include "ActorStatus.h"
 #include "ActorTypes.h"
 #include "Plate.h"
+#include "sound/SoundManager.h"
 
 
 namespace
@@ -129,6 +130,9 @@ void HavePlateState::Enter()
 	targetFood->m_transform.SetParent(&player->m_transform);
 	// 食べ物をプレイヤーの前に配置 (持っている表現)
 	targetFood->SetPosition(m_owner->GetDirection() * 5.0f);
+
+	// 持った時のSE再生
+	SoundManager::Get().PlaySE(enSoundKind_Has);
 }
 
 
@@ -188,7 +192,11 @@ void ThrowState::Enter()
 		targetFood->Throw(m_owner->GetDirection());
 		m_owner->SetNearFood(false);
 		m_owner->SetForwardFood(false);
+
+		// 投げた時にSEを再生
+		SoundManager::Get().PlaySE(enSoundKind_Throw);
 	}
+
 }
 
 
@@ -232,6 +240,9 @@ void CoockingState::Enter()
 		m_owner->SetTargetFood(nullptr);
 		// 料理済みにする
 		targetFood->CreateCoockedFood();
+
+		// 切ったときにSEを再生
+		SoundManager::Get().PlaySE(enSoundKind_Cut);
 	}
 }
 

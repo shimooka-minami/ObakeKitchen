@@ -242,6 +242,12 @@
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="gimmick\CoockingSpace.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="scene\BootScene.cpp" />
+    <ClCompile Include="scene\GameScene.cpp" />
+    <ClCompile Include="scene\IScene.cpp" />
+    <ClCompile Include="scene\SceneManager.cpp" />
+    <ClCompile Include="scene\TitleScene.cpp" />
+    <ClCompile Include="sound\SoundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -271,6 +277,13 @@
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="gimmick\CoockingSpace.h" />
     <ClInclude Include="json\json.hpp" />
+    <ClInclude Include="scene\BootScene.h" />
+    <ClInclude Include="scene\GameScene.h" />
+    <ClInclude Include="scene\IScene.h" />
+    <ClInclude Include="scene\SceneManager.h" />
+    <ClInclude Include="scene\TitleScene.h" />
+    <ClInclude Include="sound\SoundManager.h" />
+    <ClInclude Include="sound\Types.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Transform.h" />

@@ -19,7 +19,7 @@ public:
 	 */
 	Transform m_transform;
 
-	//[]
+
 protected:
 	/** モデル描画 */
 	ModelRender m_modelRender;

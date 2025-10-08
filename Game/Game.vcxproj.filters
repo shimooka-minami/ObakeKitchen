@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="system">
-      <UniqueIdentifier>{22dd8095-74f9-46df-81a1-36675a040b1f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="util">
       <UniqueIdentifier>{d21bd762-085b-4171-aebf-12fb4c98a6fc}</UniqueIdentifier>
     </Filter>
@@ -21,6 +18,15 @@
     </Filter>
     <Filter Include="gimmick">
       <UniqueIdentifier>{284f73f8-8832-47c1-837d-40d7b98c6f3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sound">
+      <UniqueIdentifier>{db5b41f3-ce1b-479c-99ac-805eb12ac169}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{22dd8095-74f9-46df-81a1-36675a040b1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene">
+      <UniqueIdentifier>{5e403bdb-56d1-44f7-baa0-132bfcbdfc06}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +84,24 @@
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="gimmick\CoockingSpace.cpp">
       <Filter>gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="sound\SoundManager.cpp">
+      <Filter>sound</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\BootScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\GameScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\TitleScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\IScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\SceneManager.cpp">
+      <Filter>scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +164,27 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="gimmick\CoockingSpace.h">
       <Filter>gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="sound\SoundManager.h">
+      <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="sound\Types.h">
+      <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\BootScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\GameScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\TitleScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\IScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\SceneManager.h">
+      <Filter>scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

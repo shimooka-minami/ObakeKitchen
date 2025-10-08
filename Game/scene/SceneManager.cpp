@@ -1,0 +1,93 @@
+#include "stdafx.h"
+#include "SceneManager.h"
+
+#include "BootScene.h"
+#include "TitleScene.h"
+#include "GameScene.h"
+
+
+SceneManager* SceneManager::m_instance = nullptr;	// 初期化
+
+
+SceneManager::SceneManager()
+{
+	// ブートシーン追加
+	AddSceneMap<BootScene>();
+	AddSceneMap<TitleScene> ();
+	AddSceneMap<GameScene>();
+}
+
+
+SceneManager::~SceneManager()
+{
+}
+
+
+void SceneManager::Update()
+{
+	if (m_currentScene) {
+		uint32_t nextSceneId;
+		m_currentScene->Update();
+		if (m_currentScene->RequestScene(nextSceneId)) {
+			delete m_currentScene;
+			CreateScene(nextSceneId);
+		}
+	}
+}
+
+
+void SceneManager::Render(RenderContext& rc)
+{
+	if (m_currentScene) {
+		m_currentScene->Render(rc);
+	}
+}
+
+
+void SceneManager::CreateScene(const uint32_t id)
+{
+	auto it = m_sceneMap.find(id);
+	if (it == m_sceneMap.end()) {
+		K2_ASSERT(false, "新規シーンが追加されていません。\n");
+	}
+	auto& createSceneFunc = it->second;
+	m_currentScene = createSceneFunc();
+	m_currentScene->Start();
+}
+
+
+
+
+/*****************************************************/
+
+
+SceneManagerObject::SceneManagerObject()
+{
+	SceneManager::CreateInstance();
+}
+
+
+SceneManagerObject::~SceneManagerObject()
+{
+	SceneManager::DestroyInstance();
+}
+
+
+bool SceneManagerObject::Start()
+{
+	// 最初のシーンを設定
+	SceneManager::GetInstance()->CreateScene(BootScene::ID());
+	return true;
+}
+
+
+void SceneManagerObject::Update()
+{
+	SceneManager::GetInstance()->Update();
+}
+
+
+void SceneManagerObject::Render(RenderContext& rc)
+{
+	SceneManager::GetInstance()->Render(rc);
+}

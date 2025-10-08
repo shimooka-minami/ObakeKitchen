@@ -13,6 +13,8 @@
 #include "gimmick/CoockingSpace.h"
 #include "collision/CollisionManager.h"
 
+#include "sound/SoundManager.h"
+
 
 namespace
 {
@@ -156,6 +158,9 @@ bool Game::Start()
 	CollisionHitManager::Create();
 	// @todo for test
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+
+	// BGMÄ¶
+	SoundManager::Get().PlayBGM(enSoundKind_Game);
 
 	return true;
 }

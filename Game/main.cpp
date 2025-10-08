@@ -7,6 +7,8 @@
 #include "Game.h"
 
 #include "core/ParameterManager.h"
+#include "sound/SoundManager.h"
+#include "scene/SceneManager.h"
 
 
 void ReportLiveObjects()
@@ -36,9 +38,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	// パラメーターマネージャー生成
 	ParameterManager::CreateInstance();
-
-	//Gameクラスのオブジェクトを作成。
-	NewGO<Game>(0, "game");
+	// サウンドマネージャー生成
+	SoundManager::CreateInstance();
+	// シーン管理用のゲームオブジェクト生成
+	auto* sceneManagerObject = NewGO<SceneManagerObject>(0, "sceneManagerObject");
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
@@ -50,9 +53,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		if (g_pad[0]->IsTrigger(enButtonA) ){
 			g_pad[0]->SetVibration(/*durationSec=*/0.5f, /*normalizedPower=*/1.0f);
 		}
+		// サウンドの更新
+		SoundManager::Get().Update();
 		K2Engine::GetInstance()->Execute();
 	}
 
+	// シーン管理破棄
+	DeleteGO(sceneManagerObject);
+	// サウンドマネージャー破棄
+	SoundManager::DestroyInstance();
 	// パラメーターマネージャー破棄
 	ParameterManager::DestroyInstance();
 
