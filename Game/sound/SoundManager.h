@@ -47,7 +47,7 @@ public:
     /** BGM再生 */
     void PlayBGM(const int kind);
     /** BGM停止 */
-    void SetopBGM();
+    void StopBGM();
     
     /** SE再生 */
     SoundHandle PlaySE(const int kind, const bool isLood = false, const bool is3D =false);

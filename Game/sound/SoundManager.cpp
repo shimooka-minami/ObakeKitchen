@@ -61,7 +61,7 @@ void SoundManager::PlayBGM(const int kind)
 }
 
 
-void SoundManager::SetopBGM()
+void SoundManager::StopBGM()
 {
 	if (m_bgm == nullptr) {
 		return;

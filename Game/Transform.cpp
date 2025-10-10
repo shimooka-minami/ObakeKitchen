@@ -90,8 +90,13 @@ void Transform::Release()
 		(*it)->m_parent = nullptr;
 		//子トランスフォームへの紐づけを外す
 		m_children.erase(it);
+		// 対象がいないなら抜ける
+		if (m_children.size() == 0) {
+			break;
+		}
 		//イテレータを進める
 		++it;
+		
 	}
 	//念のため？vectorの要素を全削除
 	m_children.clear();

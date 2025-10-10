@@ -246,6 +246,7 @@
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="scene\IScene.cpp" />
     <ClCompile Include="scene\SceneManager.cpp" />
+    <ClCompile Include="scene\StartupScene.cpp" />
     <ClCompile Include="scene\TitleScene.cpp" />
     <ClCompile Include="sound\SoundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -256,6 +257,7 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Types.cpp" />
+    <ClCompile Include="ui\SpriteAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Actor.h" />
@@ -281,6 +283,7 @@
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="scene\IScene.h" />
     <ClInclude Include="scene\SceneManager.h" />
+    <ClInclude Include="scene\StartupScene.h" />
     <ClInclude Include="scene\TitleScene.h" />
     <ClInclude Include="sound\SoundManager.h" />
     <ClInclude Include="sound\Types.h" />
@@ -288,6 +291,7 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="ui\SpriteAnimation.h" />
     <ClInclude Include="util\CRC32.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

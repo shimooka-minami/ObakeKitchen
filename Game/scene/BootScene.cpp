@@ -1,41 +1,43 @@
+/**
+ * BootScene.cpp
+ * 起動画面のシーン
+ */
 #include "stdafx.h"
 #include "BootScene.h"
+#include "StartupScene.h"
 #include "TitleScene.h"
-#include "sound/SoundManager.h"
+#include "GameScene.h"
 
 
 namespace
 {
-	enum EnBootKind
+	struct SelectSceneInformation
 	{
-		enBootKind_Game,
-		enBootKind_LogoA,
-		enBootKind_LogoB,
-		enBootKind_Max,
-	};
-	struct BootInformation
-	{
-		std::string assetPath;
-		float time;
-		float shortTime;
-		enSoundKind voiceKind;
+		const wchar_t* name;
+		Vector3 position;
+		uint32_t sceneId;
 		//
-		BootInformation(const std::string& path, const float t, const float st, const enSoundKind vKind)
-			: assetPath(path)
-			, time(t)
-			, shortTime(st)
-			, voiceKind(vKind)
-
-		{}
-	};
-	static const BootInformation bootInfoList[] = {
-		BootInformation("Assets/modelData/title/notitle.dds", 2.0f, 0.5f, enSoundKind_None),
-		BootInformation("Assets/modelData/title/kawahara.dds", 2.0f, 0.5f, enSoundKind_BootA),
-		BootInformation("Assets/modelData/title/kbc_games.dds", 2.0f, 0.5f, enSoundKind_BootB),
+		SelectSceneInformation(const wchar_t* name, const Vector3& pos, const uint32_t id)
+			: name(name)
+			, position(pos)
+			, sceneId(id)
+		{
+		}
 	};
 
-	constexpr float MAX_SPRITE_WIDTH = 1920.0f;
-	constexpr float MAX_SPRITE_HIGHT = 1080.0f;
+	static const SelectSceneInformation selectSceneinformationList[enSceneKind_Max] =
+	{
+		SelectSceneInformation(L"スタートアップ", Vector3(0.0f, 200.0f, 0.0f), StartupScene::ID()),
+		SelectSceneInformation(L"タイトル", Vector3(0.0f, 100.0f, 0.0f), TitleScene::ID()),
+		SelectSceneInformation(L"ゲーム", Vector3(0.0f, 0.0f, 0.0f), GameScene::ID()),
+	};
+
+	static const Vector3 SELECTOR_POSITON_LIST[enSceneKind_Max] =
+	{
+		Vector3(-50.0f, 190.0f, 0.0f),
+		Vector3(-50.0f, 80.0f, 0.0f),
+		Vector3(-50.0f, -20.0f, 0.0f),
+	};
 }
 
 
@@ -51,8 +53,14 @@ BootScene::~BootScene()
 
 bool BootScene::Start()
 {
-	// 初期設定
-	Change();
+	// シーン選択用に表示。どんなシーンがあるか
+	for (int i = 0; i < enSceneKind_Max; i++) {
+		const auto& info = selectSceneinformationList[i];
+		m_sceneText[i].SetText(info.name);
+		m_sceneText[i].SetPosition(info.position);
+	}
+	// 選択している個所を分かるようにするアイコン
+	m_selecterRender.Init("Assets/modelData/debug/selecter.dds", 64.0f, 64.0f);
 
 	return true;
 }
@@ -60,74 +68,49 @@ bool BootScene::Start()
 
 void BootScene::Update()
 {
-	if (m_spriteRender) {
-		m_spriteRender->Update();
+	if (g_pad[0]->IsTrigger(enButtonUp)) {
+		m_selectIndex--;
+		// 最小値チェック
+		if (m_selectIndex < enSceneKind_Default) {
+			m_selectIndex = enSceneKind_Default;	// 範囲外にならないように調整
+		}
 	}
-	if (CanChange()) {
-		Change();
-		m_elapsedTime = 0.0f;
-	} else {
-		const float deltaTime = g_gameTime->GetFrameDeltaTime();
-		m_elapsedTime += deltaTime;
+	else if (g_pad[0]->IsTrigger(enButtonDown)) {
+		m_selectIndex++;
+		// 最大値チェック
+		if (m_selectIndex >= enSceneKind_Max) {
+			m_selectIndex = enSceneKind_Max - 1;	// 範囲外にならないように調整
+		}
 	}
+
+	// シーン設定
+	if (g_pad[0]->IsTrigger(enButtonA)) {
+		const auto& info = selectSceneinformationList[m_selectIndex];
+		m_requestSceneId = info.sceneId;
+	}
+
+	m_selecterRender.SetPosition(SELECTOR_POSITON_LIST[m_selectIndex]);
+	m_selecterRender.Update();
 }
 
 
 void BootScene::Render(RenderContext& rc)
 {
-	if (m_spriteRender) {
-		m_spriteRender->Draw(rc);
+	// シーンの名前描画
+	for (int i = 0; i < enSceneKind_Max; i++)
+	{
+		m_sceneText[i].Draw(rc);
 	}
+	// セレクター描画
+	m_selecterRender.Draw(rc);
 }
 
 
 bool BootScene::RequestScene(uint32_t& id)
 {
-	if (m_currentIndex >= enBootKind_Max) {
-		if (CanChange()) {
-			id = TitleScene::ID();
-			return true;
-		}
-	}
-	return false;
-}
-
-
-void BootScene::Change()
-{
-	if (m_spriteRender) {
-		delete m_spriteRender;
-		m_spriteRender = nullptr;
-	}
-	if (m_currentIndex >= enBootKind_Max) {
-		return;
-	}
-
-	const auto& bootInfo = bootInfoList[m_currentIndex++];
-
-	m_spriteRender = new SpriteRender();
-	m_spriteRender->Init(bootInfo.assetPath.c_str(), MAX_SPRITE_WIDTH, MAX_SPRITE_HIGHT);
-
-	m_changeTime = bootInfo.time;
-	m_shortChangeTime = bootInfo.shortTime;
-
-	if (bootInfo.voiceKind != enSoundKind_None) {
-		SoundManager::Get().PlaySE(bootInfo.voiceKind);
-	}
-}
-
-
-bool BootScene::CanChange() const
-{
-	// 指定した経過時間を過ぎているなら変更可能
-	if (m_elapsedTime >= m_changeTime) {
+	if (m_requestSceneId != INVALID_SCENE_ID) {
+		id = m_requestSceneId;
 		return true;
-	}
-	// 一定時間を過ぎていて何かボタンを押したなら切り替え可能
-	if (m_elapsedTime >= m_shortChangeTime) {
-		if (g_pad[0]->IsPressAnyKey()) {
-			return true;
-		}
 	}
 	return false;
 }

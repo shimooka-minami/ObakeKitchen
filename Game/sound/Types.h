@@ -14,9 +14,11 @@ enum enSoundKind
 	enSoundKind_Has,
 	enSoundKind_Throw,
 	enSoundKind_End,
+	enSoundKind_Button,
 	enSoundKind_SE_Max,
 	enSoundKind_BGM = enSoundKind_SE_Max,
 	enSoundKind_Game = enSoundKind_BGM,
+	enSoundKind_Title,
 	enSoundKind_Voice,
 	enSoundKind_BootA = enSoundKind_Voice,
 	enSoundKind_BootB,
@@ -42,8 +44,10 @@ static SoundInformation soundInformation[enSoundKind_Max] =
 	SoundInformation("Assets/sound/has.wav"),
 	SoundInformation("Assets/sound/throw.wav"),
 	SoundInformation("Assets/sound/end.wav"),
+	SoundInformation("Assets/sound/button.wav"),
 	// BGM
 	SoundInformation("Assets/sound/bgm/stage_1.wav"),
+	SoundInformation("Assets/sound/bgm/title.wav"),
 	// Voice
 	SoundInformation("Assets/sound/voice/bootA.wav"),
 	SoundInformation("Assets/sound/voice/bootB.wav"),

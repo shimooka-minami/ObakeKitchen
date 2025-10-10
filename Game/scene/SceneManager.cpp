@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 
 #include "BootScene.h"
+#include "StartupScene.h"
 #include "TitleScene.h"
 #include "GameScene.h"
 
@@ -13,6 +14,7 @@ SceneManager::SceneManager()
 {
 	// ブートシーン追加
 	AddSceneMap<BootScene>();
+	AddSceneMap<StartupScene>();
 	AddSceneMap<TitleScene> ();
 	AddSceneMap<GameScene>();
 }

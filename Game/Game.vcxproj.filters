@@ -28,6 +28,9 @@
     <Filter Include="scene">
       <UniqueIdentifier>{5e403bdb-56d1-44f7-baa0-132bfcbdfc06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{efece5e8-a911-4583-9a34-a1cec28cd9ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -102,6 +105,12 @@
     </ClCompile>
     <ClCompile Include="scene\SceneManager.cpp">
       <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\StartupScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\SpriteAnimation.cpp">
+      <Filter>ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +194,12 @@
     </ClInclude>
     <ClInclude Include="scene\SceneManager.h">
       <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\StartupScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\SpriteAnimation.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
