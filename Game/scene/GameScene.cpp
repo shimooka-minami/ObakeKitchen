@@ -96,6 +96,7 @@ bool GameScene::Start()
 		char name[] = "playerA";
 		name[6] = 'A' + i;
 		m_playerList[i] = NewGO<Player>(0, name);
+		m_playerList[i]->m_transform.m_localScale = Vector3{2.0f,2.0f,1.0f};
 	}
 
 	// プレイヤーコントローラー
@@ -121,6 +122,15 @@ bool GameScene::Start()
 			const std::string& name = j["name"];
 			// 座標
 			json::Transform transform = json::ParseTransformComponents(j["Transform"]);
+
+			//地面
+			if (IsForwardMatchObjectName(name.c_str(), "Env_Road_Free 1")) {
+				auto* staticGimmick = NewGO<StaticGimmick>(0, "ground");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+				return true;
+			}
+
 
 			// キッチン
 			if (IsForwardMatchObjectName(name.c_str(), "Prop_KitchenCabinet_01")) {

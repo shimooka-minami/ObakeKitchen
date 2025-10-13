@@ -1,10 +1,34 @@
 {
   "objects": [
     {
-      "name": "Prop_KitchenCabinet_01 (1)",
+      "name": "Env_Road_Free 1",
       "Transform": {
         "position": {
-          "x": 100.0,
+          "x": 109.4036,
+          "y": 0.0,
+          "z": -223.6888
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets\\modelData\\Ground\\ground.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (35)",
+      "Transform": {
+        "position": {
+          "x": 465.0,
           "y": 0.0,
           "z": 300.0
         },
@@ -22,14 +46,6 @@
       },
       "StaticMeshExportComponent": {
         "assetPath": "Assets/modelData/Ground/kitchen.tkm"
-      },
-      "InteractExportComponent": {
-        "position": {
-          "x": 0.0,
-          "y": 0.3,
-          "z": 0.96
-        },
-        "radius": 0.66
       }
     },
     {
@@ -65,12 +81,60 @@
       }
     },
     {
-      "name": "Prop_Knife_04",
+      "name": "Prop_KitchenCabinet_01_Normal (24)",
       "Transform": {
         "position": {
+          "x": 1425.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
           "x": 0.0,
-          "y": 105.0,
-          "z": 290.0
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (27)",
+      "Transform": {
+        "position": {
+          "x": 1524.0,
+          "y": 0.0,
+          "z": -157.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (44)",
+      "Transform": {
+        "position": {
+          "x": 345.0,
+          "y": 0.0,
+          "z": 300.0
         },
         "rotation": {
           "x": 0.0,
@@ -85,7 +149,1015 @@
         }
       },
       "StaticMeshExportComponent": {
-        "assetPath": "C:\\git\\ObakeKitcen_new\\ObakeKitchen\\Game\\Assets\\modelData\\Ground\\knife.tkm"
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (20)",
+      "Transform": {
+        "position": {
+          "x": 585.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (21)",
+      "Transform": {
+        "position": {
+          "x": 1185.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (11)",
+      "Transform": {
+        "position": {
+          "x": -255.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (16)",
+      "Transform": {
+        "position": {
+          "x": 345.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (14)",
+      "Transform": {
+        "position": {
+          "x": 105.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (37)",
+      "Transform": {
+        "position": {
+          "x": 825.0,
+          "y": 0.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (29)",
+      "Transform": {
+        "position": {
+          "x": 1524.0,
+          "y": 0.0,
+          "z": -397.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (4)",
+      "Transform": {
+        "position": {
+          "x": -353.0,
+          "y": 0.0,
+          "z": 83.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": -0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (33)",
+      "Transform": {
+        "position": {
+          "x": 1524.0,
+          "y": 0.0,
+          "z": 83.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (25)",
+      "Transform": {
+        "position": {
+          "x": 945.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (2)",
+      "Transform": {
+        "position": {
+          "x": -255.0,
+          "y": 0.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Env_Road_Free",
+      "Transform": {
+        "position": {
+          "x": 1060.0,
+          "y": 0.0,
+          "z": -221.4613
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets\\modelData\\Ground\\ground.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (1)",
+      "Transform": {
+        "position": {
+          "x": -135.0,
+          "y": 0.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (31)",
+      "Transform": {
+        "position": {
+          "x": 1524.0,
+          "y": 0.0,
+          "z": -517.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (32)",
+      "Transform": {
+        "position": {
+          "x": 1524.0,
+          "y": 0.0,
+          "z": -637.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal",
+      "Transform": {
+        "position": {
+          "x": 105.0,
+          "y": 0.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (5)",
+      "Transform": {
+        "position": {
+          "x": -353.0,
+          "y": 0.0,
+          "z": -37.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": -0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (36)",
+      "Transform": {
+        "position": {
+          "x": 705.0,
+          "y": 0.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (18)",
+      "Transform": {
+        "position": {
+          "x": 705.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (40)",
+      "Transform": {
+        "position": {
+          "x": 1305.0,
+          "y": 0.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (19)",
+      "Transform": {
+        "position": {
+          "x": 465.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (8)",
+      "Transform": {
+        "position": {
+          "x": -353.0,
+          "y": 0.0,
+          "z": -637.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": -0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (41)",
+      "Transform": {
+        "position": {
+          "x": 1065.0,
+          "y": 0.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (39)",
+      "Transform": {
+        "position": {
+          "x": 1425.0,
+          "y": 0.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (42)",
+      "Transform": {
+        "position": {
+          "x": 1185.0,
+          "y": 0.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (34)",
+      "Transform": {
+        "position": {
+          "x": 585.0,
+          "y": 0.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (43)",
+      "Transform": {
+        "position": {
+          "x": 225.0,
+          "y": 0.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (30)",
+      "Transform": {
+        "position": {
+          "x": 1524.0,
+          "y": 0.0,
+          "z": -277.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (3)",
+      "Transform": {
+        "position": {
+          "x": -353.0,
+          "y": 0.0,
+          "z": 203.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": -0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (26)",
+      "Transform": {
+        "position": {
+          "x": 1524.0,
+          "y": 0.0,
+          "z": 203.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (17)",
+      "Transform": {
+        "position": {
+          "x": 825.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (23)",
+      "Transform": {
+        "position": {
+          "x": 1305.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (9)",
+      "Transform": {
+        "position": {
+          "x": -353.0,
+          "y": 0.0,
+          "z": -517.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": -0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (28)",
+      "Transform": {
+        "position": {
+          "x": 1524.0,
+          "y": 0.0,
+          "z": -37.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": 0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (6)",
+      "Transform": {
+        "position": {
+          "x": -353.0,
+          "y": 0.0,
+          "z": -157.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": -0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (13)",
+      "Transform": {
+        "position": {
+          "x": -135.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (7)",
+      "Transform": {
+        "position": {
+          "x": -353.0,
+          "y": 0.0,
+          "z": -277.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": -0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (38)",
+      "Transform": {
+        "position": {
+          "x": 945.0,
+          "y": 0.0,
+          "z": 300.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (22)",
+      "Transform": {
+        "position": {
+          "x": 1065.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (12)",
+      "Transform": {
+        "position": {
+          "x": -15.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (10)",
+      "Transform": {
+        "position": {
+          "x": -353.0,
+          "y": 0.0,
+          "z": -397.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -0.7071,
+          "z": 0.0,
+          "w": -0.7071
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
+      }
+    },
+    {
+      "name": "Prop_KitchenCabinet_01_Normal (15)",
+      "Transform": {
+        "position": {
+          "x": 225.0,
+          "y": 0.0,
+          "z": -735.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/kitchen.tkm"
       }
     },
     {
@@ -110,6 +1182,30 @@
       },
       "StaticMeshExportComponent": {
         "assetPath": "C:\\git\\ObakeKitcen_new\\ObakeKitchen\\Game\\Assets\\modelData\\Ground\\manaita.tkm"
+      }
+    },
+    {
+      "name": "Prop_Knife_04",
+      "Transform": {
+        "position": {
+          "x": 0.0,
+          "y": 105.0,
+          "z": 290.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "C:\\git\\ObakeKitcen_new\\ObakeKitchen\\Game\\Assets\\modelData\\Ground\\knife.tkm"
       }
     }
   ]

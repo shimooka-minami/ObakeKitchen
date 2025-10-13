@@ -3,8 +3,8 @@
 
 #include "Actor/Player.h"
 
-const float CAMERA_POS_Y = 300.0f; //カメラのY座標
-const float CAMERA_POS_Z = -200.0f; //カメラのZ座標
+const float CAMERA_POS_Y = 500.0f; //カメラのY座標
+const float CAMERA_POS_Z = -1000.0f; //カメラのZ座標
 
 const float CAMERA_NEAR_CLIP = 1.0f; //ニアクリップ
 const float CAMERA_FAR_CLIP = 10000.0f; //ファークリップ
