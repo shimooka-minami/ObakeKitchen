@@ -9,6 +9,10 @@
 class SpriteAnimationBase
 {
 protected:
+	bool m_isLoop = false;
+
+
+protected:
 	enum EnAnimationStep
 	{
 		enAnimationStep_Min,
@@ -110,6 +114,31 @@ public:
 		: SpriteAnimationBase(render,targetTime)
 		, m_baseAlpha(baseAlpha)
 		, m_targetAlpha(targetAlpha)
+	{
+	}
+
+
+	void Update() override;
+};
+
+
+
+
+/***********************************************/
+
+
+class TranslateSpriteAnimation : public SpriteAnimationBase
+{
+private:
+	Vector3 m_basePosition = Vector3::Zero;
+	Vector3 m_targetPosition = Vector3::Zero;
+
+
+public:
+	TranslateSpriteAnimation(SpriteRender* render, const float targetTime, const Vector3 basePosition, const Vector3 targetPosition)
+		: SpriteAnimationBase(render, targetTime)
+		, m_basePosition(basePosition)
+		, m_targetPosition(targetPosition)
 	{
 	}
 

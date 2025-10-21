@@ -38,5 +38,5 @@ public:
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
 
-	virtual bool RequestScene(uint32_t& id)  override;
+	virtual bool RequestScene(uint32_t& id, float& waitTime)  override;
 };

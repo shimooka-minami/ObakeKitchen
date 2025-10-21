@@ -7,6 +7,8 @@
 #include "Game.h"
 
 #include "core/ParameterManager.h"
+#include "core/Fade.h"
+#include "effect/EffectManager.h"
 #include "sound/SoundManager.h"
 #include "scene/SceneManager.h"
 
@@ -36,10 +38,17 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ここから初期化を行うコードを記述する。
 	//////////////////////////////////////
 
+	// @todo for test
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+
+	// フェード生成
+	auto* fadeObject = NewGO<FadeObject>(100, "fadeObject");
 	// パラメーターマネージャー生成
 	ParameterManager::CreateInstance();
 	// サウンドマネージャー生成
 	SoundManager::CreateInstance();
+	// エフェクトマネージャー生成
+	EffectManager::CreateInstance();
 	// シーン管理用のゲームオブジェクト生成
 	auto* sceneManagerObject = NewGO<SceneManagerObject>(0, "sceneManagerObject");
 
@@ -60,10 +69,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	// シーン管理破棄
 	DeleteGO(sceneManagerObject);
+	// エフェクトマネージャー破棄
+	EffectManager::DestroyInstance();
 	// サウンドマネージャー破棄
 	SoundManager::DestroyInstance();
 	// パラメーターマネージャー破棄
 	ParameterManager::DestroyInstance();
+	// フェード破棄
+	DeleteGO(fadeObject);
 
 	K2Engine::DeleteInstance();
 

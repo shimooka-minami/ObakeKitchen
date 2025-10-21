@@ -191,7 +191,7 @@ void GameScene::Render(RenderContext& rc)
 }
 
 
-bool GameScene::RequestScene(uint32_t& id)
+bool GameScene::RequestScene(uint32_t& id, float& waitTime)
 {
 	return false;
 }

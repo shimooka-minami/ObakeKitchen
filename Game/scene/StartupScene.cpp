@@ -87,7 +87,7 @@ void StartupScene::Render(RenderContext& rc)
 }
 
 
-bool StartupScene::RequestScene(uint32_t& id)
+bool StartupScene::RequestScene(uint32_t& id, float& waitTime)
 {
 	if (m_currentIndex >= enBootKind_Max) {
 		if (CanChange()) {

@@ -27,6 +27,6 @@ public:
 	virtual void Render(RenderContext& rc) = 0;
 
 	/** 次のシーンを要求する。idは次のシーンのIDを返す。trueならば要求成功、falseならば失敗 */
-	virtual bool RequestScene(uint32_t& id) = 0; 
+	virtual bool RequestScene(uint32_t& id, float& waitTime) = 0;
 };
 

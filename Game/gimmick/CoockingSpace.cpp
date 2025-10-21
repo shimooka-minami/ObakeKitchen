@@ -23,6 +23,7 @@ bool CoockingSpace::Start()
 	// 丸い判定を作る
 	// あとで座標更新されるので、一旦座標は0
 	m_collisionObject.CreateSphere(Vector3::Zero, Quaternion::Identity, m_radius);
+	UpdateTransform();
 
 	// 当たり判定の処理をするため管理に登録する
 	CollisionHitManager::Get().RegisterCollisionObject(enCollisionType_CookingSpace, this, &m_collisionObject);
@@ -33,6 +34,12 @@ bool CoockingSpace::Start()
 
 
 void CoockingSpace::Update()
+{
+	UpdateTransform();
+}
+
+
+void CoockingSpace::UpdateTransform()
 {
 	m_transform.UpdateTransform();
 	m_collisionObject.SetPosition(m_transform.m_position);

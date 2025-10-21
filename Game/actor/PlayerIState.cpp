@@ -6,6 +6,7 @@
 #include "ActorTypes.h"
 #include "Plate.h"
 #include "sound/SoundManager.h"
+#include "effect/EffectManager.h"
 
 
 namespace
@@ -94,6 +95,9 @@ void DashState::Update()
 	const Vector3 move = moveDirection * moveDashSpeed;
 	// 座標設定
 	m_owner->SetMoveVector(move);
+
+	//エフェクトを生成
+	EffectManager::Get().PlayEffect(enEffectKind_Dash, m_owner->GetPosition(), m_owner->GetRotation(), Vector3(20.0f, 20.0f, 20.0f));
 }
 
 
@@ -129,7 +133,7 @@ void HavePlateState::Enter()
 	// 食べ物をプレイヤーの子にする
 	targetFood->m_transform.SetParent(&player->m_transform);
 	// 食べ物をプレイヤーの前に配置 (持っている表現)
-	targetFood->SetPosition(m_owner->GetDirection() * 5.0f);
+	targetFood->SetPosition(m_owner->GetDirection() * 10.0f);
 
 	// 持った時のSE再生
 	SoundManager::Get().PlaySE(enSoundKind_Has);

@@ -32,6 +32,15 @@ class SceneManager
 
 
 private:
+	/** 次のシーンID */
+	uint32_t m_nextSceneId = INVALID_SCENE_ID;
+	
+	/** 経過時間 */
+	float m_elapsedTime = 0.0f;
+	float m_waitTime = 0.0f;
+
+
+private:
 	SceneManager();
 	/** 仮想デストラクタ:派生クラスのデストラクタが呼ばれるようにする */
 	~SceneManager(); 

@@ -8,6 +8,11 @@
 
 void ScaleSpriteAnimation::Update()
 {
+	if (!m_isLoop)
+	{
+		return;
+	}
+
 	const float deltaTime = g_gameTime->GetFrameDeltaTime();
 
 	Vector2 targetScale;
@@ -53,6 +58,11 @@ void ScaleSpriteAnimation::Update()
 
 void ColorSpriteAnimation::Update()
 {
+	if (!m_isLoop)
+	{
+		return;
+	}
+
 	const float deltaTime = g_gameTime->GetFrameDeltaTime();
 
 	Vector4 targetColor;
@@ -121,6 +131,48 @@ void AlphaSpriteAnimation::Update()
 	float computeAlpha = nsK2EngineLow::Math::Lerp<float>(computePercent, baseAlpha, targetAlpha);
 
 	m_render->SetMulColor(Vector4(0.0f, 0.0f, 0.0f, computeAlpha));
+
+	m_elapsedTime += deltaTime;
+	if (m_elapsedTime >= m_targetTime) {
+		m_elapsedTime = 0;
+		m_currentStep = m_currentStep == enAnimationStep_Min ? enAnimationStep_Max : enAnimationStep_Min;
+	}
+}
+
+
+
+
+/***********************************************/
+
+
+void TranslateSpriteAnimation::Update()
+{
+	const float deltaTime = g_gameTime->GetFrameDeltaTime();
+
+	Vector3 targetPosition;
+	Vector3 basePosition;
+
+	switch (m_currentStep)
+	{
+	case enAnimationStep_Min:
+	{
+		targetPosition = m_targetPosition;
+		basePosition = m_basePosition;
+		break;
+	}
+	case enAnimationStep_Max:
+	{
+		targetPosition = m_basePosition;
+		basePosition = m_targetPosition;
+		break;
+	}
+	}
+
+	const float computePercent = m_elapsedTime / m_targetTime;
+
+	Vector3 computePosition = nsK2EngineLow::Math::Lerp<Vector3>(computePercent, basePosition, targetPosition);
+
+	m_render->SetPosition(computePosition);
 
 	m_elapsedTime += deltaTime;
 	if (m_elapsedTime >= m_targetTime) {

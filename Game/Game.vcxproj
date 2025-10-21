@@ -235,9 +235,11 @@
     <ClCompile Include="Actor\StateMachine.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="collision\CollisionManager.cpp" />
+    <ClCompile Include="core\Fade.cpp" />
     <ClCompile Include="core\ParameterManager.cpp" />
     <ClCompile Include="core\SceneLoader.cpp" />
     <ClCompile Include="core\TransformHelper.cpp" />
+    <ClCompile Include="effect\EffectManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="gimmick\CoockingSpace.cpp" />
@@ -258,6 +260,7 @@
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Types.cpp" />
     <ClCompile Include="ui\SpriteAnimation.cpp" />
+    <ClCompile Include="ui\UIBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Actor.h" />
@@ -272,9 +275,12 @@
     <ClInclude Include="Actor\StateMachine.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="collision\CollisionManager.h" />
+    <ClInclude Include="core\Fade.h" />
     <ClInclude Include="core\ParameterManager.h" />
     <ClInclude Include="core\SceneLoader.h" />
     <ClInclude Include="core\TransformHelper.h" />
+    <ClInclude Include="effect\EffectManager.h" />
+    <ClInclude Include="effect\Types.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="gimmick\CoockingSpace.h" />
@@ -292,6 +298,7 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="ui\SpriteAnimation.h" />
+    <ClInclude Include="ui\UIBase.h" />
     <ClInclude Include="util\CRC32.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

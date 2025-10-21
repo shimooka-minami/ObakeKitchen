@@ -66,6 +66,8 @@ void CollisionHitManager::Update()
 		}
 
 	}
+
+	m_collisionPairList.clear();
 }
 
 

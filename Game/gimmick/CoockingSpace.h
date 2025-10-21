@@ -31,6 +31,10 @@ public:
 	virtual void Render(RenderContext& renderContect) override {}	// 描画はない
 
 
+private:
+	void UpdateTransform();
+
+
 public:
 	/** 半径の設定 */
 	inline void SetRadius(const float radius) { m_radius = radius; }

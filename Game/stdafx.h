@@ -9,3 +9,5 @@ using namespace nsK2Engine;
 #include "json/json.hpp"
 
 #include "Transform.h"
+
+#include "core/Fade.h"

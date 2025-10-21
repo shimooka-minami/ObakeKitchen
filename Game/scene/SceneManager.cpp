@@ -6,6 +6,8 @@
 #include "TitleScene.h"
 #include "GameScene.h"
 
+#include "core/Fade.h"
+
 
 SceneManager* SceneManager::m_instance = nullptr;	// 初期化
 
@@ -28,11 +30,24 @@ SceneManager::~SceneManager()
 void SceneManager::Update()
 {
 	if (m_currentScene) {
-		uint32_t nextSceneId;
 		m_currentScene->Update();
-		if (m_currentScene->RequestScene(nextSceneId)) {
+		if (m_currentScene->RequestScene(m_nextSceneId, m_waitTime)) {
 			delete m_currentScene;
-			CreateScene(nextSceneId);
+			m_currentScene = nullptr;
+
+			Fade::Get().Enable();
+		}
+	}
+
+	if (m_nextSceneId != INVALID_SCENE_ID) {
+		m_elapsedTime += g_gameTime->GetFrameDeltaTime();
+		if (m_elapsedTime >= m_waitTime) {
+			CreateScene(m_nextSceneId);
+			m_waitTime = 0.0f;
+			m_elapsedTime = 0.0f;
+			m_nextSceneId = INVALID_SCENE_ID;
+
+			Fade::Get().Disable();
 		}
 	}
 }

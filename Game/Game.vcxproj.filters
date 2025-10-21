@@ -31,6 +31,9 @@
     <Filter Include="ui">
       <UniqueIdentifier>{efece5e8-a911-4583-9a34-a1cec28cd9ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effect">
+      <UniqueIdentifier>{5b75be25-2573-4b6b-927d-94342bd1f849}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -111,6 +114,15 @@
     </ClCompile>
     <ClCompile Include="ui\SpriteAnimation.cpp">
       <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\UIBase.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="effect\EffectManager.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Fade.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +212,18 @@
     </ClInclude>
     <ClInclude Include="ui\SpriteAnimation.h">
       <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\UIBase.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="effect\EffectManager.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="effect\Types.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Fade.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

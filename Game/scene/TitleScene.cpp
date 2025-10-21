@@ -84,10 +84,11 @@ void TitleScene::Render(RenderContext& rc)
 }
 
 
-bool TitleScene::RequestScene(uint32_t& id)
+bool TitleScene::RequestScene(uint32_t& id, float& waitTime)
 {
 	if (isRequestNext) {
 		id = GameScene::ID();
+		waitTime = 3.0f;
 		return true;
 	}
 	return false;

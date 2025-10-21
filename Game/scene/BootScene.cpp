@@ -106,10 +106,11 @@ void BootScene::Render(RenderContext& rc)
 }
 
 
-bool BootScene::RequestScene(uint32_t& id)
+bool BootScene::RequestScene(uint32_t& id, float& waitTime)
 {
 	if (m_requestSceneId != INVALID_SCENE_ID) {
 		id = m_requestSceneId;
+		waitTime = 0.0f;
 		return true;
 	}
 	return false;
