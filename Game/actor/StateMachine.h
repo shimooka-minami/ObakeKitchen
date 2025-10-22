@@ -68,6 +68,8 @@ private:
 
 	/** 料理スペースに入った */
 	bool m_isInCookingSpace = false;
+	/** 食材スペースに入った */
+	bool m_isInFoodSpace = false;
 
 
 public:
@@ -225,6 +227,11 @@ public:
 	 * 料理スペースに入ったか
 	 */
 	inline void SetInCookingSpace(const bool inSpace) { m_isInCookingSpace = inSpace; }
+
+	/**
+	 * 食材スペースに入ったか
+	 */
+	inline void SetInFoodSpace(const bool inFoodSpace) { m_isInFoodSpace = inFoodSpace; }
 
 
 public:

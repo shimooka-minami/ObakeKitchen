@@ -6,6 +6,7 @@
 #include "actor/Plate.h"
 
 #include "gimmick/CoockingSpace.h"
+#include "gimmick/FoodSpace.h"
 
 
 CollisionHitManager* CollisionHitManager::m_instance = nullptr;
@@ -34,7 +35,10 @@ void CollisionHitManager::Update()
 			CollisionInfo* infoA = &m_collisionInfoList[i];
 			CollisionInfo* infoB = &m_collisionInfoList[j];
 
-			if(infoA->m_collision->IsHit(infoB->m_collision) || infoB->m_collision->IsHit(infoA->m_collision))
+			const bool isCheckA= infoA->m_collision->IsHit(infoB->m_collision);
+			const bool isCheckB = infoB->m_collision->IsHit(infoA->m_collision);
+
+			if(isCheckA  || isCheckB)
 			{
 				// CollisionPairの中に同じ組み合わせがないかチェック
 				bool exists = false;
@@ -58,6 +62,10 @@ void CollisionHitManager::Update()
 		
 		// 料理スペース用の処理
 		if (UpdateHitCookingSpace(pair)) {
+			continue;
+		}
+		// 食材スペース用の処理
+		if (UpdateHitFoodSpace(pair)) {
 			continue;
 		}
 		// プレイヤーと食べ物の処理
@@ -109,6 +117,37 @@ bool CollisionHitManager::UpdateHitCookingSpace(CollisionPair& pair)
 	// 料理スペースにプレイヤーが入ったときの処理
 	player->GetStateMachine()->SetInCookingSpace(true);
 	
+	return true;
+}
+
+
+bool CollisionHitManager::UpdateHitFoodSpace(CollisionPair& pair)
+{
+	// 判定対象が料理スペースだった場合
+	FoodSpace* foodSpace = GetTargetObject<FoodSpace>(pair, enCollisionType_FoodSpace);
+	Player* player = GetTargetObject<Player>(pair, enCollisionType_Player);
+
+	// 料理スペースじゃないなら処理しない
+	if (foodSpace == nullptr) {
+		return false;
+	}
+	// playerじゃないなら処理しない
+	if (player == nullptr) {
+		return false;
+	}
+
+	// 料理スペースにプレイヤーが入ったときの処理
+	//player->GetStateMachine()->SetInFoodSpace(true);
+
+	// @todo for test
+	if (g_pad[0]->IsTrigger(enButtonA)) {
+
+		float posX = rand() % 500;
+		float posZ = rand() % 200;
+
+		FoodPlate* foodPlate = NewGO<FoodPlate>(0, "foodPlate");
+		foodPlate->Initialize(foodSpace->GetAssetPath().c_str(), foodSpace->GetCookedAssetsPath().c_str(), Vector3(posX, 0.0f, posZ), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
+	}
 	return true;
 }
 

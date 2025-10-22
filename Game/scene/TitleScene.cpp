@@ -3,6 +3,8 @@
 #include "GameScene.h"
 #include "sound/SoundManager.h"
 
+// @todo for test
+#include "ui/UIBase.h"
 
 namespace
 {
@@ -29,6 +31,9 @@ namespace
 		TitleSpriteInformation("Assets/modelData/title/title1.dds", Vector3::Zero, MAX_SPRITE_WIDTH, MAX_SPRITE_HIGHT),
 		TitleSpriteInformation("Assets/modelData/title/push_a.dds", Vector3(0.0f, -300.0f, 0.0f), 300, 100),
 	};
+
+	// @todo for test
+	static UICanvas* canvasTest = nullptr;
 }
 
 
@@ -51,9 +56,17 @@ bool TitleScene::Start()
 		m_spriteRender[i].SetPosition(info.position);
 	}
 
-	m_buttonAnimation = std::make_unique<ScaleSpriteAnimation>(&m_spriteRender[enTitleSpriteKind_ButtonA], 1.5f, Vector2(1.0f, 1.0f), Vector2(1.3f, 1.3f));
+	m_buttonAnimation = std::make_unique<ScaleSpriteAnimation>(&m_spriteRender[enTitleSpriteKind_ButtonA], 1.5f, true, Vector2(1.0f, 1.0f), Vector2(1.3f, 1.3f));
 
 	SoundManager::Get().PlayBGM(enSoundKind_Title);
+
+	// @todo for test
+	canvasTest = new UICanvas();
+	canvasTest->m_transform.m_localPosition = Vector3(500.0f, 0.0f, 0.0f);
+	auto* uiIcon = canvasTest->CreateUI<UIIcon>();
+	uiIcon->Initialize("Assets/ui/hukidashi.dds", 100.0f, 100.0f, Vector3(-100.0f, 50.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	uiIcon = canvasTest->CreateUI<UIIcon>();
+	uiIcon->Initialize("Assets/ui/tomato.dds", 80.0f, 80.0f, Vector3(-150.0f, 50.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
 	return true;
 }
@@ -73,6 +86,12 @@ void TitleScene::Update()
 	for (int i = 0; i < enTitleSpriteKind_Max; i++) {
 		m_spriteRender[i].Update();
 	}
+
+	// @todo for test
+	if (g_pad[0]->IsPress(enButtonDown)) {
+		canvasTest->m_transform.m_localPosition.y++;
+	}
+	canvasTest->Update();
 }
 
 
@@ -81,6 +100,9 @@ void TitleScene::Render(RenderContext& rc)
 	for (int i = 0; i < enTitleSpriteKind_Max; i++) {
 		m_spriteRender[i].Draw(rc);
 	}
+
+	// @todo for test
+	canvasTest->Render(rc);
 }
 
 

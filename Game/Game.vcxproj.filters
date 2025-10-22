@@ -41,7 +41,6 @@
     <ClCompile Include="system\system.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Actor\Player.cpp">
       <Filter>actor</Filter>
@@ -124,13 +123,15 @@
     <ClCompile Include="core\Fade.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="gimmick\FoodSpace.cpp">
+      <Filter>gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="Actor\Player.h">
       <Filter>actor</Filter>
@@ -224,6 +225,9 @@
     </ClInclude>
     <ClInclude Include="core\Fade.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="gimmick\FoodSpace.h">
+      <Filter>gimmick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

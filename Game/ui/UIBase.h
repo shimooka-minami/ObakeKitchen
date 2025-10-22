@@ -1,72 +1,196 @@
 /**
  * UIBase.h
- * UIの基盤を作る
+ * UIの基本的な処理をするクラス群
  */
 #pragma once
 
 
-#include "ui/SpriteAnimation.h"
-//
-//enum EnUIBerSpriteKind
-//{
-//	enUIBerSpriteKind_Back,
-//	enUIBerSpriteKind_Ber,
-//	enUIBerSpriteKind_Frame,
-//	enUIBerSpriteKind_Max
-//};
-//
-//
-///**
-// * UI:ゲージを増加させる
-// */
-//class ProgrresUIBer : public SpriteAnimationBase
-//{
-//private:
-//	float m_baseProgrresBer = 0.0f;
-//	float m_targetProgrresBer = 0.0f;
-//
-//
-//private:
-//	SpriteRender m_spriteRender[enUIBerSpriteKind_Max];
-//	std::unique_ptr<SpriteAnimationBase> m_buttonAnimation;
-//
-//
-//public:
-//	ProgrresUIBer();
-//	virtual ~ProgrresUIBer();
-//
-//	bool Start();
-//	virtual void Update() override;
-//	virtual void UIBerAnim(); //仮
-//	void Render(RenderContext& rc);
-//
-//
-//public:
-//	ProgrresUIBer(SpriteRender* render, const float targetTime, const float baseProgrresBer, const float targetProgrresBer)
-//		:SpriteAnimationBase(render, targetTime)
-//		, m_baseProgrresBer(baseProgrresBer)
-//		, m_targetProgrresBer(targetProgrresBer)
-//	{
-//	}
-//};
+class UIBase : public Noncopyable
+{
+public:
+	Transform m_transform;
 
 
-/** 基底クラス */
-//class UIBase
-//{
-//protected:
-//	enum UIStep
-//	{
-//		UIStep_Min,
-//		UIStep_Max
-//	};
-//
-//protected:
-//	SpriteRender* m_onwer = nullptr;
-//	float m_elapsedTime = 0.0;
-//	float m_targetTime = 0.0f;
-//
-//public:
-//	virtual void Update() = 0;
-//
-//};
+protected:
+	bool isStart = false;
+	bool isUpdate = true;
+	bool isDraw = true;
+
+
+public:
+	UIBase() {}
+	virtual ~UIBase() {}
+
+	virtual bool Start() = 0;
+	virtual void Update() = 0;
+	virtual void Render(RenderContext& rc) = 0;
+};
+
+
+
+
+// ============================================
+// 画像を使うUI関連
+// ============================================
+
+
+class UIImage : public UIBase
+{
+protected:
+	SpriteRender m_spriteRender;
+
+
+protected:
+	UIImage();
+	~UIImage();
+
+
+public:
+	virtual bool Start() override;
+	virtual void Update() override;
+	virtual void Render(RenderContext& rc) override;
+};
+
+
+
+/**
+ * ゲージUI
+ */
+class UIGauge : public UIImage
+{
+private:
+	UIGauge();
+	~UIGauge();
+
+
+public:
+	virtual bool Start() override;
+	virtual void Update() override;
+	virtual void Render(RenderContext& rc) override;
+};
+
+
+/**
+ * アイコンUI
+ */
+class UIIcon : public UIImage
+{
+	friend class UICanvas;
+
+private:
+	UIIcon();
+	~UIIcon();
+
+
+public:
+	virtual bool Start() override;
+	virtual void Update() override;
+	virtual void Render(RenderContext& rc) override;
+
+
+public:
+	void Initialize(const char* assetName, const float width, const float height, const Vector3& position, const Vector3& scale, const Quaternion& rotation);
+};
+
+
+
+
+// ============================================
+// 文字を使うUI関連
+// ============================================
+
+
+class UIText : public UIBase
+{
+protected:
+	FontRender m_fontRender;
+
+
+private:
+	UIText();
+	~UIText();
+
+
+public:
+	virtual bool Start() override;
+	virtual void Update() override;
+	virtual void Render(RenderContext& rc) override;
+};
+
+
+
+// ============================================
+// ボタンを使うUI関連
+// ============================================
+class UIButton : public UIImage
+{
+private:
+	/** ボタンが押されたときの処理(外部から委譲される) */
+	std::function<void()> m_delegate;
+
+
+private:
+	UIButton();
+	~UIButton();
+
+
+public:
+	virtual bool Start() override;
+	virtual void Update() override;
+	virtual void Render(RenderContext& rc) override;
+};
+
+
+
+
+// ============================================
+// キャンバス
+// ============================================
+
+
+/**
+ * 絵を書くキャンバスのイメージ
+ * UIを作るときにこのクラスを作ってください
+ */
+class UICanvas
+{
+	friend class UIBase;
+	friend class UIImage;
+	friend class UIGauge;
+	friend class UIIcon;
+	friend class UIText;
+	friend class UIButton;
+
+
+public:
+	/** 例外でpublic */
+	Transform m_transform;
+
+
+private:
+	/**
+	 * NOTE: 各UI自体に親子関係持たせたいけど使わない可能性があるので、一旦ここだけにしてみる
+	 */
+	std::vector<UIBase*> m_uiList;
+
+
+public:
+	UICanvas();
+	~UICanvas();
+
+
+	bool Start();
+	void Update();
+	void Render(RenderContext& rc);
+
+
+public:
+	template <typename T>
+	T* CreateUI()
+	{
+		T* ui = new T();
+		ui->m_transform.SetParent(&m_transform);
+		m_uiList.push_back(ui);
+		return ui;
+	}
+};

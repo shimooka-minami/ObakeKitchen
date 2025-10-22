@@ -11,6 +11,7 @@
 #include "actor/Plate.h"
 
 #include "gimmick/CoockingSpace.h"
+#include "gimmick/FoodSpace.h"
 #include "collision/CollisionManager.h"
 
 #include "sound/SoundManager.h"
@@ -74,6 +75,21 @@ namespace
 		info.radius = j.at("radius").get<float>();
 		return info;
 	}
+
+
+	/** 食材箱の情報を取得 */
+	struct FoodBoxExportInfo
+	{
+		std::string assetsPath;
+		std::string cookedAssetsPath;
+	};
+	FoodBoxExportInfo ParseFoodBoxComponent(const nlohmann::json& j)
+	{
+		FoodBoxExportInfo info;
+		info.assetsPath = j.at("assetPath").get<std::string>();
+		info.cookedAssetsPath = j.at("cookedAssetPath").get<std::string>();
+		return info;
+	}
 }
 
 
@@ -92,11 +108,13 @@ GameScene::~GameScene()
 bool GameScene::Start()
 {
 	// プレイヤー
-	for (int i = 0; i < MAX_PLAYER_NUM; ++i) {
+	for (int i = 0; i < 1;/* MAX_PLAYER_NUM;*/ ++i) {
 		char name[] = "playerA";
 		name[6] = 'A' + i;
 		m_playerList[i] = NewGO<Player>(0, name);
-		m_playerList[i]->m_transform.m_localScale = Vector3{2.0f,2.0f,1.0f};
+		m_playerList[i]->m_transform.m_localScale = Vector3(2.0f,2.0f,1.0f);
+		m_playerList[i]->m_transform.m_localPosition = Vector3(1.0f + static_cast<float>(i), 0.0f, 0.0f);
+		m_playerList[i]->m_transform.UpdateTransform();
 	}
 
 	// プレイヤーコントローラー
@@ -144,19 +162,46 @@ bool GameScene::Start()
 					auto* cookingSpace = NewGO<CoockingSpace>(0, "coockingSpace");
 					cookingSpace->m_transform.SetParent(&staticGimmick->m_transform);
 					cookingSpace->m_transform.m_localPosition = info.position;
+					cookingSpace->m_transform.UpdateTransform();
 					cookingSpace->SetRadius(info.radius);
 				}
 				return true;
 			}
+			// まな板
 			if (IsForwardMatchObjectName(name.c_str(), "Prop_CuttingPlate")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "cookingBoard");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
 			}
+			//包丁
 			if (IsForwardMatchObjectName(name.c_str(), "Prop_Knife_04")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "knife");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			}
+			// 食材箱
+			if (IsForwardMatchObjectName(name.c_str(), "Crate")) {
+				auto* staticGimmick = NewGO<StaticGimmick>(0, "foodBox");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One/*transform.scale*/, transform.rotation);	// TODO: Unityからの変換がおかしい？から、大きさは固定にする
+
+				FoodSpace* foodSpace = nullptr;
+				if (j.contains("InteractExportComponent")) {
+					InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
+					
+					foodSpace = NewGO<FoodSpace>(0, "foodSpace");
+					foodSpace->m_transform.SetParent(&staticGimmick->m_transform);
+					foodSpace->m_transform.m_localPosition = info.position;
+					foodSpace->m_transform.UpdateTransform();
+					foodSpace->SetRadius(info.radius);
+				}
+				if (j.contains("FoodBoxExportComponent")) {
+					FoodBoxExportInfo info = ParseFoodBoxComponent(j["FoodBoxExportComponent"]);
+					if (foodSpace) {
+						foodSpace->SetAssetPath(info.assetsPath);
+						foodSpace->SetCookedAssetsPath(info.cookedAssetsPath);
+					}
+				}
 			}
 			return true;
 		});

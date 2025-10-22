@@ -4,7 +4,7 @@
 #include<InitGUID.h>
 #include<dxgidebug.h>
 
-#include "Game.h"
+//#include "Game.h"
 
 #include "core/ParameterManager.h"
 #include "core/Fade.h"

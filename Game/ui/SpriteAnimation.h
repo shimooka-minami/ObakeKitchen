@@ -9,10 +9,6 @@
 class SpriteAnimationBase
 {
 protected:
-	bool m_isLoop = false;
-
-
-protected:
 	enum EnAnimationStep
 	{
 		enAnimationStep_Min,
@@ -25,11 +21,15 @@ protected:
 	float m_elapsedTime = 0.0;
 	float m_targetTime = 0.0f;
 	EnAnimationStep m_currentStep;
+	bool m_isLoop = false;
+	bool m_isCompleted = false;	// 処理が完了したか
+
 
 public:
-	SpriteAnimationBase(SpriteRender* render, const float targetTime)
+	SpriteAnimationBase(SpriteRender* render, const float targetTime, const bool isLoop)
 		: m_render(render)
 		, m_targetTime(targetTime)
+		, m_isLoop(isLoop)
 	{
 	}
 
@@ -54,8 +54,8 @@ private:
 
 
 public:
-	ScaleSpriteAnimation(SpriteRender* render, const float targetTime, const Vector2 baseScale, const Vector2 targetScale)
-		: SpriteAnimationBase(render, targetTime)
+	ScaleSpriteAnimation(SpriteRender* render, const float targetTime, const bool isLoop, const Vector2 baseScale, const Vector2 targetScale)
+		: SpriteAnimationBase(render, targetTime, isLoop)
 		, m_baseScale(baseScale)
 		, m_targetScale(targetScale)
 	{
@@ -82,8 +82,8 @@ private:
 
 
 public:
-	ColorSpriteAnimation(SpriteRender* render, const float targetTime, const Vector4 baseColor, const Vector4 targetColor)
-		: SpriteAnimationBase(render, targetTime)
+	ColorSpriteAnimation(SpriteRender* render, const float targetTime, const bool isLoop, const Vector4 baseColor, const Vector4 targetColor)
+		: SpriteAnimationBase(render, targetTime, isLoop)
 		, m_baseColor(baseColor)
 		, m_targetColor(targetColor)
 	{
@@ -110,8 +110,8 @@ private:
 
 	
 public:
-	AlphaSpriteAnimation(SpriteRender* render, const float targetTime, const float baseAlpha, const float targetAlpha)
-		: SpriteAnimationBase(render,targetTime)
+	AlphaSpriteAnimation(SpriteRender* render, const float targetTime, const bool isLoop, const float baseAlpha, const float targetAlpha)
+		: SpriteAnimationBase(render, targetTime, isLoop)
 		, m_baseAlpha(baseAlpha)
 		, m_targetAlpha(targetAlpha)
 	{
@@ -127,6 +127,9 @@ public:
 /***********************************************/
 
 
+/**
+ * 上下左右のアニメーション
+ */
 class TranslateSpriteAnimation : public SpriteAnimationBase
 {
 private:
@@ -135,8 +138,8 @@ private:
 
 
 public:
-	TranslateSpriteAnimation(SpriteRender* render, const float targetTime, const Vector3 basePosition, const Vector3 targetPosition)
-		: SpriteAnimationBase(render, targetTime)
+	TranslateSpriteAnimation(SpriteRender* render, const float targetTime, const bool isLoop, const Vector3 basePosition, const Vector3 targetPosition)
+		: SpriteAnimationBase(render, targetTime, isLoop)
 		, m_basePosition(basePosition)
 		, m_targetPosition(targetPosition)
 	{

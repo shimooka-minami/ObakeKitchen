@@ -21,8 +21,7 @@ CoockingSpace::~CoockingSpace()
 bool CoockingSpace::Start()
 {
 	// 丸い判定を作る
-	// あとで座標更新されるので、一旦座標は0
-	m_collisionObject.CreateSphere(Vector3::Zero, Quaternion::Identity, m_radius);
+	m_collisionObject.CreateSphere(m_transform.m_position, Quaternion::Identity, 5.0f/*m_radius*/);	//@todo for test
 	UpdateTransform();
 
 	// 当たり判定の処理をするため管理に登録する

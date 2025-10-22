@@ -41,7 +41,7 @@ public:
 
 
 /**
- * 加工前の食材が乗った皿
+ * 食材が乗った皿
  * ※投げることができる
  */
 class FoodPlate : public Plate
@@ -49,11 +49,21 @@ class FoodPlate : public Plate
 	using SuperClass = Plate;
 
 
+private:
+	enum EnState
+	{
+		enState_Food,		// 料理前
+		enState_Coocked,	// 料理後
+	};
+
+
 protected:
 	/** 投げる際に加えられる力 */
 	Vector3 m_addForce;
 	/** 食材をカット等した後のモデル名 */
 	std::string m_coockedFoodModelName;
+
+	EnState m_state;
 
 
 public:

@@ -16,6 +16,7 @@ enum EnCollisionType
 	enCollisionType_Player,
 	enCollisionType_FoodPlate,
 	enCollisionType_CookingSpace,	// 料理スペース
+	enCollisionType_FoodSpace,		// 食材スペース
 };
 
 
@@ -76,6 +77,7 @@ public:
 
 private:
 	bool UpdateHitCookingSpace(CollisionPair& pair);
+	bool UpdateHitFoodSpace(CollisionPair& pair);
 	bool UpdateHitFoodPlate(CollisionPair& pair);
 
 

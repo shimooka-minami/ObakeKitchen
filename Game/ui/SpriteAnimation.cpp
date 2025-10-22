@@ -8,7 +8,8 @@
 
 void ScaleSpriteAnimation::Update()
 {
-	if (!m_isLoop)
+	// 繰り返し実行するか
+	if (!m_isLoop && m_isCompleted)
 	{
 		return;
 	}
@@ -17,6 +18,7 @@ void ScaleSpriteAnimation::Update()
 
 	Vector2 targetScale;
 	Vector2 baseScale;
+	// ステップの切り替わりで拡縮
 	switch (m_currentStep)
 	{
 		case enAnimationStep_Min:
@@ -33,13 +35,17 @@ void ScaleSpriteAnimation::Update()
 		}
 	}
 
+	// 現在のアニメーション経過時間のパーセント
 	const float computePercent = m_elapsedTime / m_targetTime;
 
+	// 初期値から目標値までをなめらかに変化
 	Vector2 computeScale = baseScale;
 	computeScale.Lerp(computePercent, baseScale, targetScale);
 
+	// 大きさを設定する
 	m_render->SetScale(Vector3(computeScale.x, computeScale.y, 1.0f));
 
+	// 一定時間経過したら往復
 	m_elapsedTime += deltaTime;
 	if (m_elapsedTime >= m_targetTime) {
 		m_elapsedTime = 0.0f;
@@ -47,6 +53,9 @@ void ScaleSpriteAnimation::Update()
 		// 今の状態(Step)がMaxだった場合->Min。そうでない場合->Max
 		// 例文)condition ? value_if_true : value_if_false;
 		m_currentStep = m_currentStep == enAnimationStep_Max ? enAnimationStep_Min : enAnimationStep_Max;
+
+		// 完了
+		m_isCompleted = true;
 	}
 }
 
@@ -58,7 +67,7 @@ void ScaleSpriteAnimation::Update()
 
 void ColorSpriteAnimation::Update()
 {
-	if (!m_isLoop)
+	if (!m_isLoop && m_isCompleted)
 	{
 		return;
 	}
@@ -94,6 +103,9 @@ void ColorSpriteAnimation::Update()
 	if (m_elapsedTime >= m_targetTime) {
 		m_elapsedTime = 0;
 		m_currentStep = m_currentStep == enAnimationStep_Min ? enAnimationStep_Max : enAnimationStep_Min;
+
+		// 完了
+		m_isCompleted = true;
 	}
 }
 
@@ -105,6 +117,11 @@ void ColorSpriteAnimation::Update()
 
 void AlphaSpriteAnimation::Update()
 {
+	if (!m_isLoop && m_isCompleted)
+	{
+		return;
+	}
+
 	const float deltaTime = g_gameTime->GetFrameDeltaTime();
 
 	float targetAlpha;
@@ -136,6 +153,9 @@ void AlphaSpriteAnimation::Update()
 	if (m_elapsedTime >= m_targetTime) {
 		m_elapsedTime = 0;
 		m_currentStep = m_currentStep == enAnimationStep_Min ? enAnimationStep_Max : enAnimationStep_Min;
+
+		// 完了
+		m_isCompleted = true;
 	}
 }
 
@@ -147,6 +167,11 @@ void AlphaSpriteAnimation::Update()
 
 void TranslateSpriteAnimation::Update()
 {
+	if (!m_isLoop && m_isCompleted)
+	{
+		return;
+	}
+
 	const float deltaTime = g_gameTime->GetFrameDeltaTime();
 
 	Vector3 targetPosition;
@@ -178,5 +203,8 @@ void TranslateSpriteAnimation::Update()
 	if (m_elapsedTime >= m_targetTime) {
 		m_elapsedTime = 0;
 		m_currentStep = m_currentStep == enAnimationStep_Min ? enAnimationStep_Max : enAnimationStep_Min;
+
+		// 完了
+		m_isCompleted = true;
 	}
 }
