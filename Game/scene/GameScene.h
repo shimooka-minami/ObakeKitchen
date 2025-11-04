@@ -19,11 +19,13 @@ class GameScene : public IScene
 {
 	appScene(GameScene);
 
-
 private:
 	PlayerController* m_playerContoller = nullptr;
 	GameCamera* m_gameCamera = nullptr;
 	BackGround* m_backGround = nullptr;
+
+	// @todo for test
+	//UIGauge* m_uiGauge = nullptr;
 
 
 	ModelRender m_modelRender; //モデル描画

@@ -160,10 +160,10 @@ void HavePlateState::Exit()
 {
 	Player* player = m_owner->GetOwner();
 	FoodPlate* targetFood = m_owner->GetTargetFood();
-	player->m_transform.RemoveChild(&targetFood->m_transform);
-
-	targetFood->SetPosition(targetFood->m_transform.m_position);
-
+	if (targetFood) {
+		player->m_transform.RemoveChild(&targetFood->m_transform);
+		targetFood->SetPosition(targetFood->m_transform.m_position);
+	}
 	// 移動終わり
 	m_owner->SetMoveVector(Vector3::Zero);
 }	
@@ -239,11 +239,8 @@ void CoockingState::Enter()
 	K2_ASSERT(targetFood, "食べ物を持っていません。\n");
 	if (targetFood)
 	{
-		m_owner->SetNearFood(false);
-		m_owner->SetForwardFood(false);
-		m_owner->SetTargetFood(nullptr);
 		// 料理済みにする
-		targetFood->CreateCoockedFood();
+		targetFood->ChangedCoocke();
 
 		// 切ったときにSEを再生
 		SoundManager::Get().PlaySE(enSoundKind_Cut);

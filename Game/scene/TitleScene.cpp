@@ -17,7 +17,7 @@ namespace
 		Vector3 position;
 		float width;
 		float hight;
-		//
+		//タイトルスプライト情報
 		TitleSpriteInformation(const std::string& path, const Vector3& pos, const float w, const float h)
 			: assetPath(path)
 			, position(pos)
@@ -65,8 +65,13 @@ bool TitleScene::Start()
 	canvasTest->m_transform.m_localPosition = Vector3(500.0f, 0.0f, 0.0f);
 	auto* uiIcon = canvasTest->CreateUI<UIIcon>();
 	uiIcon->Initialize("Assets/ui/hukidashi.dds", 100.0f, 100.0f, Vector3(-100.0f, 50.0f, 0.0f), Vector3::One, Quaternion::Identity);
-	uiIcon = canvasTest->CreateUI<UIIcon>();
-	uiIcon->Initialize("Assets/ui/tomato.dds", 80.0f, 80.0f, Vector3(-150.0f, 50.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	auto* uiDigit = canvasTest->CreateUI <UIDigit>();
+	uiDigit->Initialize("Assets/modelData/UI/suji", 5, 0, 50.0f, 50.0f, Vector3(-200.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+
+	uiDigit->SetNumber(123);
+	
+	//uiIcon = canvasTest->CreateUI<UIIcon>();
+	//uiIcon->Initialize("Assets/ui/tomato.dds", 80.0f, 80.0f, Vector3(-150.0f, 50.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
 	return true;
 }

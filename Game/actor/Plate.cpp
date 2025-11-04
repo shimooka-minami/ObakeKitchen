@@ -87,14 +87,23 @@ void FoodPlate::Update()
 	// 物理的ではない当たり判定の座標を更新
 	m_collisionObject.SetPosition(m_transform.m_position);
 	// モデルの座標を更新する
-	m_modelRender.SetPosition(m_transform.m_position);
-	m_modelRender.Update();
+	if (m_state == enState_Coocked) {
+		m_coockedRender.SetPosition(m_transform.m_position);
+		m_coockedRender.Update();
+	} else {
+		m_modelRender.SetPosition(m_transform.m_position);
+		m_modelRender.Update();
+	}
 }
 
 
 void FoodPlate::Render(RenderContext& rc)
 {
-	m_modelRender.Draw(rc);
+	if (m_state == enState_Coocked) {
+		m_coockedRender.Draw(rc);
+	} else {
+		m_modelRender.Draw(rc);
+	}
 }
 
 
@@ -102,7 +111,7 @@ void FoodPlate::Initialize(const char* modelName, const char* coockedModelName, 
 {
 	SuperClass::Initialize(modelName, position, scale, rotation);
 
-	m_coockedFoodModelName = coockedModelName;
+	m_coockedRender.Init(coockedModelName);
 }
 
 
@@ -115,16 +124,6 @@ void FoodPlate::SetPosition(const Vector3& position)
 }
 
 
-void FoodPlate::CreateCoockedFood()
-{
-	// 食材が切り替わるので、加工前は削除する
-	DeleteGO(this);
-
-	auto* coocked = NewGO<CoockedFoodPlate>(0, "coockedFoodPlate");
-	coocked->Initialize(m_coockedFoodModelName.c_str(), "", m_transform.m_position, m_transform.m_scale, m_transform.m_rotation);
-}
-
-
 void FoodPlate::Throw(const Vector3& direction)
 {
 	if (m_addForce.LengthSq() >= 0.01f) {
@@ -134,47 +133,4 @@ void FoodPlate::Throw(const Vector3& direction)
 
 	const float addForcePower = GetStatus()->GetAddForcePower();
 	m_addForce = direction * addForcePower;
-}
-
-
-
-
-/**********************************/
-
-
-CoockedFoodPlate::CoockedFoodPlate()
-{
-	m_status = CreateStatus<CoockedFoodStatus>();
-}
-
-
-CoockedFoodPlate::~CoockedFoodPlate()
-{
-	if (m_status) {
-		delete m_status;
-		m_status = nullptr;
-	}
-}
-
-
-bool CoockedFoodPlate::Start()
-{
-	// 物理当たり判定の初期化
-	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_transform.m_position, enCollsiionAttr_Food);
-	// 物体ではない当たり判定の初期化
-	m_collisionObject.CreateSphere(m_transform.m_position, Quaternion::Identity, GetStatus()->GetRadius());
-
-	return true;
-}
-
-
-void CoockedFoodPlate::Update()
-{
-	SuperClass::Update();
-}
-
-
-void CoockedFoodPlate::Render(RenderContext& rc)
-{
-	SuperClass::Render(rc);
 }

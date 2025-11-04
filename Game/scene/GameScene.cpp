@@ -12,10 +12,13 @@
 
 #include "gimmick/CoockingSpace.h"
 #include "gimmick/FoodSpace.h"
+#include "gimmick/DeliverySpace.h"
 #include "collision/CollisionManager.h"
 
 #include "sound/SoundManager.h"
 
+// @todo for test
+#include "ui/UIBase.h"
 
 namespace
 {
@@ -90,6 +93,9 @@ namespace
 		info.cookedAssetsPath = j.at("cookedAssetPath").get<std::string>();
 		return info;
 	}
+
+	// @todo for test
+	static UICanvas* canvasTest = nullptr;
 }
 
 
@@ -203,6 +209,23 @@ bool GameScene::Start()
 					}
 				}
 			}
+			// î[ïièÍ
+			if (IsForwardMatchObjectName(name.c_str(), "Prop_Fridge_04")) {
+				auto* staticGimmick = NewGO<StaticGimmick>(0, "delivery");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One/*transform.scale*/, transform.rotation);
+
+				DeliverySpace* deliverySpace = nullptr;
+				if (j.contains("InteractExportComponent")) {
+					InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
+
+					deliverySpace = NewGO<DeliverySpace>(0, "deliverySpace");
+					deliverySpace->m_transform.SetParent(&staticGimmick->m_transform);
+					deliverySpace->m_transform.m_localPosition = info.position;
+					deliverySpace->m_transform.UpdateTransform();
+					deliverySpace->SetRadius(info.radius);
+				}
+			}
 			return true;
 		});
 
@@ -216,6 +239,24 @@ bool GameScene::Start()
 	// @todo for test
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
+
+	//// @todo for test
+	//canvasTest = new UICanvas();
+	//canvasTest->m_transform.m_localPosition = Vector3(500.0f, 0.0f, 0.0f);
+	//// ÉQÅ[ÉWÇÃîwåi
+	//auto* uiGauge_back = canvasTest->CreateUI<UIGauge>();
+	//uiGauge_back->Initialize("Assets/modelData/UI/Ber/ber.dds", 200.0f, 50.0f, Vector3(-100.0f, 50.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	//// ÉQÅ[ÉW
+	//auto* uiGauge_mid = canvasTest->CreateUI<UIGauge>();
+	//uiGauge_mid->Initialize("Assets/modelData/UI/Ber/ber_mid.dds", 200.0f, 50.0f, Vector3(-100.0f, 50.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	//// ÉQÅ[ÉWÇÃòg
+	//auto* uiGauge_frame = canvasTest->CreateUI<UIGauge>();
+	//uiGauge_frame->Initialize("Assets/modelData/UI/Ber/ber_waku.dds", 200.0f, 50.0f, Vector3(-100.0f, 50.0f, 0.0f), Vector3::One, Quaternion::Identity);
+
+	// @todo for test
+	//m_uiGauge = uiGauge_mid; // ê^ÇÒíÜÇÃÉQÅ[ÉWÇäoÇ¶ÇƒÇ®Ç≠
+	//m_uiGauge = uiGauge_mid;
+
 	// BGMçƒê∂
 	SoundManager::Get().PlayBGM(enSoundKind_Game);
 
@@ -227,12 +268,34 @@ void GameScene::Update()
 {
 	// @todo for test
 	CollisionHitManager::Get().Update();
+
+	// @todo for test
+	float m_pressTime = 0.0f; // âüÇµÇƒÇ¢ÇÈéûä‘
+
+	const float deltaTime = g_gameTime->GetFrameDeltaTime();
+
+	if (g_pad[0]->IsPress(enButtonDown)) {
+		m_pressTime += deltaTime; // âüÇµÇƒÇ¢ÇÈéûä‘Çë´Ç∑
+		//m_uiGauge->m_transform.m_localScale.x -= 0.1f;
+	}
+	else {
+		m_pressTime = 0.0f;
+	}
+
+	//m_uiGauge->m_transform.m_localScale.x -= 0.1f;
+	//uiGauge_mid->m_transform.localScale.x;
+
+	/*if (g_pad[0]->IsPress(enButtonDown)) {
+		canvasTest->m_transform.m_localScale.x -= 0.1f; 
+	}*/
+	//canvasTest->Update();
 }
 
 
 void GameScene::Render(RenderContext& rc)
 {
-
+	// @todo for test
+	//canvasTest->Render(rc);
 }
 
 

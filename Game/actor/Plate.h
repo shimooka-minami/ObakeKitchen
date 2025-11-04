@@ -60,10 +60,10 @@ private:
 protected:
 	/** 投げる際に加えられる力 */
 	Vector3 m_addForce;
-	/** 食材をカット等した後のモデル名 */
-	std::string m_coockedFoodModelName;
-
-	EnState m_state;
+	
+	/** 料理前と後で分けるために必要な情報 */
+	EnState m_state = enState_Food;
+	ModelRender m_coockedRender;
 
 
 public:
@@ -76,17 +76,16 @@ public:
 
 
 public:
+	/** 初期化 */
 	void Initialize(const char* modelName, const char* coockedModelName, const Vector3& position, const Vector3 scale, const Quaternion& rotation);
 
 	/** 座標の設定 お皿の位置 */
 	void SetPosition(const Vector3& position);
 
-	/**
-	 * @todo for あとで処理を変えると思う
-	 * この関数が呼ばれたら食材を加工済みにする
-	 * 本当は別クラスを作って、その中で切り替える処理にしたい
-	 */
-	void CreateCoockedFood();
+	/** 料理後に変更 */
+	void ChangedCoocke() { m_state = enState_Coocked; }
+	/** 料理後か */
+	bool IsCoocked() { return m_state == enState_Coocked; }
 
 
 public:
@@ -98,23 +97,4 @@ public:
 
 public:
 	FoodStatus* GetStatus() { return dynamic_cast<FoodStatus*>(m_status); }
-};
-
-
-
-
-/**********************************/
-
-
-class CoockedFoodPlate : public FoodPlate
-{
-	using SuperClass = FoodPlate;
-
-public:
-	CoockedFoodPlate();
-	~CoockedFoodPlate();
-
-	virtual bool Start() override;
-	virtual void Update() override;
-	virtual void Render(RenderContext& rc) override;
 };

@@ -7,6 +7,7 @@
 
 #include "gimmick/CoockingSpace.h"
 #include "gimmick/FoodSpace.h"
+#include "gimmick/DeliverySpace.h"
 
 
 CollisionHitManager* CollisionHitManager::m_instance = nullptr;
@@ -60,6 +61,10 @@ void CollisionHitManager::Update()
 	// 今回のゲームではないがプレイヤーの攻撃がエネミーにあたったのでHPを減らすみたいなことをする
 	for (auto& pair : m_collisionPairList) {
 		
+		// 納品スぺース用の処理
+		if (UpdateHitDeliverySpace(pair)) {
+			continue;
+		}
 		// 料理スペース用の処理
 		if (UpdateHitCookingSpace(pair)) {
 			continue;
@@ -192,4 +197,39 @@ bool CollisionHitManager::UpdateHitFoodPlate(CollisionPair& pair)
 	}
 
 	return true;
+}
+
+bool CollisionHitManager::UpdateHitDeliverySpace(CollisionPair& pair)
+{
+	Player* player = GetTargetObject<Player>(pair, enCollisionType_Player);
+	DeliverySpace* deliverySpace = GetTargetObject<DeliverySpace>(pair, enCollisionType_DeliverySpace);
+
+	// プレイヤーが納品場と当たってないとき
+	if (deliverySpace == nullptr)
+	{
+		return false;
+	}
+	if (player == nullptr)
+	{
+		return false;
+	}
+
+	// 取得
+	FoodPlate* targetFood = player->GetStateMachine()->GetTargetFood();
+	if (targetFood == nullptr)
+	{
+		return false;
+	}
+	if (targetFood->IsCoocked())
+	{
+		// 親子関係終わり
+		player->m_transform.RemoveChild(&targetFood->m_transform);
+		// 持ち物じゃない
+		player->GetStateMachine()->SetTargetFood(nullptr);
+		// スコア処理
+		DeleteGO(targetFood);
+		return true;
+	}
+
+	return false;
 }

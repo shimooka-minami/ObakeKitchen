@@ -242,6 +242,7 @@
     <ClCompile Include="effect\EffectManager.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="gimmick\CoockingSpace.cpp" />
+    <ClCompile Include="gimmick\DeliverySpace.cpp" />
     <ClCompile Include="gimmick\FoodSpace.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="scene\BootScene.cpp" />
@@ -283,6 +284,7 @@
     <ClInclude Include="effect\Types.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="gimmick\CoockingSpace.h" />
+    <ClInclude Include="gimmick\DeliverySpace.h" />
     <ClInclude Include="gimmick\FoodSpace.h" />
     <ClInclude Include="json\json.hpp" />
     <ClInclude Include="scene\BootScene.h" />

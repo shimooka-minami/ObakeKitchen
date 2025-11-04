@@ -58,6 +58,9 @@ public:
  */
 class UIGauge : public UIImage
 {
+	friend class UICanvas;
+	
+
 private:
 	UIGauge();
 	~UIGauge();
@@ -67,6 +70,9 @@ public:
 	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
+
+public:
+	void Initialize(const char* assetName, const float width, const float height, const Vector3& position, const Vector3& scale, const Quaternion& rotation);
 };
 
 
@@ -142,6 +148,63 @@ public:
 
 
 
+// ============================================
+// UI桁表示(スコア表示などで使用)
+// ============================================
+class UIDigit : public UIBase
+{
+private:
+	/** 画像表示機能の可変長配列 */
+	std::vector<SpriteRender*> m_renderList;
+	/** 表示される数字 */
+	int m_number;
+	int m_requestNumber;
+	int m_digit;
+	/** 数字表示に必要な画像が入った */
+	std::string m_assetPath;
+
+	// あとでかえて
+	int w;
+	int h;
+
+
+
+public:
+	UIDigit();
+	~UIDigit();
+
+
+public:
+	virtual bool Start() override;
+	virtual void Update() override;
+	virtual void Render(RenderContext& rc) override;
+
+
+public:
+	/**
+	 * ・何桁かの情報（数）
+	 * ・高さ
+	 * ・横
+	 * ・位置
+	 * ・大きさ
+	 * ・アセットの名前
+	 */
+	void Initialize(const char* assetPath, const int digit, const int number, const float widht, const float height, const Vector3& position, const Vector3& scale, const Quaternion& rotation);
+
+	/** 数字を設定 */
+	void SetNumber(const int number) { m_requestNumber = number; }
+
+
+private:
+	void UpdateNumber(const int targetDigit, const int number);
+	void UpdatePosition(const int index);
+
+	/** 対象の桁 */
+	int GetDigit(int digit);
+};
+
+
+
 
 // ============================================
 // キャンバス
@@ -152,7 +215,7 @@ public:
  * 絵を書くキャンバスのイメージ
  * UIを作るときにこのクラスを作ってください
  */
-class UICanvas
+class UICanvas : public UIBase
 {
 	friend class UIBase;
 	friend class UIImage;
@@ -160,11 +223,6 @@ class UICanvas
 	friend class UIIcon;
 	friend class UIText;
 	friend class UIButton;
-
-
-public:
-	/** 例外でpublic */
-	Transform m_transform;
 
 
 private:

@@ -183,7 +183,7 @@ public:
 	/**
 	 * M‚ÌˆÊ’u‚ğİ’è ‚¢‚é‚©•ª‚©‚ç‚ñ‚¯‚Çˆê‰
 	 */
-	inline void SetPlatePosition(const Vector3 platePos) { m_platePos = platePos; }
+	inline void SetPlatePosition(const Vector3& platePos) { m_platePos = platePos; }
 
 
 	/**

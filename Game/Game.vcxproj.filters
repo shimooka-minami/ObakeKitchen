@@ -126,6 +126,9 @@
     <ClCompile Include="gimmick\FoodSpace.cpp">
       <Filter>gimmick</Filter>
     </ClCompile>
+    <ClCompile Include="gimmick\DeliverySpace.cpp">
+      <Filter>gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -227,6 +230,9 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="gimmick\FoodSpace.h">
+      <Filter>gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="gimmick\DeliverySpace.h">
       <Filter>gimmick</Filter>
     </ClInclude>
   </ItemGroup>
