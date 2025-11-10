@@ -9,6 +9,8 @@
 #include "gimmick/FoodSpace.h"
 #include "gimmick/DeliverySpace.h"
 
+#include "score/Score.h"
+
 
 CollisionHitManager* CollisionHitManager::m_instance = nullptr;
 
@@ -219,15 +221,19 @@ bool CollisionHitManager::UpdateHitDeliverySpace(CollisionPair& pair)
 	if (targetFood == nullptr)
 	{
 		return false;
-	}
+	}	
 	if (targetFood->IsCoocked())
 	{
 		// 親子関係終わり
 		player->m_transform.RemoveChild(&targetFood->m_transform);
 		// 持ち物じゃない
 		player->GetStateMachine()->SetTargetFood(nullptr);
+		player->GetStateMachine()->SetForwardFood(false);
+		player->GetStateMachine()->SetNearFood(false);
 		// スコア処理
 		DeleteGO(targetFood);
+		// スコアの加算
+		Score::GetInstance()->AddScore(50);
 		return true;
 	}
 

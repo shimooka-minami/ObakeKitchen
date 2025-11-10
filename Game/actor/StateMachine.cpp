@@ -45,15 +45,17 @@ void StateMachine::Update()
 void StateMachine::ChangeState()
 {
 	// 切り替え先のステートを取得
-	IState* nextState = GetChangeState();
+	m_nextState = GetChangeState();
 	//ステートが切り替わった(nullptrじゃない)時・今のステートがnextStateと同じ数字ではない時
-	if (nextState != nullptr && m_currentState != nextState) {
+	if (m_nextState != nullptr && m_currentState != m_nextState) {
 		//今のステートを終了
 		m_currentState->Exit();
 		//新しいステートに変更
-		m_currentState = nextState;
+		m_currentState = m_nextState;
 		//新しいステートを開始
 		m_currentState->Enter();
+		// 次の状態を無にする
+		m_nextState = nullptr;
 	}
 }
 
@@ -130,6 +132,9 @@ bool StateMachine::ChangeHavePlate() const
 		return false;
 	}
 	if (!m_isForwardFood) {
+		return false;
+	}
+	if (m_targetFood == nullptr) {
 		return false;
 	}
 

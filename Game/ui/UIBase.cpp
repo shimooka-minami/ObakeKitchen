@@ -218,6 +218,22 @@ void UIDigit::Initialize(const char* assetName, const int digit, const int numbe
 }
 
 
+// @todo for test
+//void UIDigit::SetCustomChar(int targetDigit, const std::string& assetPath)
+//{
+//	K2_ASSERT(targetDigit >= 1, "桁指定が間違えています。\n");
+//
+//	int targetIndex = targetDigit - 1;
+//	if (targetIndex >= m_renderList.size())
+//	{
+//		return; // 範囲外
+//	}
+//
+//	SpriteRender* render = m_renderList[targetIndex];
+//	std::string assetName = m_assetPath + "/" + assetPath; // coron.dds
+//	render->Init(assetName.c_str(), w, h);
+//}
+
 void UIDigit::UpdateNumber(const int targetDigit, const int number)
 {
 	// NOTE: targetDigitは1以上の値になっている

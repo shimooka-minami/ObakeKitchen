@@ -34,6 +34,9 @@
     <Filter Include="Effect">
       <UniqueIdentifier>{5b75be25-2573-4b6b-927d-94342bd1f849}</UniqueIdentifier>
     </Filter>
+    <Filter Include="score">
+      <UniqueIdentifier>{c5ff2349-076f-4fb3-8b3c-53c9d012c63a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -128,6 +131,21 @@
     </ClCompile>
     <ClCompile Include="gimmick\DeliverySpace.cpp">
       <Filter>gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="score\Score.cpp">
+      <Filter>score</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\UIScore.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\ResultScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="core\TimeKeeper.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\UITimer.cpp">
+      <Filter>ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +252,21 @@
     </ClInclude>
     <ClInclude Include="gimmick\DeliverySpace.h">
       <Filter>gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="score\Score.h">
+      <Filter>score</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\UIScore.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\ResultScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="core\TimeKeeper.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\UITimer.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -182,17 +182,22 @@ public:
 
 public:
 	/**
+	 * ・アセットの名前
 	 * ・何桁かの情報（数）
-	 * ・高さ
+	 * ・表示する数
 	 * ・横
+	 * ・高さ
 	 * ・位置
 	 * ・大きさ
-	 * ・アセットの名前
+	 * ・回転
 	 */
 	void Initialize(const char* assetPath, const int digit, const int number, const float widht, const float height, const Vector3& position, const Vector3& scale, const Quaternion& rotation);
 
 	/** 数字を設定 */
 	void SetNumber(const int number) { m_requestNumber = number; }
+
+	// @todo for test
+	//void SetCustomChar(int targetDigit, const std::string& assetPath);
 
 
 private:

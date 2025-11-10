@@ -238,6 +238,7 @@
     <ClCompile Include="core\Fade.cpp" />
     <ClCompile Include="core\ParameterManager.cpp" />
     <ClCompile Include="core\SceneLoader.cpp" />
+    <ClCompile Include="core\TimeKeeper.cpp" />
     <ClCompile Include="core\TransformHelper.cpp" />
     <ClCompile Include="effect\EffectManager.cpp" />
     <ClCompile Include="GameCamera.cpp" />
@@ -248,9 +249,11 @@
     <ClCompile Include="scene\BootScene.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="scene\IScene.cpp" />
+    <ClCompile Include="scene\ResultScene.cpp" />
     <ClCompile Include="scene\SceneManager.cpp" />
     <ClCompile Include="scene\StartupScene.cpp" />
     <ClCompile Include="scene\TitleScene.cpp" />
+    <ClCompile Include="score\Score.cpp" />
     <ClCompile Include="sound\SoundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -262,6 +265,8 @@
     <ClCompile Include="Types.cpp" />
     <ClCompile Include="ui\SpriteAnimation.cpp" />
     <ClCompile Include="ui\UIBase.cpp" />
+    <ClCompile Include="ui\UIScore.cpp" />
+    <ClCompile Include="ui\UITimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Actor.h" />
@@ -279,6 +284,7 @@
     <ClInclude Include="core\Fade.h" />
     <ClInclude Include="core\ParameterManager.h" />
     <ClInclude Include="core\SceneLoader.h" />
+    <ClInclude Include="core\TimeKeeper.h" />
     <ClInclude Include="core\TransformHelper.h" />
     <ClInclude Include="effect\EffectManager.h" />
     <ClInclude Include="effect\Types.h" />
@@ -290,9 +296,11 @@
     <ClInclude Include="scene\BootScene.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="scene\IScene.h" />
+    <ClInclude Include="scene\ResultScene.h" />
     <ClInclude Include="scene\SceneManager.h" />
     <ClInclude Include="scene\StartupScene.h" />
     <ClInclude Include="scene\TitleScene.h" />
+    <ClInclude Include="score\Score.h" />
     <ClInclude Include="sound\SoundManager.h" />
     <ClInclude Include="sound\Types.h" />
     <ClInclude Include="stdafx.h" />
@@ -301,6 +309,8 @@
     <ClInclude Include="Types.h" />
     <ClInclude Include="ui\SpriteAnimation.h" />
     <ClInclude Include="ui\UIBase.h" />
+    <ClInclude Include="ui\UIScore.h" />
+    <ClInclude Include="ui\UITimer.h" />
     <ClInclude Include="util\CRC32.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

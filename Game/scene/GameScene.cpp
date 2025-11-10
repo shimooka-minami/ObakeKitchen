@@ -1,9 +1,13 @@
 #include "stdafx.h"
+
 #include "GameScene.h"
+#include "ResultScene.h"
 
 #include "GameCamera.h"
 #include "BackGround.h"
+
 #include "core/SceneLoader.h"
+#include "core/TimeKeeper.h"
 
 #include "actor/Player.h"
 #include "actor/PlayerController.h"
@@ -15,10 +19,14 @@
 #include "gimmick/DeliverySpace.h"
 #include "collision/CollisionManager.h"
 
+#include "score/Score.h"
+
 #include "sound/SoundManager.h"
 
 // @todo for test
 #include "ui/UIBase.h"
+#include "ui/UIScore.h"
+#include "ui/UITimer.h"
 
 namespace
 {
@@ -107,7 +115,9 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-
+	Score::DestroyInstance();
+	DeleteGO(m_uiScore);
+	DeleteGO(m_uiTimer);
 }
 
 
@@ -118,7 +128,7 @@ bool GameScene::Start()
 		char name[] = "playerA";
 		name[6] = 'A' + i;
 		m_playerList[i] = NewGO<Player>(0, name);
-		m_playerList[i]->m_transform.m_localScale = Vector3(2.0f,2.0f,1.0f);
+		m_playerList[i]->m_transform.m_localScale = Vector3(2.0f,2.0f,2.0f);
 		m_playerList[i]->m_transform.m_localPosition = Vector3(1.0f + static_cast<float>(i), 0.0f, 0.0f);
 		m_playerList[i]->m_transform.UpdateTransform();
 	}
@@ -131,17 +141,9 @@ bool GameScene::Start()
 	// カメラ
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
 
-	// 地面
-	//m_backGround = NewGO<BackGround>(0, "backGround");
-
 	// 
 	LoadScene("Assets/scene/SceneExport.json", [](const nlohmann::json& j)
 		{
-			// TODO: あとからこんな感じにする
-			//auto* object = NewGO<Gimmick>(0);
-			//object->SetModelName(j["modelName"]);
-			//object->SetPosition(j["position"]);
-
 			// Unityで配置しているオブジェクトの名前
 			const std::string& name = j["name"];
 			// 座標
@@ -229,11 +231,6 @@ bool GameScene::Start()
 			return true;
 		});
 
-	// TODO: 仮で投げるオブジェクトを置く
-	auto* foodPlate = NewGO<FoodPlate>(0, "foodPlate");
-	foodPlate->Initialize("Assets/modelData/food/tomato.tkm", "Assets/modelData/food/cut_tomato.tkm", Vector3(200.0f, 00.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
-
-	// @todo for test
 	// 判定管理生成
 	CollisionHitManager::Create();
 	// @todo for test
@@ -257,8 +254,23 @@ bool GameScene::Start()
 	//m_uiGauge = uiGauge_mid; // 真ん中のゲージを覚えておく
 	//m_uiGauge = uiGauge_mid;
 
+	// タイムキーパーの生成
+	m_timeKeeper = std::make_unique<TimeKeeper>();
+	// @todo for test
+	// 仮で制限時間を入れる
+	m_timeKeeper->SetLimitTime(5);
+
+	// スコア管理の生成
+	Score::CreateInstance();
+
 	// BGM再生
 	SoundManager::Get().PlayBGM(enSoundKind_Game);
+
+	// @todo for test
+	m_uiScore = NewGO<UIScore>(0, "uiScore");
+	
+	// 制限時間のUI
+	m_uiTimer = NewGO<UITimer>(0, "uiTimer");
 
 	return true;
 }
@@ -282,6 +294,21 @@ void GameScene::Update()
 		m_pressTime = 0.0f;
 	}
 
+	m_uiScore->SetScore(Score::GetInstance()->GetScore());
+
+	// 制限時間
+	m_timeKeeper->Update();							// 時間進める		// 29.0f;
+	m_uiTimer->SetTimer(m_timeKeeper->GetRemainingTime());	// 時間設定			// 30.0f
+
+	
+	// 制限時間をこえたら次のシーン
+	if(m_timeKeeper->IsTimeOver())
+	{
+		m_isNextScene = true;
+	}
+	
+
+
 	//m_uiGauge->m_transform.m_localScale.x -= 0.1f;
 	//uiGauge_mid->m_transform.localScale.x;
 
@@ -301,5 +328,10 @@ void GameScene::Render(RenderContext& rc)
 
 bool GameScene::RequestScene(uint32_t& id, float& waitTime)
 {
+	if (m_isNextScene)
+	{
+		id = ResultScene::ID();
+		return true;
+	}
 	return false;
 }

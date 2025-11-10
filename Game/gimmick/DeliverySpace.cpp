@@ -21,7 +21,7 @@ DeliverySpace::~DeliverySpace()
 bool DeliverySpace::Start()
 {
 	// 丸い判定を作る
-	m_collisionObject.CreateSphere(m_transform.m_position, Quaternion::Identity, 5.0f/*m_radius*/);	// @todo for test
+	m_collisionObject.CreateSphere(m_transform.m_position, Quaternion::Identity, 10.0f/*m_radius*/);	// @todo for test
 	UpdateTransform();
 
 	// 当たり判定の処理をするため管理に登録する

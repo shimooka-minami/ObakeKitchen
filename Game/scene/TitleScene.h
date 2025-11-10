@@ -27,7 +27,7 @@ private:
 	std::unique_ptr<SpriteAnimationBase> m_buttonAnimation;
 
 
-	bool isRequestNext = false;
+	bool m_isRequestNext = false;
 
 
 public:

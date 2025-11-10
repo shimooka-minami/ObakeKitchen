@@ -106,3 +106,30 @@ private:
     /** シングルトンインスタンス */
     static EffectManager* m_instance;
 };
+
+
+
+
+/***********************************************/
+
+
+/**
+ * エフェクトマネージャーを管理するクラス
+ * 
+ * エフェクトの読み込みのため
+ * mainでエフェクトの読み込みをした場合、エフェクシアの初期化が終わってないためうまく動作しない
+ * そのため、エフェクシアの初期化が終わる次のフレームでエフェクトマネージャーの生成をしたい
+ * 0フレーム = Main + エフェクシアの初期化 + エフェクトマネージャーオブジェクトの生成
+ * 1フレーム = エフェクトマネージャーオブジェクトのスタート関数(エフェクトデータの読み込み)
+ */
+class EffectManagerObject : public IGameObject
+{
+public:
+    EffectManagerObject();
+    ~EffectManagerObject();
+
+    bool Start() override;
+    void Update() override;
+    void Render(RenderContext& rc);
+
+};

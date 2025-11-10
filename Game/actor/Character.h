@@ -22,6 +22,7 @@ protected:
 	/** アニメーションクリップのリスト */
 	std::vector<AnimationClip*> m_animationClipList;
 
+
 public:
 	Character();
 	~Character();

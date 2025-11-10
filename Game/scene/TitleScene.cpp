@@ -56,7 +56,7 @@ bool TitleScene::Start()
 		m_spriteRender[i].SetPosition(info.position);
 	}
 
-	m_buttonAnimation = std::make_unique<ScaleSpriteAnimation>(&m_spriteRender[enTitleSpriteKind_ButtonA], 1.5f, true, Vector2(1.0f, 1.0f), Vector2(1.3f, 1.3f));
+	m_buttonAnimation = std::make_unique<ScaleSpriteAnimation>(&m_spriteRender[enTitleSpriteKind_ButtonA], 0.3f, true, Vector2(1.0f, 1.0f), Vector2(1.3f, 1.3f));
 
 	SoundManager::Get().PlayBGM(enSoundKind_Title);
 
@@ -79,10 +79,10 @@ bool TitleScene::Start()
 
 void TitleScene::Update()
 {
-	if (!isRequestNext) {
+	if (!m_isRequestNext) {
 		if (g_pad[0]->IsPress(enButtonA)) {
 			SoundManager::Get().PlaySE(enSoundKind_Button);
-			isRequestNext = true;
+			m_isRequestNext = true;
 		}
 	}
 
@@ -113,7 +113,7 @@ void TitleScene::Render(RenderContext& rc)
 
 bool TitleScene::RequestScene(uint32_t& id, float& waitTime)
 {
-	if (isRequestNext) {
+	if (m_isRequestNext) {
 		id = GameScene::ID();
 		waitTime = 3.0f;
 		return true;

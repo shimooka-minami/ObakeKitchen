@@ -5,6 +5,7 @@
 #include "StartupScene.h"
 #include "TitleScene.h"
 #include "GameScene.h"
+#include "ResultScene.h"
 
 #include "core/Fade.h"
 
@@ -19,6 +20,7 @@ SceneManager::SceneManager()
 	AddSceneMap<StartupScene>();
 	AddSceneMap<TitleScene> ();
 	AddSceneMap<GameScene>();
+	AddSceneMap<ResultScene>();
 }
 
 

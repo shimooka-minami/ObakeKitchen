@@ -1,8 +1,8 @@
 [
     {
         "comment": "フードステータス",
-        "radius":20.0,
-        "height":20.0,
-        "addForcePower": 1000.0
+        "radius":10.0,
+        "height":10.0,
+        "addForcePower": 2000.0
     }
 ]

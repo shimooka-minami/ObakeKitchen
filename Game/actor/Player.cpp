@@ -77,6 +77,7 @@ void Player::Update()
 	
 	// 判定処理結果の座標を設定
 	m_transform.m_localPosition = position;
+	m_transform.m_localRotation.SetRotationYFromDirectionXZ(move);	// プレイヤーが移動している方向
 	m_transform.UpdateTransform();
 
 	// ステートマシンに座標設定

@@ -28,6 +28,6 @@ struct EffectInformation
 /** 情報を保持 */
 static EffectInformation effectInformation[enEffectKind_Max] =
 {
-	EffectInformation(u"Assets/effect/dash.efk"),
+	EffectInformation(u"Assets/effect/09.efkefc"),
 };
 

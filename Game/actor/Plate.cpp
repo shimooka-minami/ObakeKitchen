@@ -77,10 +77,11 @@ void FoodPlate::Update()
 	const float deltaTime = g_gameTime->GetFrameDeltaTime();
 	// 徐々に力を弱める
 	// TODO:いい感じの処理に修正予定
-	m_addForce.Scale(0.8f);
+	m_addForce.Scale(0.9f);
 	// 物理当たり判定を実行
 	if (!m_transform.HasParent()) {
-		m_transform.m_localPosition = m_characterController.Execute(m_addForce, deltaTime);
+		m_addForce.y -= 100.0f;
+		m_transform.m_localPosition = m_characterController.Execute(m_addForce, deltaTime);		
 	}
 	// 座標を更新
 	m_transform.UpdateTransform();

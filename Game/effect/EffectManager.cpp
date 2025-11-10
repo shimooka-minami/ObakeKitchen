@@ -19,7 +19,6 @@ EffectManager::EffectManager()
 		const auto& info = effectInformation[i];
 		EffectEngine::GetInstance()->ResistEffect(i, info.assetPath);
 	}
-	//EffectEngine::GetInstance()->ResistEffect(enEffectKind_Dash, u"Assets/Effects/Fire/Fire.efk");
 }
 
 
@@ -59,4 +58,37 @@ void EffectManager::StopEffect(const EffectHandle handle)
 		return;
 	}
 	effect->Stop();
+}
+
+
+
+
+/***********************************************/
+
+
+EffectManagerObject::EffectManagerObject()
+{
+}
+
+
+EffectManagerObject::~EffectManagerObject()
+{
+}
+
+
+bool EffectManagerObject::Start()
+{
+	EffectManager::CreateInstance();
+
+	return true;
+}
+
+
+void EffectManagerObject::Update()
+{
+}
+
+
+void EffectManagerObject::Render(RenderContext& rc)
+{
 }

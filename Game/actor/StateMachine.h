@@ -4,7 +4,6 @@ class Player;
 class PlayerStatus;
 
 class IState;
-class IdleState;
 
 class FoodPlate;
 
@@ -25,7 +24,8 @@ class StateMachine
 {
 private:
 	/** 今のステータス*/
-	IState* m_currentState;
+	IState* m_currentState = nullptr;
+	IState* m_nextState = nullptr;
 	/** ステートのリスト*/
 	IState* m_stateList[enPlayerNum];
 
@@ -94,6 +94,14 @@ private:
 	inline bool IsEqualCurrentState(enPlayerState state) const
 	{
 		return m_currentState == m_stateList[state];
+	}
+
+
+public:
+	/** 指定した状態になるか */
+	inline bool IsEqualNextState(enPlayerState state) const
+	{
+		return m_nextState == m_stateList[state];
 	}
 
 

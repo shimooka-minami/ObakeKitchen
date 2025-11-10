@@ -47,8 +47,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	ParameterManager::CreateInstance();
 	// サウンドマネージャー生成
 	SoundManager::CreateInstance();
-	// エフェクトマネージャー生成
-	EffectManager::CreateInstance();
+	// エフェクトマネージャーオブジェクト生成
+	auto* effectManagerObject = NewGO<EffectManagerObject>(0, "effectManagerObject");
 	// シーン管理用のゲームオブジェクト生成
 	auto* sceneManagerObject = NewGO<SceneManagerObject>(0, "sceneManagerObject");
 
@@ -69,8 +69,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	// シーン管理破棄
 	DeleteGO(sceneManagerObject);
-	// エフェクトマネージャー破棄
-	EffectManager::DestroyInstance();
+	// エフェクトマネージャーオブジェクト破棄
+	DeleteGO(effectManagerObject);
 	// サウンドマネージャー破棄
 	SoundManager::DestroyInstance();
 	// パラメーターマネージャー破棄

@@ -10,6 +10,9 @@ class Player;
 class PlayerController;
 class GameCamera;
 class BackGround;
+class UIScore;
+class TimeKeeper;
+class UITimer;
 
 
 /**
@@ -26,11 +29,17 @@ private:
 
 	// @todo for test
 	//UIGauge* m_uiGauge = nullptr;
+	UIScore* m_uiScore = nullptr;
+	UITimer* m_uiTimer = nullptr;
 
+	std::unique_ptr<TimeKeeper> m_timeKeeper;
 
 	ModelRender m_modelRender; //モデル描画
 
 	std::array<Player*, MAX_PLAYER_NUM> m_playerList;
+
+	/** 次のシーンに行く変数 */
+	bool m_isNextScene = false;
 
 public:
 	GameScene();
