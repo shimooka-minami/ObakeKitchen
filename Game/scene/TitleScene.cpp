@@ -56,7 +56,14 @@ bool TitleScene::Start()
 		m_spriteRender[i].SetPosition(info.position);
 	}
 
-	m_buttonAnimation = std::make_unique<ScaleSpriteAnimation>(&m_spriteRender[enTitleSpriteKind_ButtonA], 0.3f, true, Vector2(1.0f, 1.0f), Vector2(1.3f, 1.3f));
+	//m_buttonAnimation = std::make_unique<ScaleSpriteAnimation>(&m_spriteRender[enTitleSpriteKind_ButtonA], 0.3f, true, Vector2(1.0f, 1.0f), Vector2(1.3f, 1.3f));
+
+	// ‰ñ“](‰¼)
+	Quaternion start;
+	start.SetRotationDegZ(30.0f);
+	Quaternion end;
+	end.SetRotationDegZ(-30.0f);
+	m_buttonAnimation = std::make_unique<RotationSpriteAnimation>(&m_spriteRender[enTitleSpriteKind_ButtonA], 0.1f, true, start, end);
 
 	SoundManager::Get().PlayBGM(enSoundKind_Title);
 

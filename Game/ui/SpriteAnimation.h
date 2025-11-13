@@ -23,6 +23,8 @@ protected:
 	EnAnimationStep m_currentStep;
 	bool m_isLoop = false;
 	bool m_isCompleted = false;	// 処理が完了したか
+	// 再生するかどうか
+	bool m_isPlay = false;
 
 
 public:
@@ -35,6 +37,22 @@ public:
 
 	/** 純粋仮想関数 */
 	virtual void Update() = 0;
+
+
+	void Play()
+	{
+		// 再生するかどうかフラグをtrueにする
+		m_isPlay = true;
+		m_isCompleted = false;
+		m_currentStep = enAnimationStep_Min;
+		m_elapsedTime = 0.0f;
+
+	}
+	void Stop()
+	{
+		// 再生するかどうかフラグをfalseにする
+		m_isPlay = false;
+	}
 };
 
 
@@ -148,3 +166,33 @@ public:
 
 	void Update() override;
 };
+
+
+
+
+
+/***********************************************/
+
+
+/**
+ * 回転のアニメーション
+ */
+class RotationSpriteAnimation : public SpriteAnimationBase
+{
+private:
+	Quaternion m_baseRotation = Quaternion::Identity;
+	Quaternion m_targetRotation = Quaternion::Identity;
+
+
+public:
+	RotationSpriteAnimation(SpriteRender* render, const float targetTime, const bool isLoop, const Quaternion baseRotation, const Quaternion targetRotation)
+		: SpriteAnimationBase(render, targetTime, isLoop)
+		, m_baseRotation(baseRotation)
+		, m_targetRotation(targetRotation)
+	{
+	}
+
+	
+	void Update() override;
+};
+

@@ -13,6 +13,7 @@ enum EnSceneKind
 	enSceneKind_Boot = enSceneKind_Default,
 	enSceneKind_Title,
 	enSceneKind_Game,
+	enSceneKind_Result,
 	enSceneKind_Max,
 };
 

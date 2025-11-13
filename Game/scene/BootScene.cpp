@@ -7,6 +7,7 @@
 #include "StartupScene.h"
 #include "TitleScene.h"
 #include "GameScene.h"
+#include "ResultScene.h"
 
 
 namespace
@@ -30,6 +31,7 @@ namespace
 		SelectSceneInformation(L"スタートアップ", Vector3(0.0f, 200.0f, 0.0f), StartupScene::ID()),
 		SelectSceneInformation(L"タイトル", Vector3(0.0f, 100.0f, 0.0f), TitleScene::ID()),
 		SelectSceneInformation(L"ゲーム", Vector3(0.0f, 0.0f, 0.0f), GameScene::ID()),
+		SelectSceneInformation(L"リザルト", Vector3(0.0f, -100.0f, 0.0f), ResultScene::ID()),
 	};
 
 	static const Vector3 SELECTOR_POSITON_LIST[enSceneKind_Max] =
@@ -37,6 +39,7 @@ namespace
 		Vector3(-50.0f, 190.0f, 0.0f),
 		Vector3(-50.0f, 80.0f, 0.0f),
 		Vector3(-50.0f, -20.0f, 0.0f),
+		Vector3(-50.0f, -120.0f, 0.0f),
 	};
 }
 

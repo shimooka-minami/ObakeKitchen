@@ -187,8 +187,15 @@ bool GameScene::Start()
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
 			}
+			// 食材のアイコン
+			if (IsForwardMatchObjectName(name.c_str(), "tomato_top")) {
+				auto* staticGimmick = NewGO<StaticGimmick>(0, "tomato_top");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+
+			}
 			// 食材箱
-			if (IsForwardMatchObjectName(name.c_str(), "Crate")) {
+			if (IsForwardMatchObjectName(name.c_str(), "BoxReady")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "foodBox");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One/*transform.scale*/, transform.rotation);	// TODO: Unityからの変換がおかしい？から、大きさは固定にする
@@ -258,7 +265,7 @@ bool GameScene::Start()
 	m_timeKeeper = std::make_unique<TimeKeeper>();
 	// @todo for test
 	// 仮で制限時間を入れる
-	m_timeKeeper->SetLimitTime(5);
+	m_timeKeeper->SetLimitTime(10);
 
 	// スコア管理の生成
 	Score::CreateInstance();
@@ -293,6 +300,12 @@ void GameScene::Update()
 	else {
 		m_pressTime = 0.0f;
 	}
+
+	// @todo for test
+	if (g_pad[0]->IsTrigger(enButtonUp)) {
+		Score::GetInstance()->AddScore(100);
+	}
+
 
 	m_uiScore->SetScore(Score::GetInstance()->GetScore());
 

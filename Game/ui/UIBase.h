@@ -5,6 +5,9 @@
 #pragma once
 
 
+class SpriteAnimationBase;
+
+
 class UIBase : public Noncopyable
 {
 public:
@@ -16,14 +19,36 @@ protected:
 	bool isUpdate = true;
 	bool isDraw = true;
 
+	std::vector<SpriteAnimationBase*> m_spriteAnimationList;
+
 
 public:
-	UIBase() {}
-	virtual ~UIBase() {}
+	UIBase()
+	{
+		m_spriteAnimationList.clear();
+	}
+	virtual ~UIBase()
+	{
+		for (auto* spriteAnimation : m_spriteAnimationList) {
+			delete spriteAnimation;
+			spriteAnimation = nullptr;
+		}
+		m_spriteAnimationList.clear();
+	}
 
 	virtual bool Start() = 0;
 	virtual void Update() = 0;
 	virtual void Render(RenderContext& rc) = 0;
+
+
+public:
+	/** スプライトアニメーションの追加 */
+	void AddSpriteAnimation(SpriteAnimationBase* animation)
+	{
+		m_spriteAnimationList.push_back(animation);
+	}
+	void PlaySpriteAnimation();
+	void StopSpriteAnimation();
 };
 
 
@@ -49,6 +74,10 @@ public:
 	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
+
+public:
+	/** スプライトレンダーの取得 */
+	SpriteRender* GetSpriteRender() { return &m_spriteRender; }
 };
 
 
@@ -198,6 +227,8 @@ public:
 
 	// @todo for test
 	//void SetCustomChar(int targetDigit, const std::string& assetPath);
+
+	std::vector<SpriteRender*>& GetSpriteRenderList() { return m_renderList; }
 
 
 private:

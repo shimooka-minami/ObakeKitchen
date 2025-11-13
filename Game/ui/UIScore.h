@@ -16,6 +16,11 @@ private:
 	UIDigit* m_uiDigit = nullptr;
 	int m_score = 0;
 
+	UICanvas* m_uiAddScoreCanvas = nullptr;
+	UIDigit* m_uiAddScoreDigit = nullptr;
+	int m_requestAddScore = 0;
+	int m_addScore = 0;
+
 
 public:
 	/** コンストラクタ 初期化 */
@@ -30,7 +35,11 @@ public:
 
 public:
 	/** 表示させたいスコアを設定 */
-	void SetScore(const int score) { m_score = score; }
+	void SetScore(const int score)
+	{
+		m_requestAddScore = score - m_score;		// 200 = 1000 - 800
+		m_score = score;					// 1000
+	}
 };
 
 

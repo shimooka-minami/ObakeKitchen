@@ -7,15 +7,20 @@
 
 class UICanvas;
 class UIDigit;
+class UIIcon;
 
+class TimeKeeper;
 
 class UITimer : public IGameObject
 {
 private:
 	UICanvas* m_uiCanvas = nullptr;
 	UIDigit* m_uiDigit = nullptr;
+	UIIcon* m_uiHourGlass = nullptr;
 	float m_timer = 0;
+	bool m_isTimeLimit = false;
 
+	TimeKeeper* m_timeKeeper = nullptr;
 
 public:
 	/** コンストラクタ 初期化 */
@@ -29,7 +34,7 @@ public:
 
 
 public:
-	/** 表示させたいスコアを設定 */
+	/** 表示させたい時間を設定 */
 	void SetTimer(const float timer) { m_timer = timer; }
 };
 

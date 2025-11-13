@@ -25,7 +25,7 @@ bool ResultScene::Start()
 void ResultScene::Update()
 {
 	if (!isRequestNext) {
-		if (g_pad[0]->IsPress(enButtonA)) {
+		if (g_pad[0]->IsTrigger(enButtonA)) {
 			SoundManager::Get().PlaySE(enSoundKind_Button);
 			isRequestNext = true;
 		}

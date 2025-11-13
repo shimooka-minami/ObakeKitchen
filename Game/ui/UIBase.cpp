@@ -4,6 +4,26 @@
  */
 #include "stdafx.h"
 #include "UIBase.h"
+#include "SpriteAnimation.h"
+
+
+void UIBase::PlaySpriteAnimation()
+{
+	for (auto* animation : m_spriteAnimationList)
+	{
+		animation->Play();
+	}
+}
+
+
+void UIBase::StopSpriteAnimation()
+{
+	for (auto* animation : m_spriteAnimationList)
+	{
+		animation->Stop();
+	}
+}
+
 
 
 
@@ -119,6 +139,10 @@ void UIIcon::Update()
 	m_spriteRender.SetScale(m_transform.m_scale);
 	m_spriteRender.SetRotation(m_transform.m_rotation);
 	m_spriteRender.Update();
+
+	for (auto* animation : m_spriteAnimationList) {
+		animation->Update();
+	}
 }
 
 
@@ -181,6 +205,10 @@ void UIDigit::Update()
 		spriteRender->SetScale(m_transform.m_scale);
 		spriteRender->SetRotation(m_transform.m_rotation);
 		spriteRender->Update();
+	}
+
+	for (auto* animation : m_spriteAnimationList) {
+		animation->Update();
 	}
 }
 

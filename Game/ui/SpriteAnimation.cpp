@@ -13,6 +13,11 @@ void ScaleSpriteAnimation::Update()
 	{
 		return;
 	}
+	// 再生するかがtrueじゃなければ実行しない
+	if (!m_isPlay)
+	{
+		return;
+	}
 
 	const float deltaTime = g_gameTime->GetFrameDeltaTime();
 
@@ -71,6 +76,11 @@ void ColorSpriteAnimation::Update()
 	{
 		return;
 	}
+	// 再生するかがtrueじゃなければ実行しない
+	if (!m_isPlay)
+	{
+		return;
+	}
 
 	const float deltaTime = g_gameTime->GetFrameDeltaTime();
 
@@ -98,9 +108,13 @@ void ColorSpriteAnimation::Update()
 	Vector4 computeColor = nsK2EngineLow::Math::Lerp<Vector4>(computePercent, baseColor, targetColor);
 
 	m_render->SetMulColor(computeColor);
+	m_render->Update();
 
 	m_elapsedTime += deltaTime;
 	if (m_elapsedTime >= m_targetTime) {
+		m_render->SetMulColor(targetColor);
+		m_render->Update();
+
 		m_elapsedTime = 0;
 		m_currentStep = m_currentStep == enAnimationStep_Min ? enAnimationStep_Max : enAnimationStep_Min;
 
@@ -118,6 +132,11 @@ void ColorSpriteAnimation::Update()
 void AlphaSpriteAnimation::Update()
 {
 	if (!m_isLoop && m_isCompleted)
+	{
+		return;
+	}
+	// 再生するかがtrueじゃなければ実行しない
+	if (!m_isPlay)
 	{
 		return;
 	}
@@ -148,9 +167,11 @@ void AlphaSpriteAnimation::Update()
 	float computeAlpha = nsK2EngineLow::Math::Lerp<float>(computePercent, baseAlpha, targetAlpha);
 
 	m_render->SetMulColor(Vector4(0.0f, 0.0f, 0.0f, computeAlpha));
+	m_render->Update();
 
 	m_elapsedTime += deltaTime;
 	if (m_elapsedTime >= m_targetTime) {
+
 		m_elapsedTime = 0;
 		m_currentStep = m_currentStep == enAnimationStep_Min ? enAnimationStep_Max : enAnimationStep_Min;
 
@@ -168,6 +189,11 @@ void AlphaSpriteAnimation::Update()
 void TranslateSpriteAnimation::Update()
 {
 	if (!m_isLoop && m_isCompleted)
+	{
+		return;
+	}
+	// 再生するかがtrueじゃなければ実行しない
+	if (!m_isPlay)
 	{
 		return;
 	}
@@ -198,6 +224,64 @@ void TranslateSpriteAnimation::Update()
 	Vector3 computePosition = nsK2EngineLow::Math::Lerp<Vector3>(computePercent, basePosition, targetPosition);
 
 	m_render->SetPosition(computePosition);
+	m_render->Update();
+
+	m_elapsedTime += deltaTime;
+	if (m_elapsedTime >= m_targetTime) {
+		m_elapsedTime = 0;
+		m_currentStep = m_currentStep == enAnimationStep_Min ? enAnimationStep_Max : enAnimationStep_Min;
+
+		// 完了
+		m_isCompleted = true;
+	}
+}
+
+
+
+
+/*************************************************/
+
+
+void RotationSpriteAnimation::Update()
+{
+	if (!m_isLoop && m_isCompleted)
+	{
+		return;
+	}
+	// 再生するかがtrueじゃなければ実行しない
+	if (!m_isPlay)
+	{
+		return;
+	}
+
+	const float deltaTime = g_gameTime->GetFrameDeltaTime();
+
+	Quaternion targetRotation;
+	Quaternion baseRotation;
+
+	switch (m_currentStep)
+	{
+		case enAnimationStep_Min:
+		{
+			targetRotation = m_targetRotation;
+			baseRotation = m_baseRotation;
+			break;
+		}
+		case enAnimationStep_Max:
+		{
+			targetRotation = m_baseRotation;
+			baseRotation = m_targetRotation;
+			break;
+		}
+	}
+	
+	const float computePercent = m_elapsedTime / m_targetTime;
+
+	Quaternion computeRot;
+	computeRot.Slerp(computePercent, baseRotation, targetRotation);
+
+	m_render->SetRotation(computeRot);
+	m_render->Update();
 
 	m_elapsedTime += deltaTime;
 	if (m_elapsedTime >= m_targetTime) {

@@ -234,7 +234,9 @@
     <ClCompile Include="Actor\PlayerIState.cpp" />
     <ClCompile Include="Actor\StateMachine.cpp" />
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="collision\Collider.cpp" />
     <ClCompile Include="collision\CollisionManager.cpp" />
+    <ClCompile Include="collision\Shape.cpp" />
     <ClCompile Include="core\Fade.cpp" />
     <ClCompile Include="core\ParameterManager.cpp" />
     <ClCompile Include="core\SceneLoader.cpp" />
@@ -280,7 +282,9 @@
     <ClInclude Include="Actor\PlayerIState.h" />
     <ClInclude Include="Actor\StateMachine.h" />
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="collision\Collider.h" />
     <ClInclude Include="collision\CollisionManager.h" />
+    <ClInclude Include="collision\Shape.h" />
     <ClInclude Include="core\Fade.h" />
     <ClInclude Include="core\ParameterManager.h" />
     <ClInclude Include="core\SceneLoader.h" />
