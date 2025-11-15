@@ -58,6 +58,11 @@ namespace imp
 }
 
 
+
+
+/************************************/
+
+
 /** 形状の種類 */
 enum EnShapeType
 {
@@ -113,8 +118,8 @@ private:
 	float m_radius = 0.0f;
 
 public:
-	SphereShape();
-	~SphereShape();
+	SphereShape() : IShape(enShapeType_Sphere) {}
+	~SphereShape() {}
 
 
 public:
@@ -129,6 +134,7 @@ public:
 /************************************/
 
 
+/** NOTE: 一旦使わないので未対応のまま */
 class BoxShape : public IShape
 {
 private:
@@ -136,6 +142,6 @@ private:
 
 
 public:
-	BoxShape();
-	~BoxShape();
+	BoxShape() : IShape(enShapeType_Box) {}
+	~BoxShape() {}
 };

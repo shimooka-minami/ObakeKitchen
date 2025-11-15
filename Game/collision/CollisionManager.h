@@ -3,12 +3,11 @@
  * 当たり判定管理
  */
 #pragma once
+#include "Collider.h"
 
 
 class Player;
 class FoodPlate;
-
-
 
 
 enum EnCollisionType
@@ -27,10 +26,10 @@ struct CollisionInfo
 {
 	EnCollisionType m_type;	// 当たり判定の種類(プレイヤーと食材がヒットしたみたいな処理をするために必要。自分がだれかの判断)
 	IGameObject* m_object;	// 当たり判定を持つオブジェクトのポインタ
-	CollisionObject* m_collision; // 当たり判定オブジェクトのポインタ
+	app::RefCollider m_collision; // 当たり判定のコライダー
 	//
 	CollisionInfo() : m_type(enCollisionType_Player), m_object(nullptr), m_collision(nullptr) {}
-	CollisionInfo(const EnCollisionType type, IGameObject* object, CollisionObject* collision) : m_type(type), m_object(object), m_collision(collision) {}
+	CollisionInfo(const EnCollisionType type, IGameObject* object, app::RefCollider collision) : m_type(type), m_object(object), m_collision(collision) {}
 };
 
 
@@ -72,7 +71,7 @@ public:
 
 public:
 	/** 判定処理をしたいオブジェクトを登録 */
-	void RegisterCollisionObject(EnCollisionType type, IGameObject* object, CollisionObject* collision);
+	void RegisterCollisionObject(EnCollisionType type, IGameObject* object, app::RefCollider collision);
 	void UnregisterCollisionObject(IGameObject* object);
 
 

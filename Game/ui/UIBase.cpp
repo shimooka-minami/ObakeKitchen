@@ -269,15 +269,12 @@ void UIDigit::UpdateNumber(const int targetDigit, const int number)
 
 	// いらない
 	const int targetRenderIndex = targetDigit - 1;
-	if (targetRenderIndex < m_renderList.size()) {
-		SpriteRender* render = m_renderList[targetRenderIndex];
-		delete render;
-	}
+	SpriteRender* nextRender = nullptr;
 	// 次のやつをつくる
-	SpriteRender* nextRender = new SpriteRender();
 	if (targetRenderIndex < m_renderList.size()) {
-		m_renderList[targetDigit - 1] = nextRender;
+		nextRender = m_renderList[targetRenderIndex];
 	} else {
+		nextRender = new SpriteRender();
 		m_renderList.push_back(nextRender);
 	}
 
@@ -318,11 +315,20 @@ int UIDigit::GetDigit(int digit)
 
 UICanvas::UICanvas()
 {
+	m_uiList.clear();
 }
 
 
 UICanvas::~UICanvas()
 {
+	for(auto* ui : m_uiList) {
+		// トランスフォームの親子関係を解除
+		m_transform.RemoveChild(&ui->m_transform);
+		// キャンバス上にあるUIを削除
+		delete ui;
+		ui = nullptr;
+	}
+	m_uiList.clear();
 }
 
 

@@ -3,6 +3,7 @@
  * 食材が出てくる場所の判定を提供する
  */
 #pragma once
+#include "collision/GhostBody.h"
 
 
 /**
@@ -19,7 +20,7 @@ protected:
 	float m_radius = 0.0f;
 
 	/** 当たり判定 */
-	CollisionObject m_collisionObject;
+	std::unique_ptr<SphereGhostBody> m_ghostBody;
 
 	// Lesson ここにAssetsPathを文字列でもてるようにして
 	std::string m_assetPath;
@@ -41,9 +42,6 @@ private:
 public:
 	/** 半径の設定 */
 	inline void SetRadius(const float radius) { m_radius = radius; }
-
-	/** 当たり判定の取得 */
-	inline CollisionObject* GetCollision() { return &m_collisionObject; }
 
 
 	// Lesson ここでAssetPathを取得できるようなゲッター関数を追加して

@@ -4,6 +4,7 @@
  */
 #pragma once
 #include "Actor.h"
+#include "collision/GhostBody.h"
 
 
 class Plate : public Actor
@@ -12,7 +13,7 @@ protected:
 	/** 物理的な当たり判定(PhysicalBody) */
 	CharacterController m_characterController;
 	/** 物体ではない当たり判定(GhostBody) */
-	CollisionObject m_collisionObject;
+	std::unique_ptr<SphereGhostBody> m_ghostBody = nullptr;
 
 
 public:
@@ -26,12 +27,6 @@ public:
 
 public:
 	virtual void Initialize(const char* modelName, const Vector3& position, const Vector3 scale, const Quaternion& rotation);
-
-	/**
-	 * 当たり判定チェックのため取得
-	 * NOTE：それ以外では使用しないこと
-	 */
-	CollisionObject* GetCollisionObject() { return &m_collisionObject; }
 };
 
 

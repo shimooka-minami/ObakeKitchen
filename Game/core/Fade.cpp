@@ -15,7 +15,10 @@ Fade::Fade()
 	m_iconRender.Init("Assets/ui/loadingIcon.dds", 64.0f, 64.0f);
 	m_iconRender.SetPosition(Vector3(900.0f, -400.0f, 0.0f));
 
-	m_spriteAnimation = std::make_unique<TranslateSpriteAnimation>(&m_iconRender, 1.0f, true, Vector3(900.0f, -410.0f, 0.0f), Vector3(900.0f, -390.0f, 0.0f));
+	std::vector<Vector3> targetTranslateList = { Vector3(900.0f, -410.0f, 0.0f), Vector3(900.0f, -390.0f, 0.0f), Vector3(900.0f, -410.0f, 0.0f) };
+	std::vector<float> timeList = { 1.0f,1.0f };
+	m_spriteAnimation = std::make_unique<TranslateSpriteAnimation>(&m_iconRender, true, timeList, targetTranslateList);
+	m_spriteAnimation->Play();
 }
 
 

@@ -38,8 +38,8 @@ void CollisionHitManager::Update()
 			CollisionInfo* infoA = &m_collisionInfoList[i];
 			CollisionInfo* infoB = &m_collisionInfoList[j];
 
-			const bool isCheckA= infoA->m_collision->IsHit(infoB->m_collision);
-			const bool isCheckB = infoB->m_collision->IsHit(infoA->m_collision);
+			const bool isCheckA= infoA->m_collision->IsHit(infoB->m_collision.get());
+			const bool isCheckB = infoB->m_collision->IsHit(infoA->m_collision.get());
 
 			if(isCheckA  || isCheckB)
 			{
@@ -86,7 +86,7 @@ void CollisionHitManager::Update()
 }
 
 
-void CollisionHitManager::RegisterCollisionObject(EnCollisionType type, IGameObject* object, CollisionObject* collision)
+void CollisionHitManager::RegisterCollisionObject(EnCollisionType type, IGameObject* object, app::RefCollider collision)
 {
 	CollisionInfo info(type, object, collision);
 	m_collisionInfoList.push_back(std::move(info));
@@ -225,7 +225,7 @@ bool CollisionHitManager::UpdateHitDeliverySpace(CollisionPair& pair)
 	if (targetFood->IsCoocked())
 	{
 		// eŽqŠÖŒWI‚í‚è
-		player->m_transform.RemoveChild(&targetFood->m_transform);
+		player->m_transform.ClearChild();
 		// Ž‚¿•¨‚¶‚á‚È‚¢
 		player->GetStateMachine()->SetTargetFood(nullptr);
 		player->GetStateMachine()->SetForwardFood(false);

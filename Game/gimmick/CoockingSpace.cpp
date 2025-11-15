@@ -4,28 +4,26 @@
  */
 #include "stdafx.h"
 #include "CoockingSpace.h"
+#include "collision/GhostBody.h"
 #include "collision/CollisionManager.h"
 
 
 CoockingSpace::CoockingSpace()
 {
-
 }
 
 
 CoockingSpace::~CoockingSpace()
 {
-	CollisionHitManager::Get().UnregisterCollisionObject(this);
 }
+
 
 bool CoockingSpace::Start()
 {
 	// 丸い判定を作る
-	m_collisionObject.CreateSphere(m_transform.m_position, Quaternion::Identity, 10.0f/*m_radius*/);	//@todo for test
+	m_ghostBody = std::make_unique<SphereGhostBody>();
+	m_ghostBody->Create(this, m_transform.m_position, 10.0f/*m_radius*/, enCollisionType_CookingSpace);	// @todo for サイズはradiusに変更予定
 	UpdateTransform();
-
-	// 当たり判定の処理をするため管理に登録する
-	CollisionHitManager::Get().RegisterCollisionObject(enCollisionType_CookingSpace, this, &m_collisionObject);
 
 	// 初期化完了
 	return true;
@@ -41,6 +39,6 @@ void CoockingSpace::Update()
 void CoockingSpace::UpdateTransform()
 {
 	m_transform.UpdateTransform();
-	m_collisionObject.SetPosition(m_transform.m_position);
-	m_collisionObject.Update();
+	m_ghostBody->SetPosition(m_transform.m_position);
+	m_ghostBody->Update();
 }

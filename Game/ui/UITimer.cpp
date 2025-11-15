@@ -41,7 +41,9 @@ bool UITimer::Start()
 		start.SetRotationDegZ(30.0f);
 		Quaternion end;
 		end.SetRotationDegZ(-30.0f);
-		RotationSpriteAnimation* rotationSpriteAnimation = new RotationSpriteAnimation(render, 0.1f, true, start, end);
+		std::vector<Quaternion> m_rotationList = { start, end, start };
+		std::vector<float> m_timeList = { 0.1f, 0.1f };
+		RotationSpriteAnimation* rotationSpriteAnimation = new RotationSpriteAnimation(render, true, m_timeList, m_rotationList);
 		m_uiHourGlass->AddSpriteAnimation(rotationSpriteAnimation);
 	}
 
@@ -92,7 +94,9 @@ void UITimer::Update()
 			{
 				auto* render = spriteRenderList[i];
 				render->SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-				ColorSpriteAnimation* alphaSpriteAnimation = new ColorSpriteAnimation(render, 1.0f, true, Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+				std::vector<Vector4> targetAlphaList = { Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f) };
+				std::vector<float> timeList = { 1.0f,1.0f };
+				ColorSpriteAnimation* alphaSpriteAnimation = new ColorSpriteAnimation(render, true, timeList, targetAlphaList);
 				m_uiDigit->AddSpriteAnimation(alphaSpriteAnimation);
 			}
 			m_uiHourGlass->PlaySpriteAnimation();

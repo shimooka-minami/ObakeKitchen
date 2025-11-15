@@ -54,13 +54,16 @@ bool UIScore::Start()
 	m_uiAddScoreDigit->SetNumber(0);
 	// UIアニメーション追加
 	{
+		std::vector<float> timeList = { 1.0f };
+		std::vector<Vector4> targetColorList = { Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f) };
 		auto& spriteRenderList = m_uiAddScoreDigit->GetSpriteRenderList();
 		for (int i = 0; i < spriteRenderList.size(); ++i) {
 			auto* render = spriteRenderList[i];
 			render->SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
-			TranslateSpriteAnimation* translateSpriteAnimation = new TranslateSpriteAnimation(render, 1.0f, false, Vector3(-650.0f - (50.0f * i), -400.0f, 0.0f), Vector3(-650.0f - (50.0f * i), -350.0f, 0.0f));
+			std::vector<Vector3> targetPositionList = { Vector3(-650.0f - (50.0f * i), -400.0f, 0.0f), Vector3(-650.0f - (50.0f * i), -350.0f, 0.0f) };
+			TranslateSpriteAnimation* translateSpriteAnimation = new TranslateSpriteAnimation(render, false, timeList, targetPositionList );
 			m_uiAddScoreDigit->AddSpriteAnimation(translateSpriteAnimation);
-			ColorSpriteAnimation* alphaSpriteAnimation = new ColorSpriteAnimation(render, 1.0f, false, Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f));
+			ColorSpriteAnimation* alphaSpriteAnimation = new ColorSpriteAnimation(render, false, timeList, targetColorList);
 			m_uiAddScoreDigit->AddSpriteAnimation(alphaSpriteAnimation);
 		}
 	}

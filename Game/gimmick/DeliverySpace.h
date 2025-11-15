@@ -3,6 +3,7 @@
  * 出来た料理を納品する
  */
 #pragma once
+#include "collision/GhostBody.h"
 
 
 /**
@@ -19,7 +20,7 @@ protected:
 	float m_radius = 0.0f;
 
 	/** 当たり判定 */
-	CollisionObject m_collisionObject;
+	std::unique_ptr<SphereGhostBody> m_ghostBody;
 
 
 public:
@@ -38,7 +39,4 @@ private:
 public:
 	/** 半径の設定 */
 	inline void SetRadius(const float radius) { m_radius = radius; }
-
-	/** 当たり判定の取得 */
-	inline CollisionObject* GetCollision() { return &m_collisionObject; }
 };

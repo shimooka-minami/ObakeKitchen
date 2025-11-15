@@ -40,6 +40,8 @@ public:
 
 	/** 特定の子トランスフォームとの紐づけを外す */
 	void RemoveChild(Transform* t);
+	/** すべてのトランスフォームとの紐づけを外す */
+	void ClearChild();
 
 	/** 親トランスフォームを設定 */
 	void SetParent(Transform* p)

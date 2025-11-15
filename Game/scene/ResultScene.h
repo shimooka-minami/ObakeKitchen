@@ -5,6 +5,8 @@
 #pragma once
 #include "IScene.h"
 
+class UICanvas;
+class UIIcon;
 
 /** リザルトシーン */
 class ResultScene : public IScene
@@ -14,6 +16,8 @@ class ResultScene : public IScene
 
 private:
 	SpriteRender m_spriteRender;
+	UICanvas* m_uiCanvas = nullptr;
+	UIIcon* m_uiIcon = nullptr;
 
 	bool isRequestNext = false;
 

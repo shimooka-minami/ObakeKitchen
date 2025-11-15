@@ -153,6 +153,9 @@
     <ClCompile Include="collision\Collider.cpp">
       <Filter>collision</Filter>
     </ClCompile>
+    <ClCompile Include="collision\GhostBody.cpp">
+      <Filter>collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -278,6 +281,9 @@
       <Filter>collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\Collider.h">
+      <Filter>collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\GhostBody.h">
       <Filter>collision</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,6 @@
 #pragma once
 #include "Character.h"
-
+#include "collision/GhostBody.h"
 
 class StateMachine;
 
@@ -9,7 +9,7 @@ class Player : public Character
 {
 private:
 	std::unique_ptr<StateMachine> m_stateMachine;
-	CollisionObject m_collisionObject;
+	std::unique_ptr<SphereGhostBody> m_ghostBody;
 
 
 public:

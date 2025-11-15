@@ -236,6 +236,7 @@
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="collision\Collider.cpp" />
     <ClCompile Include="collision\CollisionManager.cpp" />
+    <ClCompile Include="collision\GhostBody.cpp" />
     <ClCompile Include="collision\Shape.cpp" />
     <ClCompile Include="core\Fade.cpp" />
     <ClCompile Include="core\ParameterManager.cpp" />
@@ -284,6 +285,7 @@
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="collision\Collider.h" />
     <ClInclude Include="collision\CollisionManager.h" />
+    <ClInclude Include="collision\GhostBody.h" />
     <ClInclude Include="collision\Shape.h" />
     <ClInclude Include="core\Fade.h" />
     <ClInclude Include="core\ParameterManager.h" />

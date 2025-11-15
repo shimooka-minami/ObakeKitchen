@@ -125,3 +125,9 @@ void Transform::RemoveChild(Transform* t)
 		++it;
 	}
 }
+
+
+void Transform::ClearChild()
+{
+	m_children.clear();
+}

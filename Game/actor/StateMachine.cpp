@@ -75,6 +75,16 @@ IState* StateMachine::GetChangeState() const
 		if (CanChangeThrow()) {
 			return m_stateList[enPlayerThrow];
 		}
+		// ‚¿•¨‚ğ‚à‚Á‚Ä‚¢‚é‚È‚ç
+		if (m_targetFood != nullptr) {
+			return nullptr;
+		}
+	}
+	// —¿—’†‚È‚ç
+	if (IsEqualCurrentState(enPlayerCoocking)) {
+		if (ChangeHavePlate()) {
+			return m_stateList[enPlayerHavePlate];
+		}
 		return nullptr;
 	}
 
@@ -112,6 +122,11 @@ bool StateMachine::CanChangeDash() const
 
 bool StateMachine::ChangeHavePlate() const
 {
+	// —¿—’†‚ÍM‚ğ‚à‚Á‚Ä‚¢‚é‚±‚Æ‚É‚·‚é
+	if (IsEqualCurrentState(enPlayerCoocking)) {
+		return true;
+	}
+
 	// M‚ª‚Ä‚éó‘Ô‚©
 	bool canHavePlateState = false;
 	if (IsEqualCurrentState(enPlayerIdle)) {

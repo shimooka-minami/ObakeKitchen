@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "actor/Player.h"
 #include "actor/StateMachine.h"
 #include "ActorTypes.h"
 #include "collision/CollisionManager.h"
@@ -37,8 +36,6 @@ Player::~Player()
 {
 	delete m_status;
 	m_status = nullptr;
-
-	CollisionHitManager::Get().UnregisterCollisionObject(this);
 }
 
 
@@ -58,9 +55,8 @@ bool Player::Start()
 	// キャラクターコントローラー生成
 	m_characterController.Init(GetPlayerStatus()->GetRadius(), GetPlayerStatus()->GetHeight(), m_transform.m_position);
 	// 物理的ではない判定を生成
-	m_collisionObject.CreateCapsule(m_transform.m_position, m_transform.m_rotation, GetPlayerStatus()->GetRadius(), GetPlayerStatus()->GetHeight());
-	// 判定処理に登録
-	CollisionHitManager::Get().RegisterCollisionObject(enCollisionType_Player, this, &m_collisionObject);
+	m_ghostBody = std::make_unique<SphereGhostBody>();
+	m_ghostBody->Create(this, m_transform.m_position, GetPlayerStatus()->GetRadius(), enCollisionType_Player);
 
 	return true;
 }
@@ -83,7 +79,8 @@ void Player::Update()
 	// ステートマシンに座標設定
 	m_stateMachine->SetPosition(m_transform.m_position);
 	// ゴーストの判定に座標設定
-	m_collisionObject.SetPosition(m_transform.m_position);
+	m_ghostBody->SetPosition(m_transform.m_position);
+	m_ghostBody->Update();
 	// キャラクター描画に情報を設定
 	m_modelRender.SetPosition(m_transform.m_position);
 	m_modelRender.SetRotation(m_transform.m_rotation);

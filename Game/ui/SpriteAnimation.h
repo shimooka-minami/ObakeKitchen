@@ -8,44 +8,47 @@
 /** 基底クラス */
 class SpriteAnimationBase
 {
-protected:
-	enum EnAnimationStep
-	{
-		enAnimationStep_Min,
-		enAnimationStep_Max
-	};
-
+//protected:
+//	enum EnAnimationStep
+//	{
+//		enAnimationStep_Min,
+//		enAnimationStep_Max
+//	};
+//
 
 protected:
 	SpriteRender* m_render = nullptr;
 	float m_elapsedTime = 0.0;
-	float m_targetTime = 0.0f;
-	EnAnimationStep m_currentStep;
-	bool m_isLoop = false;
-	bool m_isCompleted = false;	// 処理が完了したか
-	// 再生するかどうか
-	bool m_isPlay = false;
+	std::vector<float> m_targetTimeList;			// ターゲットタイムがいっぱい入ってくる
+	int m_targetIndex = 0;							// ターゲットインデックス
+	bool m_isLoop = false;							// ループするかどうか
+	bool m_isCompleted = false;						// 処理が完了したか
+	bool m_isPlay = false;							// 再生するかどうか
 
 
 public:
-	SpriteAnimationBase(SpriteRender* render, const float targetTime, const bool isLoop)
+	SpriteAnimationBase(SpriteRender* render, const bool isLoop, std::vector<float> targetTimeList)
 		: m_render(render)
-		, m_targetTime(targetTime)
 		, m_isLoop(isLoop)
+		, m_targetTimeList(targetTimeList)
 	{
 	}
 
 	/** 純粋仮想関数 */
 	virtual void Update() = 0;
 
+	template <typename T>
+	void UpdateCore(std::vector<T> targetList, const std::function<void (const float, const T&, const T&)> func);
+
+	virtual bool CanUpdate();
 
 	void Play()
 	{
 		// 再生するかどうかフラグをtrueにする
 		m_isPlay = true;
 		m_isCompleted = false;
-		m_currentStep = enAnimationStep_Min;
 		m_elapsedTime = 0.0f;
+		m_targetIndex = 0;
 
 	}
 	void Stop()
@@ -70,13 +73,16 @@ private:
 	Vector2 m_baseScale = Vector2::Zero;
 	Vector2 m_targetScale = Vector2::Zero;
 
+	std::vector<Vector2> m_targetScaleList;			// ターゲットスケールがいっぱい入ってくる
+	
 
 public:
-	ScaleSpriteAnimation(SpriteRender* render, const float targetTime, const bool isLoop, const Vector2 baseScale, const Vector2 targetScale)
-		: SpriteAnimationBase(render, targetTime, isLoop)
-		, m_baseScale(baseScale)
-		, m_targetScale(targetScale)
+	ScaleSpriteAnimation(SpriteRender* render, const bool isLoop, std::vector<float> targetTimeList, std::vector<Vector2> targetScaleList)
+		: SpriteAnimationBase(render, isLoop, targetTimeList)
+		, m_targetScaleList(targetScaleList)
 	{
+		K2_ASSERT(m_targetScaleList.size() > 0, "値をいれてください\n");
+		K2_ASSERT(m_targetScaleList.size() - 1 == m_targetTimeList.size(), "それぞれの配列設定を見直してください。\n");
 	}
 
 
@@ -95,43 +101,16 @@ public:
 class ColorSpriteAnimation : public SpriteAnimationBase
 {
 private:
-	Vector4 m_baseColor = Vector4::White;
-	Vector4 m_targetColor = Vector4::White;
+	//Vector4 m_baseColor = Vector4::White;
+	//Vector4 m_targetColor = Vector4::White;
+
+	std::vector<Vector4> m_targetColorList;
 
 
 public:
-	ColorSpriteAnimation(SpriteRender* render, const float targetTime, const bool isLoop, const Vector4 baseColor, const Vector4 targetColor)
-		: SpriteAnimationBase(render, targetTime, isLoop)
-		, m_baseColor(baseColor)
-		, m_targetColor(targetColor)
-	{
-	}
-
-
-	void Update() override;
-};
-
-
-
-
-/***********************************************/
-
-
-/**
- * 透明度を変えるアニメーション
- */
-class AlphaSpriteAnimation : public SpriteAnimationBase
-{
-private:
-	float m_baseAlpha = 0.0f;
-	float m_targetAlpha = 0.0f;
-
-	
-public:
-	AlphaSpriteAnimation(SpriteRender* render, const float targetTime, const bool isLoop, const float baseAlpha, const float targetAlpha)
-		: SpriteAnimationBase(render, targetTime, isLoop)
-		, m_baseAlpha(baseAlpha)
-		, m_targetAlpha(targetAlpha)
+	ColorSpriteAnimation(SpriteRender* render,const bool isLoop, std::vector<float> targetTimeList, std::vector<Vector4> targetColorList)
+		: SpriteAnimationBase(render, isLoop, targetTimeList)
+		, m_targetColorList(targetColorList)
 	{
 	}
 
@@ -154,12 +133,13 @@ private:
 	Vector3 m_basePosition = Vector3::Zero;
 	Vector3 m_targetPosition = Vector3::Zero;
 
+	std::vector<Vector3> m_targetTranslateList;
 
 public:
-	TranslateSpriteAnimation(SpriteRender* render, const float targetTime, const bool isLoop, const Vector3 basePosition, const Vector3 targetPosition)
-		: SpriteAnimationBase(render, targetTime, isLoop)
-		, m_basePosition(basePosition)
-		, m_targetPosition(targetPosition)
+	TranslateSpriteAnimation(SpriteRender* render, const bool isLoop, std::vector<float> targetTimeList, std::vector<Vector3> targetTranslateList)
+		: SpriteAnimationBase(render, isLoop, targetTimeList)
+		, m_targetTranslateList(targetTranslateList)
+		
 	{
 	}
 
@@ -183,12 +163,13 @@ private:
 	Quaternion m_baseRotation = Quaternion::Identity;
 	Quaternion m_targetRotation = Quaternion::Identity;
 
+	std::vector<Quaternion> m_targetRotationList;
+
 
 public:
-	RotationSpriteAnimation(SpriteRender* render, const float targetTime, const bool isLoop, const Quaternion baseRotation, const Quaternion targetRotation)
-		: SpriteAnimationBase(render, targetTime, isLoop)
-		, m_baseRotation(baseRotation)
-		, m_targetRotation(targetRotation)
+	RotationSpriteAnimation(SpriteRender* render, const bool isLoop, std::vector<float> targetTimeList, std::vector<Quaternion> targetRotationList)
+		: SpriteAnimationBase(render, isLoop, targetTimeList)
+		, m_targetRotationList(targetRotationList)
 	{
 	}
 

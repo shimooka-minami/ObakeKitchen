@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Plate.h"
+#include "collision/GhostBody.h"
 #include "collision/CollisionManager.h"
 
 
@@ -53,7 +54,6 @@ FoodPlate::~FoodPlate()
 		delete m_status;
 		m_status = nullptr;
 	}
-	CollisionHitManager::Get().UnregisterCollisionObject(this);
 }
 
 
@@ -62,10 +62,8 @@ bool FoodPlate::Start()
 	// 物理当たり判定の初期化
 	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_transform.m_position, enCollsiionAttr_Food);
 	// 物体ではない当たり判定の初期化
-	m_collisionObject.CreateSphere(m_transform.m_position, Quaternion::Identity, GetStatus()->GetRadius());
-
-	// コリジョンを登録
-	CollisionHitManager::Get().RegisterCollisionObject(enCollisionType_FoodPlate, this, &m_collisionObject);
+	m_ghostBody = std::make_unique<SphereGhostBody>();
+	m_ghostBody->Create(this, m_transform.m_position, GetStatus()->GetRadius(), enCollisionType_FoodPlate);
 
 	return true;
 }
@@ -86,7 +84,8 @@ void FoodPlate::Update()
 	// 座標を更新
 	m_transform.UpdateTransform();
 	// 物理的ではない当たり判定の座標を更新
-	m_collisionObject.SetPosition(m_transform.m_position);
+	m_ghostBody->SetPosition(m_transform.m_position);
+	m_ghostBody->Update();
 	// モデルの座標を更新する
 	if (m_state == enState_Coocked) {
 		m_coockedRender.SetPosition(m_transform.m_position);
@@ -121,7 +120,7 @@ void FoodPlate::SetPosition(const Vector3& position)
 	m_transform.m_localPosition = position;
 	m_transform.UpdateTransform();
 	m_characterController.SetPosition(m_transform.m_position);
-	m_collisionObject.SetPosition(m_transform.m_position);
+	m_ghostBody->SetPosition(m_transform.m_position);
 }
 
 
