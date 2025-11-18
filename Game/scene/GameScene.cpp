@@ -27,6 +27,7 @@
 #include "ui/UIBase.h"
 #include "ui/UIScore.h"
 #include "ui/UITimer.h"
+#include "ui/UIPlayerNumber.h"
 
 namespace
 {
@@ -115,28 +116,37 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-	Score::DestroyInstance();
 	DeleteGO(m_uiScore);
 	DeleteGO(m_uiTimer);
+
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i) {
+		DeleteGO(m_playerList[i]);
+		DeleteGO(m_playerControllerList[i]);
+		DeleteGO(m_uiPlayerNumber[i]);
+	}
 }
 
 
 bool GameScene::Start()
 {
 	// プレイヤー
-	for (int i = 0; i < 1;/* MAX_PLAYER_NUM;*/ ++i) {
+	for (int i = 0; i <  MAX_PLAYER_NUM; ++i) {
 		char name[] = "playerA";
 		name[6] = 'A' + i;
 		m_playerList[i] = NewGO<Player>(0, name);
 		m_playerList[i]->m_transform.m_localScale = Vector3(2.0f,2.0f,2.0f);
 		m_playerList[i]->m_transform.m_localPosition = Vector3(1.0f + static_cast<float>(i), 0.0f, 0.0f);
 		m_playerList[i]->m_transform.UpdateTransform();
+		// プレイヤーコントローラー
+		m_playerControllerList[i] = NewGO<PlayerController>(0, "playerController");
+		// TODO: 仮で対象を設定。
+		m_playerControllerList[i]->SetTarget(m_playerList[i], i);
+
+		m_uiPlayerNumber[i] = NewGO<UIPlayerNumber>(0, "uiPlayerNumber");
+		m_uiPlayerNumber[i]->Initialize(i + 1);	// iは0からなので+1して数にする(iはindexなので0から)
 	}
 
-	// プレイヤーコントローラー
-	m_playerContoller = NewGO<PlayerController>(0, "playerController");
-	// TODO: 仮で対象を設定。
-	m_playerContoller->SetTarget(m_playerList[0]);
+	
 
 	// カメラ
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
@@ -187,18 +197,29 @@ bool GameScene::Start()
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
 			}
-			// 食材のアイコン
+			// 食材のアイコン(トマト)
 			if (IsForwardMatchObjectName(name.c_str(), "tomato_top")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "tomato_top");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
-
+			}
+			// 食材のアイコン(レタス)
+			if (IsForwardMatchObjectName(name.c_str(), "retasu_top")) {
+				auto* staticGimmick = NewGO<StaticGimmick>(0, "retasu_top");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			}
+			// 食材のアイコン(おにく)
+			if (IsForwardMatchObjectName(name.c_str(), "meet_top")) {
+				auto* staticGimmick = NewGO<StaticGimmick>(0, "meet_top");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
 			}
 			// 食材箱
 			if (IsForwardMatchObjectName(name.c_str(), "BoxReady")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "foodBox");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One/*transform.scale*/, transform.rotation);	// TODO: Unityからの変換がおかしい？から、大きさは固定にする
+				staticGimmick->Initialize(assetPath.c_str(), transform.position,/* Vector3::One*/transform.scale, transform.rotation);	// TODO: Unityからの変換がおかしい？から、大きさは固定にする
 
 				FoodSpace* foodSpace = nullptr;
 				if (j.contains("InteractExportComponent")) {
@@ -240,32 +261,12 @@ bool GameScene::Start()
 
 	// 判定管理生成
 	CollisionHitManager::Create();
-	// @todo for test
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-
-
-	//// @todo for test
-	//canvasTest = new UICanvas();
-	//canvasTest->m_transform.m_localPosition = Vector3(500.0f, 0.0f, 0.0f);
-	//// ゲージの背景
-	//auto* uiGauge_back = canvasTest->CreateUI<UIGauge>();
-	//uiGauge_back->Initialize("Assets/modelData/UI/Ber/ber.dds", 200.0f, 50.0f, Vector3(-100.0f, 50.0f, 0.0f), Vector3::One, Quaternion::Identity);
-	//// ゲージ
-	//auto* uiGauge_mid = canvasTest->CreateUI<UIGauge>();
-	//uiGauge_mid->Initialize("Assets/modelData/UI/Ber/ber_mid.dds", 200.0f, 50.0f, Vector3(-100.0f, 50.0f, 0.0f), Vector3::One, Quaternion::Identity);
-	//// ゲージの枠
-	//auto* uiGauge_frame = canvasTest->CreateUI<UIGauge>();
-	//uiGauge_frame->Initialize("Assets/modelData/UI/Ber/ber_waku.dds", 200.0f, 50.0f, Vector3(-100.0f, 50.0f, 0.0f), Vector3::One, Quaternion::Identity);
-
-	// @todo for test
-	//m_uiGauge = uiGauge_mid; // 真ん中のゲージを覚えておく
-	//m_uiGauge = uiGauge_mid;
 
 	// タイムキーパーの生成
 	m_timeKeeper = std::make_unique<TimeKeeper>();
 	// @todo for test
 	// 仮で制限時間を入れる
-	m_timeKeeper->SetLimitTime(10);
+	m_timeKeeper->SetLimitTime(90);
 
 	// スコア管理の生成
 	Score::CreateInstance();
@@ -289,19 +290,6 @@ void GameScene::Update()
 	CollisionHitManager::Get().Update();
 
 	// @todo for test
-	float m_pressTime = 0.0f; // 押している時間
-
-	const float deltaTime = g_gameTime->GetFrameDeltaTime();
-
-	if (g_pad[0]->IsPress(enButtonDown)) {
-		m_pressTime += deltaTime; // 押している時間を足す
-		//m_uiGauge->m_transform.m_localScale.x -= 0.1f;
-	}
-	else {
-		m_pressTime = 0.0f;
-	}
-
-	// @todo for test
 	if (g_pad[0]->IsTrigger(enButtonUp)) {
 		Score::GetInstance()->AddScore(100);
 	}
@@ -321,21 +309,15 @@ void GameScene::Update()
 	}
 	
 
-
-	//m_uiGauge->m_transform.m_localScale.x -= 0.1f;
-	//uiGauge_mid->m_transform.localScale.x;
-
-	/*if (g_pad[0]->IsPress(enButtonDown)) {
-		canvasTest->m_transform.m_localScale.x -= 0.1f; 
-	}*/
-	//canvasTest->Update();
+	// UIの座標を更新
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i) {
+		m_uiPlayerNumber[i]->SetPosition(m_playerList[i]->m_transform.m_position);
+	}
 }
 
 
 void GameScene::Render(RenderContext& rc)
 {
-	// @todo for test
-	//canvasTest->Render(rc);
 }
 
 

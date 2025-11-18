@@ -156,6 +156,7 @@ void HavePlateState::Update()
 		const Vector3 move = moveDirection * m_owner->GetOwnerStatus()->GetSpeed();
 		// 座標設定
 		m_owner->SetMoveVector(move);
+		m_owner->SetDash(true);
 	}
 	else {
 		// 座標設定
@@ -179,6 +180,80 @@ void HavePlateState::Exit()
 }	
 
 
+
+
+/********************************************/
+
+
+DashHaveState::DashHaveState(StateMachine* owner)
+	:IState(owner)
+{
+}
+
+DashHaveState::~DashHaveState()
+{
+}
+
+void DashHaveState::Enter()
+{
+	// プレイヤーの情報を取得
+	Player* player = m_owner->GetOwner();
+	// 食べ物の情報を取得
+	FoodPlate* targetFood = m_owner->GetTargetFood();
+	// 食べ物をプレイヤーの子にする
+	targetFood->m_transform.SetParent(&player->m_transform);
+	// 食べ物をプレイヤーの前に配置 (持っている表現)
+	Vector3 targetFoodPosition;
+	targetFoodPosition = Vector3::Front * 25.0f;
+	targetFoodPosition.y += 30.0f;
+	targetFood->SetPosition(targetFoodPosition);
+
+}
+
+void DashHaveState::Update()
+{
+	// 左スティックに少しでも入力量があったら処理する
+	if (m_owner->GetStickLAmount() > 0.01f) {
+		// 移動方向を取得
+		const Vector3& moveDirection = m_owner->GetDirection();
+		// ダッシュスピードを計算
+		const float moveSpeed = m_owner->GetOwnerStatus()->GetSpeed();
+		const float dashSpeed = m_owner->GetOwnerStatus()->GetDashSpeed();
+		const float moveDashSpeed = moveSpeed * dashSpeed;
+		// 移動方向にどれだけ進むかを求める
+		const Vector3 move = moveDirection * moveDashSpeed;
+		// NOTE:移動速度を後で入れよう
+		//const Vector3 move = moveDirection * m_owner->GetOwnerStatus()->GetSpeed();
+		// 座標設定
+		m_owner->SetMoveVector(move);
+	}
+	else {
+		// 座標設定
+		m_owner->SetMoveVector(Vector3::Zero);
+	}
+
+	// 左スティックの入力量が小さい場合は処理をしない
+	if (m_owner->GetStickLAmount() < 0.01f) {
+		return;
+	}
+
+	//エフェクトを生成
+	EffectManager::Get().PlayEffect(enEffectKind_Dash, m_owner->GetPosition(), m_owner->GetRotation(), Vector3(20.0f, 20.0f, 20.0f));
+}
+
+void DashHaveState::Exit()
+{
+	if (m_owner->IsEqualNextState(enPlayerThrow)) {
+		Player* player = m_owner->GetOwner();
+		FoodPlate* targetFood = m_owner->GetTargetFood();
+		if (targetFood) {
+			player->m_transform.RemoveChild(&targetFood->m_transform);
+			targetFood->SetPosition(targetFood->m_transform.m_position);
+		}
+	}
+	// 移動終わり
+	m_owner->SetMoveVector(Vector3::Zero);
+}
 
 
 /********************************************/

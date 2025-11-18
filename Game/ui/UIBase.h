@@ -230,6 +230,13 @@ public:
 
 	std::vector<SpriteRender*>& GetSpriteRenderList() { return m_renderList; }
 
+	void ForEach(const std::function<void(SpriteRender*)>& func)
+	{
+		for (auto* render : m_renderList) {
+			func(render);
+		}
+	}
+
 
 private:
 	void UpdateNumber(const int targetDigit, const int number);

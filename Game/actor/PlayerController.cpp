@@ -7,15 +7,7 @@
 /** 名前被り等の衝突を防ぐため */
 namespace
 {
-	inline bool IsInputStickL()
-	{
-		// 左スティックの入力があるかどうかを判定
-		if ((fabsf(g_pad[0]->GetLStickXF()) >= FLT_EPSILON) || (fabsf(g_pad[0]->GetLStickYF()) >= FLT_EPSILON))
-		{
-			return true;
-		}
-		return false;
-	}
+	
 }
 
 PlayerController::PlayerController()
@@ -39,10 +31,10 @@ void PlayerController::Update()
 	
 	// Aボタンで皿を拾う
 	//m_target->GetStateMachine()->SetNearFood(true);
-	targetStateMachine->ActionButtonA(g_pad[0]->IsTrigger(enButtonA));
+	targetStateMachine->ActionButtonA(GetPad()->IsTrigger(enButtonA));
 
 	// Bボタンでダッシュ TODO:ボタンが変わる可能性あり
-	targetStateMachine->SetDash(g_pad[0]->IsPress(enButtonB));
+	targetStateMachine->SetDash(GetPad()->IsPress(enButtonB));
 	// 回転
 	if (IsInputStickL())
 	{
@@ -62,12 +54,12 @@ void PlayerController::Render(RenderContext& rc)
 
 }
 
-Vector3 PlayerController::GetStickL() const
+Vector3 PlayerController::GetStickL()
 {
 	// 左スティックの入力量を取得
 	Vector3 stickL;
-	stickL.x = g_pad[0]->GetLStickXF();
-	stickL.y = g_pad[0]->GetLStickYF();
+	stickL.x = GetPad()->GetLStickXF();
+	stickL.y = GetPad()->GetLStickYF();
 
 	// カメラの前方向と右方向のベクトルを取得
 	Vector3 forward = g_camera3D->GetForward();
@@ -89,7 +81,7 @@ Vector3 PlayerController::GetStickL() const
 }
 
 
-Quaternion PlayerController::ComputeRotation() const
+Quaternion PlayerController::ComputeRotation()
 {
 	// スティックの方向
 	Vector3 direction = GetStickL();

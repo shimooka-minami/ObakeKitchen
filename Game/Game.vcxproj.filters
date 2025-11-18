@@ -156,6 +156,9 @@
     <ClCompile Include="collision\GhostBody.cpp">
       <Filter>collision</Filter>
     </ClCompile>
+    <ClCompile Include="ui\UIPlayerNumber.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -285,6 +288,9 @@
     </ClInclude>
     <ClInclude Include="collision\GhostBody.h">
       <Filter>collision</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\UIPlayerNumber.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

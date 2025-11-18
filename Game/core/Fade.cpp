@@ -10,8 +10,8 @@ Fade::Fade()
 	m_fadeRender.Init("Assets/ui/fade.dds", 1920.0f, 1080.0f);
 	m_fadeRender.SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 
-	m_nowloadingRender.Init("Assets/ui/nowloading.dds", 256.0f, 128.0f);
-	m_nowloadingRender.SetPosition(Vector3(750.0f, -400.0f, 0.0f));
+	m_nowloadingRender.Init("Assets/ui/nowloading.dds", 256.0f, 28.0f);
+	m_nowloadingRender.SetPosition(Vector3(745.0f, -400.0f, 0.0f));
 	m_iconRender.Init("Assets/ui/loadingIcon.dds", 64.0f, 64.0f);
 	m_iconRender.SetPosition(Vector3(900.0f, -400.0f, 0.0f));
 

@@ -57,6 +57,14 @@ public:
 	}
 	
 	/**
+	 * 利用可能か
+	 */
+	static bool IsAvailable()
+	{
+		return m_instance != nullptr;
+	}
+
+	/**
 	 * シングルトンインスタンスを放棄する
 	 */
 	static void DestroyInstance()

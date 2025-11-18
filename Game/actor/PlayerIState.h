@@ -26,6 +26,12 @@ public:
 
 
 
+/********************************/
+
+
+/**
+ * 歩く
+ */
 class WalkState : public IState
 {
 public:
@@ -38,6 +44,14 @@ public:
 };
 
 
+
+
+/********************************/
+
+
+/**
+ * 走る
+ */
 class DashState : public IState
 {
 public:
@@ -50,6 +64,14 @@ public:
 };
 
 
+
+
+/********************************/
+
+
+/**
+ * 食材を持つ
+ */
 class HavePlateState : public IState
 {
 public:
@@ -64,6 +86,32 @@ public:
 
 
 
+/********************************/
+
+
+/**
+ * 食材を持って走る
+ */
+class DashHaveState : public IState
+{
+public:
+	DashHaveState(StateMachine* owner);
+	~DashHaveState();
+
+	void Enter() override;
+	void Update() override;
+	void Exit() override;
+};
+
+
+
+
+/********************************/
+
+
+/**
+ * 投げる
+ */
 class ThrowState : public IState
 {
 public:
@@ -78,6 +126,12 @@ public:
 
 
 
+/********************************/
+
+
+/**
+ * 料理してる
+ */
 class CoockingState : public IState
 {
 public:
@@ -92,6 +146,12 @@ public:
 
 
 
+/********************************/
+
+
+/**
+ * 止まってる
+ */
 class IdleState : public IState
 { 
 public:
