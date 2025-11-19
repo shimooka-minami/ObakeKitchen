@@ -28,6 +28,8 @@
 #include "ui/UIScore.h"
 #include "ui/UITimer.h"
 #include "ui/UIPlayerNumber.h"
+#include "ui/UIInteractIcon.h"
+
 
 namespace
 {
@@ -137,6 +139,10 @@ bool GameScene::Start()
 		m_playerList[i]->m_transform.m_localScale = Vector3(2.0f,2.0f,2.0f);
 		m_playerList[i]->m_transform.m_localPosition = Vector3(1.0f + static_cast<float>(i), 0.0f, 0.0f);
 		m_playerList[i]->m_transform.UpdateTransform();
+
+		// @todo for test
+		m_playerList[i]->m_playerIndex = i;
+
 		// プレイヤーコントローラー
 		m_playerControllerList[i] = NewGO<PlayerController>(0, "playerController");
 		// TODO: 仮で対象を設定。
@@ -182,6 +188,10 @@ bool GameScene::Start()
 					cookingSpace->m_transform.m_localPosition = info.position;
 					cookingSpace->m_transform.UpdateTransform();
 					cookingSpace->SetRadius(info.radius);
+
+					// 料理インタラクト
+					auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
+					uiInteractIcon->Initialize(enInteractType_Cooking, transform.position);
 				}
 				return true;
 			}
@@ -254,6 +264,10 @@ bool GameScene::Start()
 					deliverySpace->m_transform.m_localPosition = info.position;
 					deliverySpace->m_transform.UpdateTransform();
 					deliverySpace->SetRadius(info.radius);
+
+					// 料理インタラクト
+					auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
+					uiInteractIcon->Initialize(enInteractType_Delivery, transform.position);
 				}
 			}
 			return true;
@@ -264,7 +278,8 @@ bool GameScene::Start()
 
 	// タイムキーパーの生成
 	m_timeKeeper = std::make_unique<TimeKeeper>();
-	// @todo for test
+
+	// @todo for test 
 	// 仮で制限時間を入れる
 	m_timeKeeper->SetLimitTime(90);
 

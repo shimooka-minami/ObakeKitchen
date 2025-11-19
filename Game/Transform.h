@@ -42,17 +42,43 @@ public:
 	void RemoveChild(Transform* t);
 	/** すべてのトランスフォームとの紐づけを外す */
 	void ClearChild();
+	void AddChild(Transform* t)
+	{
+		// 同じのは追加しない
+		if (FindChild(t)) {
+			return;
+		}
+		m_children.push_back(t);
+	}
+	bool FindChild(Transform* t)
+	{
+		for (auto* child : m_children)
+		{
+			if (child == t) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/** 親トランスフォームを設定 */
 	void SetParent(Transform* p)
 	{
+		if (m_parent) {
+			return;
+		}
 		m_parent = p;
-		m_parent->m_children.push_back(this);
+		m_parent->AddChild(this);
 	}
 
 	/** 親トランスフォームがあるか */ 
 	bool HasParent() const
 	{
 		return m_parent != nullptr;
+	}
+	/** 親を解除 */
+	void ClearParent()
+	{
+		m_parent = nullptr;
 	}
 };

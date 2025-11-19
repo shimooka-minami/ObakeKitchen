@@ -11,6 +11,10 @@ private:
 	std::unique_ptr<StateMachine> m_stateMachine;
 	std::unique_ptr<SphereGhostBody> m_ghostBody;
 
+	// @todo for test
+public:
+	int m_playerIndex = 0;
+
 
 public:
 	Player();

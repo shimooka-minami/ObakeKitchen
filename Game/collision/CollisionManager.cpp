@@ -177,6 +177,10 @@ bool CollisionHitManager::UpdateHitFoodPlate(CollisionPair& pair)
 	// プレイヤーの前に皿がない場合
 	if (!player->GetStateMachine()->IsForwardFood())
 	{
+		if (foodPlate->m_transform.HasParent()) {
+			return false;
+		}
+
 		// 近くにある（プレイヤーと皿が接触しているときの処理）
 		player->GetStateMachine()->SetNearFood(true);
 
@@ -225,6 +229,7 @@ bool CollisionHitManager::UpdateHitDeliverySpace(CollisionPair& pair)
 	if (targetFood->IsCoocked())
 	{
 		// 親子関係終わり
+		targetFood->m_transform.ClearParent();
 		player->m_transform.ClearChild();
 		// 持ち物じゃない
 		player->GetStateMachine()->SetTargetFood(nullptr);

@@ -14,3 +14,10 @@ enum EnGameObjectPriority
 	enGameObjectPriority_Default = 0,
 	enGameObjectPriority_Fade = 100,
 };
+
+
+enum EnInteractType
+{
+	enInteractType_Cooking,
+	enInteractType_Delivery,
+};
