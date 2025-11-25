@@ -1196,7 +1196,7 @@
         }
       },
       "StaticMeshExportComponent": {
-        "assetPath": "C:\\git\\ObakeKitcen_new\\ObakeKitchen\\Game\\Assets\\modelData\\Ground\\knife.tkm"
+        "assetPath": "Assets/modelData/Ground/knife.tkm"
       }
     },
     {
