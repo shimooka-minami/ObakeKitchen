@@ -96,8 +96,14 @@ void DashState::Update()
 	// 座標設定
 	m_owner->SetMoveVector(move);
 
+
+	m_elapsedTime += g_gameTime->GetFrameDeltaTime();
+	constexpr float EFFECT_PLAY_TIME = 0.5f;	// 数秒ごとにエフェクトを出すようにする
 	//エフェクトを生成
-	EffectManager::Get().PlayEffect(enEffectKind_Dash, m_owner->GetPosition(), m_owner->GetRotation(), Vector3(20.0f, 20.0f, 20.0f));
+	if (m_elapsedTime >= EFFECT_PLAY_TIME) {
+		EffectManager::Get().PlayEffect(enEffectKind_Dash, m_owner->GetPosition(), m_owner->GetRotation(), Vector3(8.0f, 8.0f, 8.0f));
+		m_elapsedTime = 0.0f;
+	}
 }
 
 

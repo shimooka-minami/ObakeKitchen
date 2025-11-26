@@ -15,6 +15,8 @@ class TimeKeeper;
 class UITimer;
 class UIPlayerNumber;
 
+class NPCController;
+
 
 /**
  * インゲーム中のシーン
@@ -31,7 +33,7 @@ private:
 	//UIGauge* m_uiGauge = nullptr;
 	UIScore* m_uiScore = nullptr;
 	UITimer* m_uiTimer = nullptr;
-	
+	NPCController* m_npcConController = nullptr;
 
 	std::unique_ptr<TimeKeeper> m_timeKeeper;
 
@@ -40,6 +42,13 @@ private:
 	std::array<Player*, MAX_PLAYER_NUM> m_playerList;
 	std::array<PlayerController*, MAX_PLAYER_NUM> m_playerControllerList;
 	std::array<UIPlayerNumber*, MAX_PLAYER_NUM> m_uiPlayerNumber;
+
+	/** NewGOしたオブジェクトを削除するために対象を覚えるリスト */
+	std::vector<IGameObject*> m_deleteList;
+
+	// @todo for test
+	std::vector<SPointLight*> m_pointLightList;
+
 
 	/** 次のシーンに行く変数 */
 	bool m_isNextScene = false;

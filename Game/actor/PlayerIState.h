@@ -54,6 +54,9 @@ public:
  */
 class DashState : public IState
 {
+private:
+	float m_elapsedTime;
+
 public:
 	DashState(StateMachine* owner);
 	~DashState();

@@ -228,6 +228,7 @@
     <ClCompile Include="Actor\ActorTypes.cpp" />
     <ClCompile Include="Actor\Character.cpp" />
     <ClCompile Include="actor\Gimmick.cpp" />
+    <ClCompile Include="actor\NPCController.cpp" />
     <ClCompile Include="actor\Plate.cpp" />
     <ClCompile Include="Actor\Player.cpp" />
     <ClCompile Include="Actor\PlayerController.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="Actor\ActorTypes.h" />
     <ClInclude Include="Actor\Character.h" />
     <ClInclude Include="actor\Gimmick.h" />
+    <ClInclude Include="actor\NPCController.h" />
     <ClInclude Include="actor\Plate.h" />
     <ClInclude Include="Actor\Player.h" />
     <ClInclude Include="Actor\PlayerController.h" />

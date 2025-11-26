@@ -28,8 +28,9 @@ namespace
 	};
 
 	static const TitleSpriteInformation titleSpriteInfoList[enTitleSpriteKind_Max] = {
-		TitleSpriteInformation("Assets/modelData/title/title1.dds", Vector3::Zero, MAX_SPRITE_WIDTH, MAX_SPRITE_HIGHT),
-		TitleSpriteInformation("Assets/modelData/title/push_a.dds", Vector3(0.0f, -300.0f, 0.0f), 300, 100),
+		TitleSpriteInformation("Assets/modelData/title/titleBack.dds", Vector3::Zero, MAX_SPRITE_WIDTH, MAX_SPRITE_HIGHT),
+		TitleSpriteInformation("Assets/modelData/title/titlelogo.dds", Vector3(0.0f, 100.0f, 0.0f), 800.0f, 150.0f),
+		TitleSpriteInformation("Assets/modelData/title/push_a.dds", Vector3(0.0f, -150.0f, 0.0f), 300, 70),
 	};
 }
 
@@ -53,9 +54,9 @@ bool TitleScene::Start()
 		m_spriteRender[i].SetPosition(info.position);
 	}
 
-	std::vector<Vector2> targetScaleList = { Vector2(1.0f, 1.0f), Vector2(1.3f, 1.3f), Vector2(1.0f, 1.0f) };
-	std::vector<float> timeList = { 1.3f,1.3f };
-	m_buttonAnimation = std::make_unique<ScaleSpriteAnimation>(&m_spriteRender[enTitleSpriteKind_ButtonA], true, timeList, targetScaleList);
+	std::vector<Vector4> targetAlphaList = { Vector4(0.8f, 0.8f, 0.8f, 1.0f), Vector4(0.6f, 0.6f, 0.6f, 0.4f), Vector4(0.8f, 0.8f, 0.8f, 1.0f) };
+	std::vector<float> timeList = { 0.8f,0.8f };
+	m_buttonAnimation = std::make_unique<ColorSpriteAnimation>(&m_spriteRender[enTitleSpriteKind_ButtonA], true, timeList, targetAlphaList);
 	m_buttonAnimation->Play();
 
 	SoundManager::Get().PlayBGM(enSoundKind_Title);
@@ -68,7 +69,7 @@ bool TitleScene::Start()
 void TitleScene::Update()
 {
 	if (!m_isRequestNext) {
-		if (g_pad[0]->IsPress(enButtonA)) {
+		if (g_pad[0]->IsTrigger(enButtonA)) {
 			SoundManager::Get().PlaySE(enSoundKind_Button);
 			m_isRequestNext = true;
 		}

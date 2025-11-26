@@ -10,6 +10,7 @@
 enum EnTitleSpriteKind
 {
 	enTitleSpriteKind_Background,
+	enTitleSpriteKind_Logo,
 	enTitleSpriteKind_ButtonA,
 	enTitleSpriteKind_Max,
 };

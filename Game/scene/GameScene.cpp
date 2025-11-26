@@ -14,6 +14,8 @@
 #include "actor/Gimmick.h"
 #include "actor/Plate.h"
 
+#include "actor/NPCController.h"
+
 #include "gimmick/CoockingSpace.h"
 #include "gimmick/FoodSpace.h"
 #include "gimmick/DeliverySpace.h"
@@ -112,7 +114,6 @@ namespace
 
 GameScene::GameScene()
 {
-
 }
 
 
@@ -126,6 +127,10 @@ GameScene::~GameScene()
 		DeleteGO(m_playerControllerList[i]);
 		DeleteGO(m_uiPlayerNumber[i]);
 	}
+
+	for (auto* deleteTarget : m_deleteList) {
+		DeleteGO(deleteTarget);
+	}
 }
 
 
@@ -137,17 +142,18 @@ bool GameScene::Start()
 		name[6] = 'A' + i;
 		m_playerList[i] = NewGO<Player>(0, name);
 		m_playerList[i]->m_transform.m_localScale = Vector3(2.0f,2.0f,2.0f);
-		m_playerList[i]->m_transform.m_localPosition = Vector3(1.0f + static_cast<float>(i), 0.0f, 0.0f);
+		m_playerList[i]->m_transform.m_localPosition = Vector3(10.0f * static_cast<float>(i), 0.0f, 0.0f);
 		m_playerList[i]->m_transform.UpdateTransform();
 
 		// @todo for test
 		m_playerList[i]->m_playerIndex = i;
 
 		// プレイヤーコントローラー
-		m_playerControllerList[i] = NewGO<PlayerController>(0, "playerController");
-		// TODO: 仮で対象を設定。
-		m_playerControllerList[i]->SetTarget(m_playerList[i], i);
-
+		if (i != 2) {	// @todo for test
+			m_playerControllerList[i] = NewGO<PlayerController>(0, "playerController");
+			// 対象を設定
+			m_playerControllerList[i]->SetTarget(m_playerList[i], i);
+		}
 		m_uiPlayerNumber[i] = NewGO<UIPlayerNumber>(0, "uiPlayerNumber");
 		m_uiPlayerNumber[i]->Initialize(i + 1);	// iは0からなので+1して数にする(iはindexなので0から)
 	}
@@ -158,20 +164,21 @@ bool GameScene::Start()
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
 
 	// 
-	LoadScene("Assets/scene/SceneExport.json", [](const nlohmann::json& j)
+	LoadScene("Assets/scene/SceneExport.json", [&](const nlohmann::json& j)
 		{
 			// Unityで配置しているオブジェクトの名前
 			const std::string& name = j["name"];
 			// 座標
 			json::Transform transform = json::ParseTransformComponents(j["Transform"]);
 
+			// @todo for 後で消す
 			//地面
-			if (IsForwardMatchObjectName(name.c_str(), "Env_Road_Free 1")) {
-				auto* staticGimmick = NewGO<StaticGimmick>(0, "ground");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
-				return true;
-			}
+			//if (IsForwardMatchObjectName(name.c_str(), "Env_Road_Free 1")) {
+			//	auto* staticGimmick = NewGO<StaticGimmick>(0, "ground");
+			//	const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			//	staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			//	return true;
+			//}
 
 
 			// キッチン
@@ -179,6 +186,7 @@ bool GameScene::Start()
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "kitchen");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+				m_deleteList.push_back(staticGimmick);
 
 				if (j.contains("InteractExportComponent")) {
 					InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
@@ -188,10 +196,12 @@ bool GameScene::Start()
 					cookingSpace->m_transform.m_localPosition = info.position;
 					cookingSpace->m_transform.UpdateTransform();
 					cookingSpace->SetRadius(info.radius);
+					m_deleteList.push_back(cookingSpace);
 
 					// 料理インタラクト
 					auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
 					uiInteractIcon->Initialize(enInteractType_Cooking, transform.position);
+					m_deleteList.push_back(uiInteractIcon);
 				}
 				return true;
 			}
@@ -200,36 +210,42 @@ bool GameScene::Start()
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "cookingBoard");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+				m_deleteList.push_back(staticGimmick);
 			}
 			//包丁
 			if (IsForwardMatchObjectName(name.c_str(), "Prop_Knife_04")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "knife");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+				m_deleteList.push_back(staticGimmick);
 			}
 			// 食材のアイコン(トマト)
 			if (IsForwardMatchObjectName(name.c_str(), "tomato_top")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "tomato_top");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+				m_deleteList.push_back(staticGimmick);
 			}
 			// 食材のアイコン(レタス)
 			if (IsForwardMatchObjectName(name.c_str(), "retasu_top")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "retasu_top");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+				m_deleteList.push_back(staticGimmick);
 			}
 			// 食材のアイコン(おにく)
 			if (IsForwardMatchObjectName(name.c_str(), "meet_top")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "meet_top");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+				m_deleteList.push_back(staticGimmick);
 			}
 			// 食材箱
 			if (IsForwardMatchObjectName(name.c_str(), "BoxReady")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "foodBox");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position,/* Vector3::One*/transform.scale, transform.rotation);	// TODO: Unityからの変換がおかしい？から、大きさは固定にする
+				m_deleteList.push_back(staticGimmick);
 
 				FoodSpace* foodSpace = nullptr;
 				if (j.contains("InteractExportComponent")) {
@@ -240,6 +256,7 @@ bool GameScene::Start()
 					foodSpace->m_transform.m_localPosition = info.position;
 					foodSpace->m_transform.UpdateTransform();
 					foodSpace->SetRadius(info.radius);
+					m_deleteList.push_back(foodSpace);
 				}
 				if (j.contains("FoodBoxExportComponent")) {
 					FoodBoxExportInfo info = ParseFoodBoxComponent(j["FoodBoxExportComponent"]);
@@ -254,6 +271,7 @@ bool GameScene::Start()
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "delivery");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One/*transform.scale*/, transform.rotation);
+				m_deleteList.push_back(staticGimmick);
 
 				DeliverySpace* deliverySpace = nullptr;
 				if (j.contains("InteractExportComponent")) {
@@ -264,10 +282,12 @@ bool GameScene::Start()
 					deliverySpace->m_transform.m_localPosition = info.position;
 					deliverySpace->m_transform.UpdateTransform();
 					deliverySpace->SetRadius(info.radius);
+					m_deleteList.push_back(deliverySpace);
 
 					// 料理インタラクト
 					auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
 					uiInteractIcon->Initialize(enInteractType_Delivery, transform.position);
+					m_deleteList.push_back(uiInteractIcon);
 				}
 			}
 			return true;
@@ -289,11 +309,19 @@ bool GameScene::Start()
 	// BGM再生
 	SoundManager::Get().PlayBGM(enSoundKind_Game);
 
-	// @todo for test
+	// スコア表示UI
 	m_uiScore = NewGO<UIScore>(0, "uiScore");
 	
 	// 制限時間のUI
 	m_uiTimer = NewGO<UITimer>(0, "uiTimer");
+
+	// 地面
+	auto* ground = NewGO<BackGround>(0, "backGround");
+	m_deleteList.push_back(ground);
+
+	// @todo for test
+	m_npcConController = NewGO<NPCController>(0, "npcController");
+	m_npcConController->SetTarget(m_playerList[2]);
 
 	return true;
 }
@@ -313,7 +341,7 @@ void GameScene::Update()
 	m_uiScore->SetScore(Score::GetInstance()->GetScore());
 
 	// 制限時間
-	m_timeKeeper->Update();							// 時間進める		// 29.0f;
+	m_timeKeeper->Update();							// 時間進める				// 29.0f;
 	m_uiTimer->SetTimer(m_timeKeeper->GetRemainingTime());	// 時間設定			// 30.0f
 
 	

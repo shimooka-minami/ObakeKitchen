@@ -12,7 +12,7 @@ class UIIcon;
 class UIInteractIcon : public IGameObject
 {
 private:
-	UICanvas* m_uiCanvas = nullptr;
+	std::unique_ptr<UICanvas> m_uiCanvas = nullptr;
 	
 	Vector3 m_position;
 

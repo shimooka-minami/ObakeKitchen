@@ -162,6 +162,9 @@
     <ClCompile Include="ui\UIInteractIcon.cpp">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="actor\NPCController.cpp">
+      <Filter>actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -297,6 +300,9 @@
     </ClInclude>
     <ClInclude Include="ui\UIInteractIcon.h">
       <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="actor\NPCController.h">
+      <Filter>actor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
