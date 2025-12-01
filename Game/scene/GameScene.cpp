@@ -126,6 +126,7 @@ GameScene::~GameScene()
 		DeleteGO(m_playerList[i]);
 		DeleteGO(m_playerControllerList[i]);
 		DeleteGO(m_uiPlayerNumber[i]);
+		DeleteGO(m_npcControllerList[i]);
 	}
 
 	for (auto* deleteTarget : m_deleteList) {
@@ -137,28 +138,32 @@ GameScene::~GameScene()
 bool GameScene::Start()
 {
 	// プレイヤー
-	for (int i = 0; i <  MAX_PLAYER_NUM; ++i) {
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i) {
 		char name[] = "playerA";
 		name[6] = 'A' + i;
 		m_playerList[i] = NewGO<Player>(0, name);
-		m_playerList[i]->m_transform.m_localScale = Vector3(2.0f,2.0f,2.0f);
-		m_playerList[i]->m_transform.m_localPosition = Vector3(10.0f * static_cast<float>(i), 0.0f, 0.0f);
-		m_playerList[i]->m_transform.UpdateTransform();
+		m_playerList[i]->m_transform.m_localScale = Vector3(2.0f, 2.0f, 2.0f);
+		m_playerList[i]->Initialize(Vector3(-120.0f + 60.0f * static_cast<float>(i), 0.0f, 0.0f));
 
-		// @todo for test
-		m_playerList[i]->m_playerIndex = i;
+		m_playerControllerList[i] = nullptr;
+		m_npcControllerList[i] = nullptr;
 
-		// プレイヤーコントローラー
-		if (i != 2) {	// @todo for test
+		// コントローラー接続がされているか
+		constexpr int USE_PLAYER_CONTROLLER_INDEX = 0; // 0番目は自操作確定
+		if (g_pad[i]->IsConnected() || i == USE_PLAYER_CONTROLLER_INDEX) {
+			// プレイヤーコントローラー
 			m_playerControllerList[i] = NewGO<PlayerController>(0, "playerController");
 			// 対象を設定
 			m_playerControllerList[i]->SetTarget(m_playerList[i], i);
 		}
+		else {
+			m_npcControllerList[i] = NewGO<NPCController>(0, "npcController");
+			m_npcControllerList[i]->SetTarget(m_playerList[i]);
+		}
+		// プレイヤー番号
 		m_uiPlayerNumber[i] = NewGO<UIPlayerNumber>(0, "uiPlayerNumber");
-		m_uiPlayerNumber[i]->Initialize(i + 1);	// iは0からなので+1して数にする(iはindexなので0から)
+		m_uiPlayerNumber[i]->Initialize(i + 1); // iは0からなので+1して数にする(iはindexなので0から)
 	}
-
-	
 
 	// カメラ
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
@@ -174,10 +179,10 @@ bool GameScene::Start()
 			// @todo for 後で消す
 			//地面
 			//if (IsForwardMatchObjectName(name.c_str(), "Env_Road_Free 1")) {
-			//	auto* staticGimmick = NewGO<StaticGimmick>(0, "ground");
-			//	const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-			//	staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
-			//	return true;
+			// auto* staticGimmick = NewGO<StaticGimmick>(0, "ground");
+			// const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			// staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			// return true;
 			//}
 
 
@@ -244,13 +249,13 @@ bool GameScene::Start()
 			if (IsForwardMatchObjectName(name.c_str(), "BoxReady")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "foodBox");
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position,/* Vector3::One*/transform.scale, transform.rotation);	// TODO: Unityからの変換がおかしい？から、大きさは固定にする
+				staticGimmick->Initialize(assetPath.c_str(), transform.position,/* Vector3::One*/transform.scale, transform.rotation); // TODO: Unityからの変換がおかしい？から、大きさは固定にする
 				m_deleteList.push_back(staticGimmick);
 
 				FoodSpace* foodSpace = nullptr;
 				if (j.contains("InteractExportComponent")) {
 					InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
-					
+
 					foodSpace = NewGO<FoodSpace>(0, "foodSpace");
 					foodSpace->m_transform.SetParent(&staticGimmick->m_transform);
 					foodSpace->m_transform.m_localPosition = info.position;
@@ -311,7 +316,7 @@ bool GameScene::Start()
 
 	// スコア表示UI
 	m_uiScore = NewGO<UIScore>(0, "uiScore");
-	
+
 	// 制限時間のUI
 	m_uiTimer = NewGO<UITimer>(0, "uiTimer");
 
@@ -319,13 +324,8 @@ bool GameScene::Start()
 	auto* ground = NewGO<BackGround>(0, "backGround");
 	m_deleteList.push_back(ground);
 
-	// @todo for test
-	m_npcConController = NewGO<NPCController>(0, "npcController");
-	m_npcConController->SetTarget(m_playerList[2]);
-
 	return true;
 }
-
 
 void GameScene::Update()
 {

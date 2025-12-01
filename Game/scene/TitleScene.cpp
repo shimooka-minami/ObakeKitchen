@@ -5,6 +5,7 @@
 
 // @todo for test
 #include "ui/UIBase.h"
+#include "actor/Player.h"
 
 namespace
 {
@@ -28,8 +29,8 @@ namespace
 	};
 
 	static const TitleSpriteInformation titleSpriteInfoList[enTitleSpriteKind_Max] = {
-		TitleSpriteInformation("Assets/modelData/title/titleBack.dds", Vector3::Zero, MAX_SPRITE_WIDTH, MAX_SPRITE_HIGHT),
-		TitleSpriteInformation("Assets/modelData/title/titlelogo.dds", Vector3(0.0f, 100.0f, 0.0f), 800.0f, 150.0f),
+		//TitleSpriteInformation("Assets/modelData/title/titleBack.dds", Vector3::Zero, MAX_SPRITE_WIDTH, MAX_SPRITE_HIGHT),
+		TitleSpriteInformation("Assets/modelData/title/titlelogo.dds", Vector3(0.0f, 300.0f, 0.0f), 800.0f, 150.0f),
 		TitleSpriteInformation("Assets/modelData/title/push_a.dds", Vector3(0.0f, -150.0f, 0.0f), 300, 70),
 	};
 }
@@ -43,6 +44,7 @@ TitleScene::TitleScene()
 TitleScene::~TitleScene()
 {
 	SoundManager::Get().StopBGM();
+	DeleteGO(m_player);
 }
 
 
@@ -54,14 +56,30 @@ bool TitleScene::Start()
 		m_spriteRender[i].SetPosition(info.position);
 	}
 
+	m_player = NewGO<Player>(0, "player");
+	m_player->m_transform.m_localPosition.Set(100.0f, 0.0f, 0.0f);
+	m_player->m_transform.m_localRotation.SetRotationDegY(180.0f);
+	m_player->m_transform.m_localScale.Set(1.5f, 1.5f, 1.5f);
+
 	std::vector<Vector4> targetAlphaList = { Vector4(0.8f, 0.8f, 0.8f, 1.0f), Vector4(0.6f, 0.6f, 0.6f, 0.4f), Vector4(0.8f, 0.8f, 0.8f, 1.0f) };
 	std::vector<float> timeList = { 0.8f,0.8f };
 	m_buttonAnimation = std::make_unique<ColorSpriteAnimation>(&m_spriteRender[enTitleSpriteKind_ButtonA], true, timeList, targetAlphaList);
 	m_buttonAnimation->Play();
 
+	// @todo for タイトル画面の3D.tkm
+	m_titleBack = std::make_unique<ModelRender>();
+	m_titleBack->Init("Assets/modelData/Ground/title_back.tkm");
+	m_titleBack->SetPosition(Vector3(0.0f, 0.0f, 30.0f));
+	m_titleBack->SetScale(Vector3::One * 0.4f);
+	m_titleBack->Update();
+
+
 	SoundManager::Get().PlayBGM(enSoundKind_Title);
 
-	
+	// ライト調整
+	g_sceneLight->SetDirectionLight(0, Vector3(1.0f, -1.0f, 0.0f), Vector3(0.8f, 0.8f, 0.8f));
+	g_sceneLight->SetAmbinet(Vector3(0.2f, 0.2f, 0.2f));
+
 	return true;
 }
 
@@ -88,6 +106,9 @@ void TitleScene::Render(RenderContext& rc)
 	for (int i = 0; i < enTitleSpriteKind_Max; i++) {
 		m_spriteRender[i].Draw(rc);
 	}
+
+	// @todo for タイトル画面
+	m_titleBack->Draw(rc);
 }
 
 

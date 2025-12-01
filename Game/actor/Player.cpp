@@ -14,8 +14,8 @@ namespace
 	};
 	AnimationData animationDataList[] =
 	{
-		AnimationData{"Assets/animData/ghost/idle.tka", true},
-		AnimationData{"Assets/animData/ghost/walk.tka", true},
+	 AnimationData{"Assets/animData/ghost/idle.tka", true},
+	 AnimationData{"Assets/animData/ghost/walk.tka", true},
 	};
 	static_assert(ARRAYSIZE(animationDataList) == static_cast<uint8_t>(PlayerAnimationType::Num), "アニメーション数があっていません");
 }
@@ -51,7 +51,7 @@ bool Player::Start()
 	}
 	//プレイヤーモデル
 	//m_modelRender.Init("Assets/modelData/player/GhostModel.tkm", *m_animationClipList.data(),enModelUpAxisZ);
-	m_modelRender.Init("Assets/modelData/player/ghost.tkm",* m_animationClipList.data(), enModelUpAxisY);
+	m_modelRender.Init("Assets/modelData/player/ghost.tkm", *m_animationClipList.data(), enModelUpAxisY);
 	// キャラクターコントローラー生成
 	m_characterController.Init(GetPlayerStatus()->GetRadius(), GetPlayerStatus()->GetHeight(), m_transform.m_position);
 	// 物理的ではない判定を生成
@@ -69,11 +69,12 @@ void Player::Update()
 
 	// 判定処理をする
 	Vector3 move = m_stateMachine->GetMoveVector();
-	const Vector3& position = m_characterController.Execute(move, 1.0f);	// あえて1.0f
-	
-	// 判定処理結果の座標を設定
-	m_transform.m_localPosition = position;
-	m_transform.m_localRotation.SetRotationYFromDirectionXZ(move);	// プレイヤーが移動している方向
+	if (move.LengthSq() > 0.001f) {
+		const Vector3& position = m_characterController.Execute(move, 1.0f); // あえて1.0f
+		// 判定処理結果の座標を設定
+		m_transform.m_localPosition = position;
+		m_transform.m_localRotation.SetRotationYFromDirectionXZ(move); // プレイヤーが移動している方向
+	}
 	m_transform.UpdateTransform();
 
 	// ステートマシンに座標設定
@@ -92,4 +93,13 @@ void Player::Update()
 void Player::Render(RenderContext& rc)
 {
 	m_modelRender.Draw(rc);
+}
+
+
+void Player::Initialize(const Vector3& position)
+{
+	m_transform.m_localPosition = position;
+	m_transform.UpdateTransform();
+	m_stateMachine->SetPosition(m_transform.m_position);
+	m_characterController.SetPosition(m_transform.m_position);
 }

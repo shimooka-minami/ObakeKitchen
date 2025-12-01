@@ -118,6 +118,10 @@ public:
 	{
 		return *m_instance;
 	}
+	static bool IsAvailable()
+	{
+		return m_instance != nullptr;
+	}
 	static void Delete()
 	{
 		if (m_instance)

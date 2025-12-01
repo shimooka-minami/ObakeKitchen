@@ -167,6 +167,11 @@ namespace nsK2EngineLow {
 		{
 			return m_state.state;
 		}
+		// コントローラーが接続されているか
+		bool IsConnected()
+		{
+			return m_state.bConnected;
+		}
 		/// <summary>
 		/// バイブレーションを設定。
 		/// </summary>

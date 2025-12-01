@@ -11,10 +11,6 @@ private:
 	std::unique_ptr<StateMachine> m_stateMachine;
 	std::unique_ptr<SphereGhostBody> m_ghostBody;
 
-	// @todo for test
-public:
-	int m_playerIndex = 0;
-
 
 public:
 	Player();
@@ -25,6 +21,8 @@ public:
 	void Render(RenderContext& rc)override;
 
 
+	void Initialize(const Vector3& position);
+
 public:
 	/** ステートマシンの取得 */
 	StateMachine* GetStateMachine() { return m_stateMachine.get(); }
@@ -33,4 +31,3 @@ public:
 public:
 	PlayerStatus* GetPlayerStatus() { return dynamic_cast<PlayerStatus*>(m_status); }
 };
-

@@ -15,7 +15,9 @@ SphereGhostBody::SphereGhostBody()
 SphereGhostBody::~SphereGhostBody()
 {
 	if (m_owner) {
-		CollisionHitManager::Get().UnregisterCollisionObject(m_owner);
+		if (CollisionHitManager::IsAvailable()) {
+			CollisionHitManager::Get().UnregisterCollisionObject(m_owner);
+		}
 	}
 }
 
@@ -37,5 +39,7 @@ void SphereGhostBody::Create(IGameObject* owner, const Vector3& position, const 
 	m_collider = app::CreateSphereCollider(position, radius);
 
 	// îªíËèàóùÇ…ìoò^
-	CollisionHitManager::Get().RegisterCollisionObject(static_cast<EnCollisionType>(collisionType), owner, m_collider);
+	if (CollisionHitManager::IsAvailable()) {
+		CollisionHitManager::Get().RegisterCollisionObject(static_cast<EnCollisionType>(collisionType), owner, m_collider);
+	}
 }

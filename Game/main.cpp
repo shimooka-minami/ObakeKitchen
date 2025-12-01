@@ -11,6 +11,7 @@
 #include "effect/EffectManager.h"
 #include "sound/SoundManager.h"
 #include "scene/SceneManager.h"
+#include "actor/NPCController.h"
 
 
 void ReportLiveObjects()
@@ -54,6 +55,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	auto* effectManagerObject = NewGO<EffectManagerObject>(0, "effectManagerObject");
 	// シーン管理用のゲームオブジェクト生成
 	auto* sceneManagerObject = NewGO<SceneManagerObject>(0, "sceneManagerObject");
+	// NPCコントローラーを呼ぶ
+	NPCController::Initialize();
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
