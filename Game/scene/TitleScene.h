@@ -30,6 +30,7 @@ private:
 
 	Player* m_player;
 	std::unique_ptr<ModelRender> m_titleBack;
+	std::unique_ptr<SpriteRender> m_titleRender;
 
 	bool m_isRequestNext = false;
 

@@ -30,7 +30,7 @@ namespace
 
 	static const TitleSpriteInformation titleSpriteInfoList[enTitleSpriteKind_Max] = {
 		//TitleSpriteInformation("Assets/modelData/title/titleBack.dds", Vector3::Zero, MAX_SPRITE_WIDTH, MAX_SPRITE_HIGHT),
-		TitleSpriteInformation("Assets/modelData/title/titlelogo.dds", Vector3(0.0f, 300.0f, 0.0f), 800.0f, 150.0f),
+		TitleSpriteInformation("Assets/modelData/title/titlelog.dds", Vector3(0.0f, 300.0f, 0.0f), 800.0f, 150.0f),
 		TitleSpriteInformation("Assets/modelData/title/push_a.dds", Vector3(0.0f, -150.0f, 0.0f), 300, 70),
 	};
 }
@@ -73,6 +73,13 @@ bool TitleScene::Start()
 	m_titleBack->SetScale(Vector3::One * 0.4f);
 	m_titleBack->Update();
 
+	// @todo for 看板を仮表示
+	m_titleRender = std::make_unique<SpriteRender>();
+	m_titleRender->Init("Assets/modelData/title/kanban.dds",500.0f,657.0f);
+	m_titleRender->SetPosition(Vector3(-600.0f, 250.0f, 0.0f));
+	m_titleRender->SetScale(Vector3::One);
+	m_titleRender->Update();
+
 
 	SoundManager::Get().PlayBGM(enSoundKind_Title);
 
@@ -109,6 +116,8 @@ void TitleScene::Render(RenderContext& rc)
 
 	// @todo for タイトル画面
 	m_titleBack->Draw(rc);
+	// @todo for 看板の仮表示
+	m_titleRender->Draw(rc);
 }
 
 
