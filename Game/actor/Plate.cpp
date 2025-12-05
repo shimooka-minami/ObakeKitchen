@@ -109,7 +109,18 @@ void FoodPlate::Render(RenderContext& rc)
 
 void FoodPlate::Initialize(const char* modelName, const char* coockedModelName, const Vector3& position, const Vector3 scale, const Quaternion& rotation)
 {
-	SuperClass::Initialize(modelName, position, scale, rotation);
+	m_transform.m_localPosition = position;
+	m_transform.m_localScale = scale;
+	m_transform.m_localRotation = rotation;
+
+	// 座標更新
+	m_transform.UpdateTransform();
+
+	// 見た目のみ
+	m_modelRender.Init(modelName);
+	// 座標等設定
+	m_modelRender.SetTRS(position, rotation, scale);
+	m_modelRender.Update();
 
 	m_coockedRender.Init(coockedModelName);
 }

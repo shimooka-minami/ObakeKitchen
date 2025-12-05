@@ -1,6 +1,126 @@
 {
   "objects": [
     {
+      "name": "Prop_Plate_02",
+      "Transform": {
+        "position": {
+          "x": 769.0,
+          "y": 106.8,
+          "z": 62.2504
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 1.3,
+          "y": 1.3,
+          "z": 1.3
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/plate.tkm"
+      }
+    },
+    {
+      "name": "PP_Lantern_02_Yellow_Light_Iron (3)",
+      "Transform": {
+        "position": {
+          "x": 825.0,
+          "y": 200.0,
+          "z": 600.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 2.0,
+          "y": 1.5,
+          "z": 2.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/lantern.tkm"
+      }
+    },
+    {
+      "name": "PP_Lantern_02_Yellow_Light_Iron (2)",
+      "Transform": {
+        "position": {
+          "x": -791.0,
+          "y": 200.0,
+          "z": 600.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 2.0,
+          "y": 1.5,
+          "z": 2.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/lantern.tkm"
+      }
+    },
+    {
+      "name": "PP_Lantern_02_Yellow_Light_Iron (1)",
+      "Transform": {
+        "position": {
+          "x": 955.0,
+          "y": 200.0,
+          "z": -100.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 2.0,
+          "y": 1.5,
+          "z": 2.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/lantern.tkm"
+      }
+    },
+    {
+      "name": "PP_Lantern_02_Yellow_Light_Iron",
+      "Transform": {
+        "position": {
+          "x": -900.0,
+          "y": 200.0,
+          "z": -100.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": -1.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": {
+          "x": 2.0,
+          "y": 1.5,
+          "z": 2.0
+        }
+      },
+      "StaticMeshExportComponent": {
+        "assetPath": "Assets/modelData/Ground/lantern.tkm"
+      }
+    },
+    {
       "name": "Prop_KitchenCabinet_01_Normal (34)",
       "Transform": {
         "position": {

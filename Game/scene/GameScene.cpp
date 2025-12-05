@@ -245,6 +245,13 @@ bool GameScene::Start()
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
 				m_deleteList.push_back(staticGimmick);
 			}
+			// お皿
+			if (IsForwardMatchObjectName(name.c_str(), "Prop_Plate_02")) {
+				auto* staticGimmick = NewGO<StaticGimmick>(0, "plane");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+				m_deleteList.push_back(staticGimmick);
+			}
 			// 食材箱
 			if (IsForwardMatchObjectName(name.c_str(), "BoxReady")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "foodBox");
@@ -295,6 +302,13 @@ bool GameScene::Start()
 					m_deleteList.push_back(uiInteractIcon);
 				}
 			}
+			// ランタン
+			if (IsForwardMatchObjectName(name.c_str(), "PP_Lantern_02_Yellow_Light_Iron")) {
+				auto* staticGimmick = NewGO<PointLightGimmick>(0, "lantern");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One /*transform.scale*/, transform.rotation);
+				m_deleteList.push_back(staticGimmick);
+			}
 			return true;
 		});
 
@@ -323,6 +337,10 @@ bool GameScene::Start()
 	// 地面
 	auto* ground = NewGO<BackGround>(0, "backGround");
 	m_deleteList.push_back(ground);
+
+	// ライト調整
+	g_sceneLight->SetDirectionLight(0, Vector3(0.0f, -1.0f, 0.5f), Vector3(0.7f, 0.2f, 0.8f));
+	g_sceneLight->SetAmbinet(Vector3(0.1f, 0.1f, 0.1f));
 
 	return true;
 }

@@ -58,7 +58,7 @@ bool TitleScene::Start()
 
 	m_player = NewGO<Player>(0, "player");
 	m_player->m_transform.m_localPosition.Set(100.0f, 0.0f, 0.0f);
-	m_player->m_transform.m_localRotation.SetRotationDegY(180.0f);
+	m_player->m_transform.m_localRotation.SetRotationDegY(200.0f);
 	m_player->m_transform.m_localScale.Set(1.5f, 1.5f, 1.5f);
 
 	std::vector<Vector4> targetAlphaList = { Vector4(0.8f, 0.8f, 0.8f, 1.0f), Vector4(0.6f, 0.6f, 0.6f, 0.4f), Vector4(0.8f, 0.8f, 0.8f, 1.0f) };

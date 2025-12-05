@@ -45,10 +45,16 @@ private:
 	/** 思考パターンのID */
 	enum EnAIStateID
 	{
-		enAIState_Idle,   // 待機
-		enAIState_FreeMove,  // 適当に移動
-		enAIState_Max,   // 最大数
-		enAIState_Invalid = -1, // 無効値
+		enAIState_Idle,					// 待機
+		enAIState_FreeMove,				// 適当に移動
+		enAIState_Search,				// 食べ物を探す
+		enAIState_TargetFoodMove,		// 対象となる食べ物へ移動
+		enAIState_PickupFood,			// 対象となる食べ物を拾う
+		enAIState_CoockingSpaceMove,	// 調理場へ移動	
+		enAIState_DeliverySpaceMove,	// 納品場へ移動
+
+		enAIState_Max,					// 最大数
+		enAIState_Invalid = -1,			// 無効値
 	};
 
 
@@ -56,8 +62,10 @@ private:
 	Player* m_target = nullptr;
 	float m_elapsedTime = 0.0f;
 
-	Vector3 m_targetPosition = Vector3::Zero;
+	Vector3 prePosition = Vector3::Zero;	// targetの前回の位置を保持
 
+	Vector3 m_targetPosition = Vector3::Zero;
+	bool isFind = false;
 
 	/** 現在の思考状態 */
 	EnAIStateID m_currentState = enAIState_Idle;
@@ -133,7 +141,15 @@ private:
 	static int CheckNothing(NPCController*) { return -1; }
 
 	/**
-	 * 待機関連
+	 * 探索
+	 */
+	static void EnterSearch(NPCController* npc);
+	static void UpdateSearch(NPCController* npc);
+	static void ExitSearch(NPCController* npc);
+	static int CheckSearch(NPCController* npc);
+
+	/**
+	 * 待機
 	 */
 	static void EnterIdle(NPCController* npc);
 	static void UpdateIdle(NPCController* npc);
@@ -141,11 +157,51 @@ private:
 	static int CheckIdle(NPCController* npc);
 
 	/**
-	 * 適当に移動関連
+	 * 適当に移動
 	 */
 	static void EnterFreeMove(NPCController* npc);
 	static void UpdateFreeMove(NPCController* npc);
 	static void ExitFreeMove(NPCController* npc);
 	static int CheckFreeMove(NPCController* npc);
 
+	/**
+	 * 対象の食べ物へ移動
+	 */
+	static void EnterTargetFoodMove(NPCController* npc);
+	static void UpdateTargetFoodMove(NPCController* npc);
+	static void ExitTargetFoodMove(NPCController* npc);
+	static int CheckTargetFoodMove(NPCController* npc);
+
+	/**
+	 * 対象の食べ物を拾う
+	 */
+	static void EnterPickupFood(NPCController* npc);
+	static void UpdatePickupFood(NPCController* npc);
+	static void ExitPickupFood(NPCController* npc);
+	static int CheckPickupFood(NPCController* npc);
+
+	/**
+	 * 調理場に移動
+	 */
+	static void EnterCoockingSpaceMove(NPCController* npc);
+	static void UpdateCoockingSpaceMove(NPCController* npc);
+	static void ExitCoockingSpaceMove(NPCController* npc);
+	static int CheckCoockingSpaceMove(NPCController* npc);
+
+	/**
+	 * 料理する
+	 */
+	static void EnterCoocking(NPCController* npc);
+	static void UpdateCoocking(NPCController* npc);
+	static void ExitCoocking(NPCController* npc);
+	static int CheckCoocking(NPCController* npc);
+
+
+	/**
+	 * 納品場に移動
+	 */
+	static void EnterDeliverySpaceMove(NPCController* npc);
+	static void UpdateDeliverySpaceMove(NPCController* npc);
+	static void ExitDeliverySpaceMove(NPCController* npc);
+	static int CheckDeliverySpaceMove(NPCController* npc);
 };

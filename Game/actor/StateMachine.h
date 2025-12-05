@@ -200,6 +200,11 @@ public:
 	inline void ActionButtonA(const bool actionButtonA) { m_actionButtonA = actionButtonA; }
 
 	/**
+	 * アクションAボタンを押したか取得
+	 */
+	inline bool IsActionButtonA() const { return m_actionButtonA; }
+
+	/**
 	 * 入力量を設定
 	 */
 	inline void SetStickLAmount(const float stickLAmount) { m_stickLAmount = stickLAmount; }

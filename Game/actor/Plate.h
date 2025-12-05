@@ -39,7 +39,7 @@ public:
  * 食材が乗った皿
  * ※投げることができる
  */
-class FoodPlate : public Plate
+class FoodPlate : public Actor
 {
 	using SuperClass = Plate;
 
@@ -53,6 +53,11 @@ private:
 
 
 protected:
+	/** 物理的な当たり判定(PhysicalBody) */
+	CharacterController m_characterController;
+	/** 物体ではない当たり判定(GhostBody) */
+	std::unique_ptr<SphereGhostBody> m_ghostBody = nullptr;
+
 	/** 投げる際に加えられる力 */
 	Vector3 m_addForce;
 	

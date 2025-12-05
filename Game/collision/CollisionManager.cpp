@@ -143,15 +143,10 @@ bool CollisionHitManager::UpdateHitFoodSpace(CollisionPair& pair)
 		return false;
 	}
 
-	// 料理スペースにプレイヤーが入ったときの処理
-	//player->GetStateMachine()->SetInFoodSpace(true);
-
-	// @todo for test
-	if (g_pad[0]->IsTrigger(enButtonA)) {
-
+	if (player->GetStateMachine()->IsActionButtonA()) {
+		// @tod ofor test
 		float posX = rand() % 500;
 		float posZ = rand() % 200;
-
 		FoodPlate* foodPlate = NewGO<FoodPlate>(0, "foodPlate");
 		foodPlate->Initialize(foodSpace->GetAssetPath().c_str(), foodSpace->GetCookedAssetsPath().c_str(), Vector3(posX, 0.0f, posZ), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
 	}

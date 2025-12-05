@@ -50,3 +50,24 @@ public:
 public:
 	virtual void Initialize(const char* assetName, const Vector3& position, const Vector3& scale, const Quaternion& rotation) override;
 };
+
+
+
+
+/*************************************/
+
+
+class PointLightGimmick : public StaticGimmick
+{
+protected:
+	SPointLight* m_pointLight[5];
+
+
+public:
+	PointLightGimmick() {}
+	~PointLightGimmick() {}
+
+	virtual bool Start() override;
+	virtual void Update() override;
+	virtual void Render(RenderContext& renderContect) override;
+};
