@@ -17,6 +17,7 @@ void Plate::Update()
 
 void Plate::Render(RenderContext& rc)
 {
+	m_modelRender.Draw(rc);
 }
 
 

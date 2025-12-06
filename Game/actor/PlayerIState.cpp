@@ -190,6 +190,77 @@ void HavePlateState::Exit()
 
 /********************************************/
 
+HavePlateState::HavePlateState(StateMachine* owner)
+	:IState(owner)
+{
+}
+
+
+HavePlateState::~HavePlateState()
+{
+}
+
+
+void HavePlateState::Enter()
+{
+	// プレイヤーの情報を取得
+	Player* player = m_owner->GetOwner();
+	// 食べ物の情報を取得
+	FoodPlate* targetFood = m_owner->GetTargetFood();
+	// 食べ物をプレイヤーの子にする
+	targetFood->m_transform.SetParent(&player->m_transform);
+	// 食べ物をプレイヤーの前に配置 (持っている表現)
+	Vector3 targetFoodPosition;
+	targetFoodPosition = Vector3::Front * 25.0f;
+	targetFoodPosition.y += 30.0f;
+	targetFood->SetPosition(targetFoodPosition);
+
+	//// test
+	//targetFood->SetPosition(Vector3(0, m_owner->GetPosition().y * 30.0f, 0));
+
+	// 持った時のSE再生
+	SoundManager::Get().PlaySE(enSoundKind_Has);
+}
+
+
+void HavePlateState::Update()
+{
+	// 左スティックに少しでも入力量があったら処理する
+	if (m_owner->GetStickLAmount() > 0.01f) {
+		// 移動方向を取得
+		const Vector3& moveDirection = m_owner->GetDirection();
+		// NOTE:移動速度を後で入れよう
+		const Vector3 move = moveDirection * m_owner->GetOwnerStatus()->GetSpeed();
+		// 座標設定
+		m_owner->SetMoveVector(move);
+		m_owner->SetDash(true);
+	}
+	else {
+		// 座標設定
+		m_owner->SetMoveVector(Vector3::Zero);
+	}
+}
+
+
+void HavePlateState::Exit()
+{
+	if (m_owner->IsEqualNextState(enPlayerThrow)) {
+		Player* player = m_owner->GetOwner();
+		FoodPlate* targetFood = m_owner->GetTargetFood();
+		if (targetFood) {
+			player->m_transform.RemoveChild(&targetFood->m_transform);
+			targetFood->SetPosition(targetFood->m_transform.m_position);
+		}
+	}
+	// 移動終わり
+	m_owner->SetMoveVector(Vector3::Zero);
+}
+
+
+
+
+/********************************************/
+
 
 DashHaveState::DashHaveState(StateMachine* owner)
 	:IState(owner)
@@ -205,7 +276,7 @@ void DashHaveState::Enter()
 	// プレイヤーの情報を取得
 	Player* player = m_owner->GetOwner();
 	// 食べ物の情報を取得
-	FoodPlate* targetFood = m_owner->GetTargetFood();
+	Plate* targetPlate = m_owner->GetTargetFood();
 	// 食べ物をプレイヤーの子にする
 	targetFood->m_transform.SetParent(&player->m_transform);
 	// 食べ物をプレイヤーの前に配置 (持っている表現)
@@ -260,6 +331,8 @@ void DashHaveState::Exit()
 	// 移動終わり
 	m_owner->SetMoveVector(Vector3::Zero);
 }
+
+
 
 
 /********************************************/

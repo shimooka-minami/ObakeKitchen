@@ -107,6 +107,20 @@ namespace
 		return info;
 	}
 
+	/** @todo for test */
+	struct PlateBoxExportInfo
+	{
+		std::string assetsPath;
+		std::string plateAssetsPath;
+	};
+	PlateBoxExportInfo ParsePlateBoxComponet(const nlohmann::json& j)
+	{
+		PlateBoxExportInfo info;
+		info.assetsPath = j.at("assetPath").get<std::string>();
+		info.plateAssetsPath = j.at("plateAssetPath").get<std::string>();
+		return info;
+	}
+
 	// @todo for test
 	static UICanvas* canvasTest = nullptr;
 }
@@ -210,6 +224,13 @@ bool GameScene::Start()
 				}
 				return true;
 			}
+			// キッチン2
+			if (IsForwardMatchObjectName(name.c_str(), "Prop_KitchenCabinet_02")) {
+				auto* staticGimmick = NewGO<StaticGimmick>(0, "kitchen2");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+				m_deleteList.push_back(staticGimmick);
+			}
 			// まな板
 			if (IsForwardMatchObjectName(name.c_str(), "Prop_CuttingPlate")) {
 				auto* staticGimmick = NewGO<StaticGimmick>(0, "cookingBoard");
@@ -251,6 +272,32 @@ bool GameScene::Start()
 				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
 				m_deleteList.push_back(staticGimmick);
+			}
+			// お皿箱
+			if (IsForwardMatchObjectName(name.c_str(), "Prop_KitchenCabinet_03")) {
+				auto* staticGimmick = NewGO<StaticGimmick>(0, "plateSpawn");
+				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+				staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One/*transform.scale*/, transform.rotation); // TODO: Unityからの変換がおかしい？から、大きさは固定にする
+				m_deleteList.push_back(staticGimmick);
+
+				FoodSpace* foodSpace = nullptr;
+				if (j.contains("InteractExportComponent")) {
+					InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
+
+					foodSpace = NewGO<FoodSpace>(0, "foodSpace");
+					foodSpace->m_transform.SetParent(&staticGimmick->m_transform);
+					foodSpace->m_transform.m_localPosition = info.position;
+					foodSpace->m_transform.UpdateTransform();
+					foodSpace->SetRadius(info.radius);
+					m_deleteList.push_back(foodSpace);
+				}
+				if (j.contains("PlateBoxExportComponent")) {
+					PlateBoxExportInfo info = ParsePlateBoxComponet(j["PlateBoxExportComponent"]);
+					if (foodSpace) {
+						foodSpace->SetAssetPath(info.assetsPath);
+						foodSpace->SetPlateAssetsPath(info.plateAssetsPath);
+					}
+				}
 			}
 			// 食材箱
 			if (IsForwardMatchObjectName(name.c_str(), "BoxReady")) {

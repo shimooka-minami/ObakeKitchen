@@ -25,6 +25,7 @@ protected:
 	// Lesson ここにAssetsPathを文字列でもてるようにして
 	std::string m_assetPath;
 	std::string m_coockedAssetPath;
+	std::string m_plateAssetPath;
 
 public:
 	FoodSpace();
@@ -56,4 +57,10 @@ public:
 
 	/** AssetPathを設定(調理済みのもの) */
 	inline void SetCookedAssetsPath(const std::string cookedAssetsPath) { m_coockedAssetPath = cookedAssetsPath; };
+
+	/** AssetPathを取得(お皿を乗せた皿) */
+	inline std::string GetPlateAssetsPath() const { return m_plateAssetPath; };
+
+	/** AssetPathを設定(お皿を乗せた皿) */
+	inline void SetPlateAssetsPath(const std::string plateAssetsPath) { m_plateAssetPath = plateAssetsPath; };
 };

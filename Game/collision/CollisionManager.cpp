@@ -147,8 +147,11 @@ bool CollisionHitManager::UpdateHitFoodSpace(CollisionPair& pair)
 		// @tod ofor test
 		float posX = rand() % 500;
 		float posZ = rand() % 200;
-		FoodPlate* foodPlate = NewGO<FoodPlate>(0, "foodPlate");
-		foodPlate->Initialize(foodSpace->GetAssetPath().c_str(), foodSpace->GetCookedAssetsPath().c_str(), Vector3(posX, 0.0f, posZ), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
+		//FoodPlate* foodPlate = NewGO<FoodPlate>(0, "foodPlate");
+		//foodPlate->Initialize(foodSpace->GetAssetPath().c_str(), foodSpace->GetCookedAssetsPath().c_str(), Vector3(posX, 0.0f, posZ), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
+
+		Plate* plate = NewGO<Plate>(0, "plate");
+		plate->Initialize("Assets/modelData/Ground/plate.tkm", Vector3(posX, 0.0f, posZ), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
 	}
 	return true;
 }

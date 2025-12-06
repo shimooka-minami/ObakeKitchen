@@ -5,6 +5,7 @@ class PlayerStatus;
 
 class IState;
 
+class Plate;
 class FoodPlate;
 
 
@@ -52,6 +53,8 @@ private:
 
 	/** フードプレートクラスのポインタ */
 	FoodPlate* m_targetFood = nullptr;
+	/** プレートクラスのポインタ */
+	Plate* m_targetPlate = nullptr;
 
 	/** 左スティックの入力量 */
 	float m_stickLAmount = 0.0f;
@@ -257,5 +260,15 @@ public:
 	 * フードプレートクラスの取得
 	 */ 
 	inline FoodPlate* GetTargetFood() { return m_targetFood; }
+
+	/**
+	 * プレートクラスの設定
+	 */
+	inline void SetTargetPlate(Plate* targetPlate) { m_targetPlate = targetPlate; }
+
+	/**
+	 * プレートクラスの取得
+	 */
+	inline Plate* GetTargetPlate() { return m_targetPlate; }
 };
 
