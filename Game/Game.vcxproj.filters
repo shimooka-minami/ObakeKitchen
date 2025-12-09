@@ -165,6 +165,9 @@
     <ClCompile Include="actor\NPCController.cpp">
       <Filter>actor</Filter>
     </ClCompile>
+    <ClCompile Include="gimmick\PlateSpace.cpp">
+      <Filter>gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -303,6 +306,9 @@
     </ClInclude>
     <ClInclude Include="actor\NPCController.h">
       <Filter>actor</Filter>
+    </ClInclude>
+    <ClInclude Include="gimmick\PlateSpace.h">
+      <Filter>gimmick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

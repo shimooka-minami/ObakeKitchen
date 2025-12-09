@@ -73,13 +73,32 @@ public:
 
 
 /**
- * 食材を持つ
+ * 皿を持つ
  */
 class HavePlateState : public IState
 {
 public:
 	HavePlateState(StateMachine* owner);
 	~HavePlateState();
+
+	void Enter() override;
+	void Update() override;
+	void Exit() override;
+};
+
+
+
+
+/********************************/
+
+/**
+ * 食材を持つ
+ */
+class HaveFoodState : public IState
+{
+public:
+	HaveFoodState(StateMachine* owner);
+	~HaveFoodState();
 
 	void Enter() override;
 	void Update() override;
@@ -127,6 +146,24 @@ public:
 };
 
 
+
+
+/********************************/
+
+
+/**
+ * 置く
+ */
+class PutState : public IState
+{
+public:
+	PutState(StateMachine* owner);
+	~PutState();
+
+	void Enter() override;
+	void Update() override;
+	void Exit() override;
+};
 
 
 /********************************/

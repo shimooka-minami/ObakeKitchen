@@ -13,5 +13,6 @@ namespace nsK2EngineLow {
 		enCollisionAttr_User,		//以下にユーザー定義のコリジョン属性を設定する。
 		enCollsiionAttr_StaticMesh = enCollisionAttr_User,
 		enCollsiionAttr_Food,
+		enCollisionAttr_Plate,
 	};
 }

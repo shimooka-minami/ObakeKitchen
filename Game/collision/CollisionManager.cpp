@@ -7,6 +7,7 @@
 
 #include "gimmick/CoockingSpace.h"
 #include "gimmick/FoodSpace.h"
+#include "gimmick/PlateSpace.h"
 #include "gimmick/DeliverySpace.h"
 
 #include "score/Score.h"
@@ -75,8 +76,16 @@ void CollisionHitManager::Update()
 		if (UpdateHitFoodSpace(pair)) {
 			continue;
 		}
+		// 皿スペース用の処理
+		if (UpdateHitPlateSpace(pair)) {
+			continue;
+		}
 		// プレイヤーと食べ物の処理
 		if (UpdateHitFoodPlate(pair)) {
+			continue;
+		}
+		// プレイヤーと皿の処理
+		if (UpdateHitPlate(pair)) {
 			continue;
 		}
 
@@ -147,6 +156,40 @@ bool CollisionHitManager::UpdateHitFoodSpace(CollisionPair& pair)
 		// @tod ofor test
 		float posX = rand() % 500;
 		float posZ = rand() % 200;
+		FoodPlate* foodPlate = NewGO<FoodPlate>(0, "foodPlate");
+		foodPlate->Initialize(foodSpace->GetAssetPath().c_str(), foodSpace->GetCookedAssetsPath().c_str(), Vector3(posX, 0.0f, posZ), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
+	}
+	return true;
+}
+
+
+bool CollisionHitManager::UpdateHitPlateSpace(CollisionPair& pair)
+{
+	// 判定対象が料理スペースだった場合
+	PlateSpace* plateSpace = GetTargetObject<PlateSpace>(pair, enCollisionType_PlateSpace);
+	Player* player = GetTargetObject<Player>(pair, enCollisionType_Player);
+
+	// 料理スペースじゃないなら処理しない
+	if (plateSpace == nullptr) {
+		return false;
+	}
+	// playerじゃないなら処理しない
+	if (player == nullptr) {
+		return false;
+	}
+
+	if (player->GetStateMachine()->IsActionButtonA()) {
+
+		// NOTE:例外でFindGO使う
+		const auto& plateList = FindGOs<Plate>("plate");
+		// 皿が4つあるなら皿を作らない
+		if (plateList.size() >= 4) {
+			return true;
+		}
+
+		// @tod ofor test
+		float posX = rand() % 500;
+		float posZ = rand() % 200;
 		//FoodPlate* foodPlate = NewGO<FoodPlate>(0, "foodPlate");
 		//foodPlate->Initialize(foodSpace->GetAssetPath().c_str(), foodSpace->GetCookedAssetsPath().c_str(), Vector3(posX, 0.0f, posZ), Vector3(1.0f, 1.0f, 1.0f), Quaternion::Identity);
 
@@ -160,7 +203,7 @@ bool CollisionHitManager::UpdateHitFoodSpace(CollisionPair& pair)
 bool CollisionHitManager::UpdateHitFoodPlate(CollisionPair& pair)
 {
 	Player* player = GetTargetObject<Player>(pair, enCollisionType_Player);
-	FoodPlate* foodPlate = GetTargetObject<FoodPlate>(pair, enCollisionType_FoodPlate);
+	FoodPlate* foodPlate = GetTargetObject<FoodPlate>(pair, enCollisionType_Food);
 
 	// プレイヤーが食材と当たってないとき
 	if (foodPlate == nullptr)
@@ -202,6 +245,55 @@ bool CollisionHitManager::UpdateHitFoodPlate(CollisionPair& pair)
 
 	return true;
 }
+
+
+bool CollisionHitManager::UpdateHitPlate(CollisionPair& pair)
+{
+	Player* player = GetTargetObject<Player>(pair, enCollisionType_Player);
+	Plate* plate = GetTargetObject<Plate>(pair, enCollisionType_Plate);
+
+	// プレイヤーが食材と当たってないとき
+	if (plate == nullptr)
+	{
+		return false;
+	}
+	if (player == nullptr)
+	{
+		return false;
+	}
+
+	// プレイヤーの前に皿がない場合
+	if (!player->GetStateMachine()->IsForwardPlate())
+	{
+		if (plate->m_transform.HasParent()) {
+			return false;
+		}
+
+		// 近くにある（プレイヤーと皿が接触しているときの処理）
+		player->GetStateMachine()->SetNearPlate(true);
+
+		Vector3 playerDirection = player->GetStateMachine()->GetDirection();
+		Vector3 plateDirection = plate->m_transform.m_position - player->m_transform.m_position;
+		plateDirection.Normalize();
+
+		// 内積を入れる変数
+		float dot;
+		// 内積の計算 プレイヤーから皿の方向
+		dot = playerDirection.Dot(plateDirection);
+		// 内積からacosで角度(円周率)を求めている
+		float angle = acos(dot);
+
+		// 円周率を角度に変換したとき、プレイヤーと皿の角度が30度以上なら
+		player->GetStateMachine()->SetForwardPlate(angle <= Math::DegToRad(30.0f));
+
+		// フードクラスをターゲットに設定
+		player->GetStateMachine()->SetTargetPlate(plate);
+	}
+
+	return true;
+}
+
+
 
 bool CollisionHitManager::UpdateHitDeliverySpace(CollisionPair& pair)
 {

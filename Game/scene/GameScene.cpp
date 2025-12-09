@@ -18,6 +18,7 @@
 
 #include "gimmick/CoockingSpace.h"
 #include "gimmick/FoodSpace.h"
+#include "gimmick/PlateSpace.h"
 #include "gimmick/DeliverySpace.h"
 #include "collision/CollisionManager.h"
 
@@ -280,22 +281,21 @@ bool GameScene::Start()
 				staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One/*transform.scale*/, transform.rotation); // TODO: Unityからの変換がおかしい？から、大きさは固定にする
 				m_deleteList.push_back(staticGimmick);
 
-				FoodSpace* foodSpace = nullptr;
+				PlateSpace* plateSpace = nullptr;
 				if (j.contains("InteractExportComponent")) {
 					InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
 
-					foodSpace = NewGO<FoodSpace>(0, "foodSpace");
-					foodSpace->m_transform.SetParent(&staticGimmick->m_transform);
-					foodSpace->m_transform.m_localPosition = info.position;
-					foodSpace->m_transform.UpdateTransform();
-					foodSpace->SetRadius(info.radius);
-					m_deleteList.push_back(foodSpace);
+					plateSpace = NewGO<PlateSpace>(0, "plateSpace");
+					plateSpace->m_transform.SetParent(&staticGimmick->m_transform);
+					plateSpace->m_transform.m_localPosition = info.position;
+					plateSpace->m_transform.UpdateTransform();
+					plateSpace->SetRadius(info.radius);
+					m_deleteList.push_back(plateSpace);
 				}
 				if (j.contains("PlateBoxExportComponent")) {
 					PlateBoxExportInfo info = ParsePlateBoxComponet(j["PlateBoxExportComponent"]);
-					if (foodSpace) {
-						foodSpace->SetAssetPath(info.assetsPath);
-						foodSpace->SetPlateAssetsPath(info.plateAssetsPath);
+					if (plateSpace) {
+						plateSpace->SetAssetPath(info.assetsPath);
 					}
 				}
 			}
@@ -397,16 +397,10 @@ void GameScene::Update()
 	// @todo for test
 	CollisionHitManager::Get().Update();
 
-	// @todo for test
-	if (g_pad[0]->IsTrigger(enButtonUp)) {
-		Score::GetInstance()->AddScore(100);
-	}
-
-
 	m_uiScore->SetScore(Score::GetInstance()->GetScore());
 
 	// 制限時間
-	m_timeKeeper->Update();							// 時間進める				// 29.0f;
+	m_timeKeeper->Update();									// 時間進める		// 29.0f;
 	m_uiTimer->SetTimer(m_timeKeeper->GetRemainingTime());	// 時間設定			// 30.0f
 
 	

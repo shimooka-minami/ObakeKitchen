@@ -12,7 +12,9 @@ StateMachine::StateMachine()
 	AddState<DashState>(enPlayerDash);
 	AddState<WalkState>(enPlayerWalk);
 	AddState<HavePlateState>(enPlayerHavePlate);
+	AddState<HaveFoodState>(enPlayerHaveFood);
 	AddState<ThrowState>(enPlayerThrow);
+	AddState<PutState>(enPlayerPut);
 	AddState<CoockingState>(enPlayerCoocking);
 	K2_ASSERT(ARRAYSIZE(m_stateList) == enPlayerNum, "AddStateを呼んでください");
 
@@ -65,8 +67,8 @@ IState* StateMachine::GetChangeState() const
 	// ステートの切り替わり
 	//
 
-	// 皿を持っている状態なら
-	if (IsEqualCurrentState(enPlayerHavePlate)) {
+	// 食材を持っている状態なら
+	if (IsEqualCurrentState(enPlayerHaveFood)) {
 		// 料理する状態に変わるかチェック
 		if (CanChangeCooking()) {
 			return m_stateList[enPlayerCoocking];
@@ -80,15 +82,29 @@ IState* StateMachine::GetChangeState() const
 			return nullptr;
 		}
 	}
+	// 皿を持っている状態なら
+	if (IsEqualCurrentState(enPlayerHavePlate)){
+		// 皿を置くかどうか切り替える
+		if (CanChangePut()) {
+			return m_stateList[enPlayerPut];
+		}
+		// 持ち物をもっているなら
+		if (m_targetPlate != nullptr) {
+			return nullptr;
+		}
+	}
 	// 料理中なら
 	if (IsEqualCurrentState(enPlayerCoocking)) {
-		if (ChangeHavePlate()) {
-			return m_stateList[enPlayerHavePlate];
+		if (ChangeHaveFood()) {
+			return m_stateList[enPlayerHaveFood];
 		}
 		return nullptr;
 	}
 
 	// その他
+	if (ChangeHaveFood()) {
+		return m_stateList[enPlayerHaveFood];
+	}
 	if (ChangeHavePlate()) {
 		return m_stateList[enPlayerHavePlate];
 	}
@@ -120,12 +136,52 @@ bool StateMachine::CanChangeDash() const
 }
 
 
-bool StateMachine::ChangeHavePlate() const
+bool StateMachine::ChangeHaveFood() const
 {
 	// 料理中は皿をもっていることにする
 	if (IsEqualCurrentState(enPlayerCoocking)) {
 		return true;
 	}
+
+	// 皿が持てる状態か
+	bool canHaveFoodState = false;
+	if (IsEqualCurrentState(enPlayerIdle)) {
+		canHaveFoodState = true;
+	}
+	if (IsEqualCurrentState(enPlayerWalk)) {
+		canHaveFoodState = true;
+	}
+	if (IsEqualCurrentState(enPlayerDash)) {
+		canHaveFoodState = true;
+	}
+	if (!canHaveFoodState) {
+		return false;
+	}
+
+	// 食材の近くにいて、食材が目の前にあって、食材を持っていないときに食材を持ちたい
+	if (!m_isNearFood) {
+		return false;
+	}
+	if (!m_isForwardFood) {
+		return false;
+	}
+	if (m_targetFood == nullptr) {
+		return false;
+	}
+
+	// 上記の条件を満たしていて、Aボタンが押されたら皿を持つ
+	if (m_actionButtonA) {
+		return true;
+	}
+}
+
+
+bool StateMachine::ChangeHavePlate() const
+{
+	//// 料理中は皿をもっていることにする
+	//if (IsEqualCurrentState(enPlayerCoocking)) {
+	//	return true;
+	//}
 
 	// 皿が持てる状態か
 	bool canHavePlateState = false;
@@ -143,13 +199,14 @@ bool StateMachine::ChangeHavePlate() const
 	}
 
 	// 皿の近くにいて、皿が目の前にあって、皿を持っていないときに皿を持ちたい
-	if (!m_isNearFood) {
+	if (!m_isNearPlate) {
 		return false;
 	}
-	if (!m_isForwardFood) {
+	if (!m_isForwardPlate) {
 		return false;
 	}
-	if (m_targetFood == nullptr) {
+	if (m_targetPlate == nullptr)
+	{
 		return false;
 	}
 
@@ -163,6 +220,18 @@ bool StateMachine::ChangeHavePlate() const
 
 
 bool StateMachine::CanChangeThrow() const
+{
+	if (!IsEqualCurrentState(enPlayerHaveFood)) {
+		return false;
+	}
+	// Aボタンが押されたら食材を投げる
+	if (m_actionButtonA) {
+		return true;
+	}
+	return false;
+}
+
+bool StateMachine::CanChangePut() const
 {
 	if (!IsEqualCurrentState(enPlayerHavePlate)) {
 		return false;

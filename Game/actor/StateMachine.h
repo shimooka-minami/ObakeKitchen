@@ -14,8 +14,10 @@ enum enPlayerState
 	enPlayerIdle,
 	enPlayerWalk,
 	enPlayerDash,
+	enPlayerHaveFood,
 	enPlayerHavePlate,
 	enPlayerThrow,
+	enPlayerPut,
 	enPlayerCoocking,
 	enPlayerNum,
 };
@@ -69,6 +71,12 @@ private:
 	/** 皿が目の前にあるか */
 	bool m_isForwardFood = false;
 
+	/** 皿が近くにあるか */
+	bool m_isNearPlate = false;
+	/** 皿が目の前にあるか */
+	bool m_isForwardPlate = false;
+
+
 	/** 料理スペースに入った */
 	bool m_isInCookingSpace = false;
 	/** 食材スペースに入った */
@@ -116,10 +124,14 @@ private:
 	bool CanChangeWalk() const;
 	/** 走る状態に変更できるか */ 
 	bool CanChangeDash() const; 
+	/** 食材を持った状態に変更できるか */
+	bool ChangeHaveFood() const;
 	/** 皿を持った状態に変更できるか */
 	bool ChangeHavePlate() const;
 	/** 皿を持ったままに変更する */
 	bool CanChangeThrow() const;
+	/** 皿を置く状態に変更する */
+	bool CanChangePut() const;
 	/** 料理する状態に変更できるか */
 	bool CanChangeCooking() const;
 
@@ -238,6 +250,29 @@ public:
 	 * 角度の取得
 	 */
 	inline void SetForwardFood(const bool isForwardFood) { m_isForwardFood = isForwardFood; }
+
+
+	/**
+	 * 近くの皿の設定 設定だけ取得は作るな
+	 */
+	inline void SetNearPlate(const bool isNearPlate) { m_isNearPlate = isNearPlate; }
+
+	/**
+	 * 近くの皿の真偽設定
+	 */
+	inline bool IsNearPlate() const { return m_isNearPlate; }
+
+
+	/**
+	 * 角度の設定(皿)
+	 */
+	inline bool IsForwardPlate() const { return m_isForwardPlate; }
+
+	/**
+	 * 角度の取得(皿)
+	 */
+	inline void SetForwardPlate(const bool isForwardPlate) { m_isForwardPlate = isForwardPlate; }
+
 
 	/**
 	 * 料理スペースに入ったか

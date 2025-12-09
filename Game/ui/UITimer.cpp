@@ -69,16 +69,6 @@ bool UITimer::Start()
 
 void UITimer::Update()
 {
-	// @todo for test
-	if (g_pad[0]->IsTrigger(enButtonA))
-	{
-		m_uiHourGlass->PlaySpriteAnimation();
-	}
-	if (g_pad[0]->IsTrigger(enButtonB))
-	{
-		m_uiHourGlass->StopSpriteAnimation();
-	}
-
 	// タイムを設定
 	m_uiDigit->SetNumber(static_cast<int>(m_timer));
 

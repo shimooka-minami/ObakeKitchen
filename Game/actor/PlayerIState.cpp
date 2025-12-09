@@ -135,14 +135,14 @@ void HavePlateState::Enter()
 	// プレイヤーの情報を取得
 	Player* player = m_owner->GetOwner();
 	// 食べ物の情報を取得
-	FoodPlate* targetFood = m_owner->GetTargetFood();
+	Plate* targetPlate = m_owner->GetTargetPlate();
 	// 食べ物をプレイヤーの子にする
-	targetFood->m_transform.SetParent(&player->m_transform);
+	targetPlate->m_transform.SetParent(&player->m_transform);
 	// 食べ物をプレイヤーの前に配置 (持っている表現)
-	Vector3 targetFoodPosition;
-	targetFoodPosition = Vector3::Front * 25.0f;
-	targetFoodPosition.y += 30.0f;
-	targetFood->SetPosition(targetFoodPosition);
+	Vector3 targetPlatePosition;
+	targetPlatePosition = Vector3::Front * 25.0f;
+	targetPlatePosition.y += 30.0f;
+	targetPlate->SetPosition(targetPlatePosition);
 
 	//// test
 	//targetFood->SetPosition(Vector3(0, m_owner->GetPosition().y * 30.0f, 0));
@@ -173,12 +173,12 @@ void HavePlateState::Update()
 
 void HavePlateState::Exit()
 {
-	if (m_owner->IsEqualNextState(enPlayerThrow)) {
+	if (m_owner->IsEqualNextState(enPlayerPut)) {
 		Player* player = m_owner->GetOwner();
-		FoodPlate* targetFood = m_owner->GetTargetFood();
-		if (targetFood) {
-			player->m_transform.RemoveChild(&targetFood->m_transform);
-			targetFood->SetPosition(targetFood->m_transform.m_position);
+		Plate* targetPlate = m_owner->GetTargetPlate();
+		if (targetPlate) {
+			player->m_transform.RemoveChild(&targetPlate->m_transform);
+			targetPlate->SetPosition(targetPlate->m_transform.m_position);
 		}
 	}
 	// 移動終わり
@@ -190,18 +190,18 @@ void HavePlateState::Exit()
 
 /********************************************/
 
-HavePlateState::HavePlateState(StateMachine* owner)
+HaveFoodState::HaveFoodState(StateMachine* owner)
 	:IState(owner)
 {
 }
 
 
-HavePlateState::~HavePlateState()
+HaveFoodState::~HaveFoodState()
 {
 }
 
 
-void HavePlateState::Enter()
+void HaveFoodState::Enter()
 {
 	// プレイヤーの情報を取得
 	Player* player = m_owner->GetOwner();
@@ -223,7 +223,7 @@ void HavePlateState::Enter()
 }
 
 
-void HavePlateState::Update()
+void HaveFoodState::Update()
 {
 	// 左スティックに少しでも入力量があったら処理する
 	if (m_owner->GetStickLAmount() > 0.01f) {
@@ -242,7 +242,7 @@ void HavePlateState::Update()
 }
 
 
-void HavePlateState::Exit()
+void HaveFoodState::Exit()
 {
 	if (m_owner->IsEqualNextState(enPlayerThrow)) {
 		Player* player = m_owner->GetOwner();
@@ -275,15 +275,15 @@ void DashHaveState::Enter()
 {
 	// プレイヤーの情報を取得
 	Player* player = m_owner->GetOwner();
-	// 食べ物の情報を取得
-	Plate* targetPlate = m_owner->GetTargetFood();
-	// 食べ物をプレイヤーの子にする
-	targetFood->m_transform.SetParent(&player->m_transform);
-	// 食べ物をプレイヤーの前に配置 (持っている表現)
-	Vector3 targetFoodPosition;
-	targetFoodPosition = Vector3::Front * 25.0f;
-	targetFoodPosition.y += 30.0f;
-	targetFood->SetPosition(targetFoodPosition);
+	//// 食べ物の情報を取得
+	//Plate* targetFood = m_owner->GetTargetFood();
+	//// 食べ物をプレイヤーの子にする
+	//targetFood->m_transform.SetParent(&player->m_transform);
+	//// 食べ物をプレイヤーの前に配置 (持っている表現)
+	//Vector3 targetFoodPosition;
+	//targetFoodPosition = Vector3::Front * 25.0f;
+	//targetFoodPosition.y += 30.0f;
+	//targetFood->SetPosition(targetFoodPosition);
 
 }
 
@@ -364,7 +364,7 @@ void ThrowState::Enter()
 		targetFood->Throw(throwPower);
 		m_owner->SetNearFood(false);
 		m_owner->SetForwardFood(false);
-
+		m_owner->SetTargetFood(nullptr);
 		// 投げた時にSEを再生
 		SoundManager::Get().PlaySE(enSoundKind_Throw);
 	}
@@ -379,6 +379,56 @@ void ThrowState::Update()
 
 
 void ThrowState::Exit()
+{
+
+}
+
+
+
+
+/********************************************/
+
+
+PutState::PutState(StateMachine* owner)
+	:IState(owner)
+{
+
+}
+
+
+PutState::~PutState()
+{
+
+}
+
+void PutState::Enter()
+{
+	// 投げる
+	if (m_owner->GetTargetPlate())
+	{
+		Vector3 throwPower = m_owner->GetDirection();
+		throwPower.y = 1.0f;
+		throwPower.Normalize();
+
+		Plate* targetPlate = m_owner->GetTargetPlate();
+		targetPlate->Put(throwPower);
+		m_owner->SetNearPlate(false);
+		m_owner->SetForwardPlate(false);
+		m_owner->SetTargetPlate(nullptr);
+
+		// 投げた時にSEを再生
+		SoundManager::Get().PlaySE(enSoundKind_Throw);
+	}
+}
+
+
+void PutState::Update()
+{
+
+}
+
+
+void PutState::Exit()
 {
 
 }

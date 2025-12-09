@@ -4,14 +4,50 @@
 #include "collision/CollisionManager.h"
 
 
+Plate::Plate() 
+{
+	m_status = CreateStatus<FoodStatus>();
+}
+
+
+Plate::~Plate()
+{
+
+}
+
 bool Plate::Start()
 {
+	// 物理当たり判定の初期化
+	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_transform.m_position, enCollisionAttr_Plate);
+	// 物体ではない当たり判定の初期化
+	m_ghostBody = std::make_unique<SphereGhostBody>();
+	m_ghostBody->Create(this, m_transform.m_position, GetStatus()->GetRadius(), enCollisionType_Plate);
+
+	m_status = CreateStatus<FoodStatus>();
+
+
 	return true;
 }
 
 
 void Plate::Update()
 {
+	// フレーム時間を取得
+	const float deltaTime = g_gameTime->GetFrameDeltaTime();
+	// 物理当たり判定を実行
+	if (!m_transform.HasParent()) {
+		Vector3 addForce = Vector3::Zero;
+		addForce.y -= 100.0f;
+		m_transform.m_localPosition = m_characterController.Execute(addForce, deltaTime);
+	}
+	// 座標を更新
+	m_transform.UpdateTransform();
+	// 物理的ではない当たり判定の座標を更新
+	m_ghostBody->SetPosition(m_transform.m_position);
+	m_ghostBody->Update();
+	// モデルの座標を更新する
+	m_modelRender.SetPosition(m_transform.m_position);
+	m_modelRender.Update();
 }
 
 
@@ -35,6 +71,27 @@ void Plate::Initialize(const char* modelName, const Vector3& position, const Vec
 	// 座標等設定
 	m_modelRender.SetTRS(position, rotation, scale);
 	m_modelRender.Update();
+}
+
+
+void Plate::SetPosition(const Vector3& position)
+{
+	m_transform.m_localPosition = position;
+	m_transform.UpdateTransform();
+	m_characterController.SetPosition(m_transform.m_position);
+	m_ghostBody->SetPosition(m_transform.m_position);
+}
+
+
+void Plate::Put(const Vector3& direction)
+{
+	//if (m_addForce.LengthSq() >= 0.01f) {
+	//	// すでに力が加わっている場合は無視
+	//	return;
+	//}
+
+	//const float addForcePower = GetStatus()->GetAddForcePower();
+	//m_addForce = direction * addForcePower;
 }
 
 
@@ -64,8 +121,7 @@ bool FoodPlate::Start()
 	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_transform.m_position, enCollsiionAttr_Food);
 	// 物体ではない当たり判定の初期化
 	m_ghostBody = std::make_unique<SphereGhostBody>();
-	m_ghostBody->Create(this, m_transform.m_position, GetStatus()->GetRadius(), enCollisionType_FoodPlate);
-
+	m_ghostBody->Create(this, m_transform.m_position, GetStatus()->GetRadius(), enCollisionType_Food);  //
 	return true;
 }
 

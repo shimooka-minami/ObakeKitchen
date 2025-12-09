@@ -249,6 +249,7 @@
     <ClCompile Include="gimmick\CoockingSpace.cpp" />
     <ClCompile Include="gimmick\DeliverySpace.cpp" />
     <ClCompile Include="gimmick\FoodSpace.cpp" />
+    <ClCompile Include="gimmick\PlateSpace.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="scene\BootScene.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
@@ -302,6 +303,7 @@
     <ClInclude Include="gimmick\CoockingSpace.h" />
     <ClInclude Include="gimmick\DeliverySpace.h" />
     <ClInclude Include="gimmick\FoodSpace.h" />
+    <ClInclude Include="gimmick\PlateSpace.h" />
     <ClInclude Include="json\json.hpp" />
     <ClInclude Include="scene\BootScene.h" />
     <ClInclude Include="scene\GameScene.h" />

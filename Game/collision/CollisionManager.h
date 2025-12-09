@@ -13,9 +13,11 @@ class FoodPlate;
 enum EnCollisionType
 {
 	enCollisionType_Player,
-	enCollisionType_FoodPlate,
+	enCollisionType_Food,
+	enCollisionType_Plate,
 	enCollisionType_CookingSpace,	// 料理スペース
 	enCollisionType_FoodSpace,		// 食材スペース
+	enCollisionType_PlateSpace,		// 皿スぺース
 	enCollisionType_DeliverySpace,	// 納品スペース
 };
 
@@ -78,7 +80,9 @@ public:
 private:
 	bool UpdateHitCookingSpace(CollisionPair& pair);
 	bool UpdateHitFoodSpace(CollisionPair& pair);
+	bool UpdateHitPlateSpace(CollisionPair& pair);
 	bool UpdateHitFoodPlate(CollisionPair& pair);
+	bool UpdateHitPlate(CollisionPair& pair);
 	bool UpdateHitDeliverySpace(CollisionPair& pair);
 
 

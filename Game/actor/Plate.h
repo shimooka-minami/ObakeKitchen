@@ -17,8 +17,8 @@ protected:
 
 
 public:
-	Plate() {}
-	~Plate() {}
+	Plate();
+	~Plate();
 
 	virtual bool Start() override;
 	virtual void Update() override;
@@ -27,6 +27,19 @@ public:
 
 public:
 	virtual void Initialize(const char* modelName, const Vector3& position, const Vector3 scale, const Quaternion& rotation);
+
+	/** 座標の設定 お皿の位置 */
+	void SetPosition(const Vector3& position);
+
+public:
+	/**
+	 * 皿を置く
+	 */
+	void Put(const Vector3& direction);
+
+
+public:
+	FoodStatus* GetStatus() { return dynamic_cast<FoodStatus*>(m_status); }
 };
 
 

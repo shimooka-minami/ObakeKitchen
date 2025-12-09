@@ -87,6 +87,11 @@ bool TitleScene::Start()
 	g_sceneLight->SetDirectionLight(0, Vector3(1.0f, -1.0f, 0.0f), Vector3(0.8f, 0.8f, 0.8f));
 	g_sceneLight->SetAmbinet(Vector3(0.2f, 0.2f, 0.2f));
 
+	// ƒJƒƒ‰‚Ì‰Šú‰»
+	g_camera3D->SetTarget(Vector3(0.0f, 50.0f, 0.0f));
+	g_camera3D->SetPosition(Vector3(0.0f,130.0f,-190.0f));
+	g_camera3D->Update();
+
 	return true;
 }
 
