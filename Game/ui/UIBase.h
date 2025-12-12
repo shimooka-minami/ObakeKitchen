@@ -49,6 +49,7 @@ public:
 	}
 	void PlaySpriteAnimation();
 	void StopSpriteAnimation();
+	bool IsCompleted() const;
 };
 
 

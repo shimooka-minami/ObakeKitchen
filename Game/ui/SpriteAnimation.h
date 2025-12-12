@@ -56,6 +56,7 @@ public:
 		// 再生するかどうかフラグをfalseにする
 		m_isPlay = false;
 	}
+	bool IsCompleted() const { return m_isCompleted; }
 };
 
 

@@ -4,17 +4,79 @@
  */
 #pragma once
 #include "IScene.h"
-#include "ui/SpriteAnimation.h"
 
 class Player;
+class UICanvas;
+class UIIcon;
+
 
 enum EnTitleSpriteKind
 {
 	//enTitleSpriteKind_Background,
 	enTitleSpriteKind_Logo,
-	enTitleSpriteKind_ButtonA,
+	//enTitleSpriteKind_ButtonA,
 	enTitleSpriteKind_Max,
 };
+
+
+enum EnTitleMenuType
+{
+	enTitleMenuType_Start,
+	EnTitleMenuType_Select,
+	EnTitleMenuType_Num,
+};
+
+
+
+class ITtitleMenu : Noncopyable
+{
+public:
+	ITtitleMenu() {}
+	virtual ~ITtitleMenu() {}
+
+	virtual bool Start() = 0;
+	virtual void Update() = 0;
+	virtual void Render(RenderContext& rc) = 0;
+	virtual bool CanChange() = 0;
+};
+
+
+class TitleStartMenu : public ITtitleMenu
+{
+private:
+	std::unique_ptr<UICanvas> m_uiCanvas = nullptr;
+	UIIcon* m_titleIcon = nullptr;
+
+	bool m_isChange = false;
+
+
+public:
+	TitleStartMenu();
+	virtual ~TitleStartMenu();
+
+	bool Start() override;
+	void Update() override;
+	void Render(RenderContext& rc) override;
+	bool CanChange() override;
+};
+
+
+/** タイトル表示の後の説明・プレイ人数などの設定を表示する */
+class TitleSelectMenu : public ITtitleMenu
+{
+private:
+	std::unique_ptr<UICanvas> m_uiCanvas;
+
+public:
+	TitleSelectMenu();
+	virtual ~TitleSelectMenu();
+
+	bool Start() override;
+	void Update() override;
+	void Render(RenderContext& rc) override;
+	bool CanChange() override;
+};
+
 
 
 
@@ -32,6 +94,9 @@ private:
 	std::unique_ptr<ModelRender> m_titleBack;
 	std::unique_ptr<SpriteRender> m_titleRender;
 
+	int m_currentMenu = enTitleMenuType_Start;
+	std::unique_ptr<ITtitleMenu> m_titleMenu = nullptr;
+
 	bool m_isRequestNext = false;
 
 
@@ -44,4 +109,8 @@ public:
 	virtual void Render(RenderContext& rc) override;
 
 	virtual bool RequestScene(uint32_t& id, float& waitTime)  override;
+
+
+private:
+	void ChangeTitleMenu();
 };

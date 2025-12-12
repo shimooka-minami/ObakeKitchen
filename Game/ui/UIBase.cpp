@@ -25,6 +25,18 @@ void UIBase::StopSpriteAnimation()
 }
 
 
+bool UIBase::IsCompleted() const
+{
+	for (auto* animation : m_spriteAnimationList)
+	{
+		if (!animation->IsCompleted()) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
 
 
  // ============================================
