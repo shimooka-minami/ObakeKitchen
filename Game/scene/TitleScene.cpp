@@ -231,6 +231,16 @@ void TitleSelectMenu::Update()
 	float senScaleList[] = { 1.4f, 1.1f, 0.6f, 0.8f };
 	m_sen->m_transform.m_localScale = Vector3(senScaleList[m_currentSelectIndex], 1.0f, 1.0f);
 
+
+	if (!m_selectMenu->IsCompleted()) {
+		if (g_pad[0]->IsTrigger(enButtonA)) {
+			m_selectMenu->PlaySpriteAnimation();
+		}
+	}
+	else {
+		m_isChange = true;
+	}
+
 	m_uiCanvas->Update();
 }
 
@@ -242,6 +252,136 @@ void TitleSelectMenu::Render(RenderContext& rc)
 
 
 bool TitleSelectMenu::CanChange()
+{
+	if (m_isChange)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
+
+
+/**************************************************/
+
+
+TitlePlayerSelectMenu::TitlePlayerSelectMenu()
+{
+
+}
+
+TitlePlayerSelectMenu::~TitlePlayerSelectMenu()
+{
+
+}
+
+bool TitlePlayerSelectMenu::Start()
+{
+	m_uiCanvas = std::make_unique<UICanvas>();
+
+	// プレイヤー人数
+	auto* playerBack = m_uiCanvas->CreateUI<UIIcon>();
+	playerBack->Initialize("Assets/modelData/menu/player_num.dds", 1700.0f, 1050.0f, Vector3::Zero, Vector3::One, Quaternion::Identity);
+
+	// おばけ
+	m_playerObake[0] = m_uiCanvas->CreateUI<UIIcon>();
+	m_playerObake[0]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3(-250.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	// プレイヤーナンバー
+	m_playerNumber[0] = m_uiCanvas->CreateUI<UIIcon>();
+	m_playerNumber[0]->Initialize("Assets/modelData/UI/player/1P.dds", 125.0f, 75.0f, Vector3(-250.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+
+	// おばけ
+	m_playerObake[1] = m_uiCanvas->CreateUI<UIIcon>();
+	m_playerObake[1]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3(  50.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	// プレイヤーナンバー
+	m_playerNumber[1] = m_uiCanvas->CreateUI<UIIcon>();
+	m_playerNumber[1]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f, Vector3(50.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+
+	// おばけ
+	m_playerObake[2] = m_uiCanvas->CreateUI<UIIcon>();
+	m_playerObake[2]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3( 350.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	// プレイヤーナンバー
+	m_playerNumber[2] = m_uiCanvas->CreateUI<UIIcon>();
+	m_playerNumber[2]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f, Vector3(350.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+
+	// おばけ
+	m_playerObake[3] = m_uiCanvas->CreateUI<UIIcon>();
+	m_playerObake[3]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3( 650.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	// プレイヤーナンバー
+	m_playerNumber[3] = m_uiCanvas->CreateUI<UIIcon>();
+	m_playerNumber[3]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f, Vector3(650.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+
+	
+
+
+	return true;
+}
+
+void TitlePlayerSelectMenu::Update()
+{
+	for (int i = 0; i < MAX_PLAYER_NUM; i++)
+	{
+		if (g_pad[i]->IsTrigger(enButtonA))
+		{
+			m_isPlayerConected[i] = true;
+		}
+	}
+	m_uiCanvas->Update();
+}
+
+void TitlePlayerSelectMenu::Render(RenderContext& rc)
+{
+	m_uiCanvas->Render(rc);
+}
+
+bool TitlePlayerSelectMenu::CanChange()
+{
+	return false;
+}
+
+
+
+
+
+/**************************************************/
+
+
+TitleControlGuide::TitleControlGuide()
+{
+
+}
+
+TitleControlGuide::~TitleControlGuide()
+{
+
+}
+
+bool TitleControlGuide::Start()
+{
+	m_uiCanvas = std::make_unique<UICanvas>();
+	// 操作方法
+	auto* controlGuide = m_uiCanvas->CreateUI<UIIcon>();
+	controlGuide->Initialize("Assets/modelData/menu/contlloer.dds", 1700.0f, 1050.0f, Vector3::Zero, Vector3::One, Quaternion::Identity);
+	// もどる
+	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>();
+	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f, Vector3(-650.0f,-300.0f,0.0f), Vector3::One, Quaternion::Identity);
+
+	return true;
+}
+
+void TitleControlGuide::Update()
+{
+	m_uiCanvas->Update();
+}
+
+void TitleControlGuide::Render(RenderContext& rc)
+{
+	m_uiCanvas->Render(rc);
+}
+
+bool TitleControlGuide::CanChange()
 {
 	return false;
 }
@@ -311,7 +451,7 @@ bool TitleScene::Start()
 
 void TitleScene::Update()
 {
-	if (m_currentMenu >= EnTitleMenuType_Num)
+	if (m_currentMenu >= enTitleMenuType_Num)
 	{
 		if (!m_isRequestNext) {
 
@@ -324,7 +464,7 @@ void TitleScene::Update()
 	//for (int i = 0; i < enTitleSpriteKind_Max; i++) {
 	// m_spriteRender[i].Update();
 	//}
-	if (m_currentMenu < EnTitleMenuType_Num) {
+	if (m_currentMenu < enTitleMenuType_Num) {
 		if (m_titleMenu->CanChange()) {
 			// 次のメニューへ
 			++m_currentMenu;
@@ -367,19 +507,29 @@ void TitleScene::ChangeTitleMenu()
 	switch (m_currentMenu)
 	{
 		case enTitleMenuType_Start:
-			{
-				titleMenu = new TitleStartMenu();
-				break;
-			}
-		case EnTitleMenuType_Select:
-			{
-				titleMenu = new TitleSelectMenu();
-				break;
-			}
+		{
+			titleMenu = new TitleStartMenu();
+			break;
+		}
+		case enTitleMenuType_Select:
+		{
+			titleMenu = new TitleSelectMenu();
+			break;
+		}
+		case enTitleMenuType_Play:
+		{
+			titleMenu = new TitlePlayerSelectMenu;
+			break;
+		}
+		case enTitleMenuType_Cotrol:
+		{
+			titleMenu = new TitleControlGuide();
+			break;
+		}
 		default:
-			{
-				K2_ASSERT(false, "Menuを追加してください");
-			}
+		{
+			K2_ASSERT(false, "Menuを追加してください");
+		}
 	}
 	titleMenu->Start();
 	m_titleMenu = std::unique_ptr<ITtitleMenu>(titleMenu);

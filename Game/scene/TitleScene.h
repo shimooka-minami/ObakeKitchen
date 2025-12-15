@@ -22,8 +22,10 @@ enum EnTitleSpriteKind
 enum EnTitleMenuType
 {
 	enTitleMenuType_Start,
-	EnTitleMenuType_Select,
-	EnTitleMenuType_Num,
+	enTitleMenuType_Select,
+	enTitleMenuType_Play,
+	enTitleMenuType_Cotrol,
+	enTitleMenuType_Num,
 };
 
 
@@ -80,6 +82,7 @@ private:
 	UIIcon* m_sen;
 
 	int m_currentSelectIndex = enSelectMenuType_GameStart;
+	bool m_isChange = false;
 	
 	Vector3 m_senPosition;
 	Vector3 m_penPosition;
@@ -95,6 +98,45 @@ public:
 };
 
 
+
+
+/** プレイヤー選択 */
+class TitlePlayerSelectMenu : public ITtitleMenu
+{
+private:
+	std::unique_ptr<UICanvas> m_uiCanvas;
+	UIIcon* m_playerObake[MAX_PLAYER_NUM];
+	UIIcon* m_playerNumber[MAX_PLAYER_NUM];
+
+	bool m_isPlayerConected[MAX_PLAYER_NUM];
+
+public:
+	TitlePlayerSelectMenu();
+	~TitlePlayerSelectMenu();
+
+	bool Start() override;
+	void Update() override;
+	void Render(RenderContext& rc)override;
+	bool CanChange() override;
+};
+
+
+/** 操作方法 */
+class TitleControlGuide : public ITtitleMenu
+{
+private:
+	std::unique_ptr<UICanvas> m_uiCanvas;
+	UIIcon* m_backObake;
+
+public:
+	TitleControlGuide();
+	~TitleControlGuide();
+
+	bool Start() override;
+	void Update() override;
+	void Render(RenderContext& rc)override;
+	bool CanChange() override;
+};
 
 
 /** タイトルシーン */
