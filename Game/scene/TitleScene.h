@@ -29,7 +29,6 @@ enum EnTitleMenuType
 };
 
 
-
 class ITtitleMenu : Noncopyable
 {
 public:
@@ -39,7 +38,7 @@ public:
 	virtual bool Start() = 0;
 	virtual void Update() = 0;
 	virtual void Render(RenderContext& rc) = 0;
-	virtual bool CanChange() = 0;
+	virtual bool CanChange(int& request) = 0;
 };
 
 
@@ -59,13 +58,14 @@ public:
 	bool Start() override;
 	void Update() override;
 	void Render(RenderContext& rc) override;
-	bool CanChange() override;
+	bool CanChange(int& request) override;
 };
 
 
 /** タイトル表示の後の説明・プレイ人数などの設定を表示する */
 class TitleSelectMenu : public ITtitleMenu
 {
+private:
 	enum enSelectMenuType
 	{
 		enSelectMenuType_GameStart,
@@ -83,7 +83,8 @@ private:
 
 	int m_currentSelectIndex = enSelectMenuType_GameStart;
 	bool m_isChange = false;
-	
+	bool m_isPlayAnimation = false;
+
 	Vector3 m_senPosition;
 	Vector3 m_penPosition;
 
@@ -94,7 +95,7 @@ public:
 	bool Start() override;
 	void Update() override;
 	void Render(RenderContext& rc) override;
-	bool CanChange() override;
+	bool CanChange(int& request) override;
 };
 
 
@@ -109,6 +110,7 @@ private:
 	UIIcon* m_playerNumber[MAX_PLAYER_NUM];
 
 	bool m_isPlayerConected[MAX_PLAYER_NUM];
+	bool m_isBack = false;
 
 public:
 	TitlePlayerSelectMenu();
@@ -117,7 +119,7 @@ public:
 	bool Start() override;
 	void Update() override;
 	void Render(RenderContext& rc)override;
-	bool CanChange() override;
+	bool CanChange(int& request) override;
 };
 
 
@@ -127,6 +129,8 @@ class TitleControlGuide : public ITtitleMenu
 private:
 	std::unique_ptr<UICanvas> m_uiCanvas;
 	UIIcon* m_backObake;
+	bool m_isBack = false;
+
 
 public:
 	TitleControlGuide();
@@ -135,7 +139,7 @@ public:
 	bool Start() override;
 	void Update() override;
 	void Render(RenderContext& rc)override;
-	bool CanChange() override;
+	bool CanChange(int& request) override;
 };
 
 
@@ -172,4 +176,17 @@ public:
 
 private:
 	void ChangeTitleMenu();
+
+
+
+
+private:
+	static bool sIsStartGame;
+
+
+public:
+	static void SetStartGame(bool isStart)
+	{
+		sIsStartGame = isStart;
+	}
 };

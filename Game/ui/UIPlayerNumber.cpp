@@ -51,6 +51,12 @@ void UIPlayerNumber::Initialize(const int number)
 
 	std::string path = "Assets/modelData/UI/Player/1P.dds";
 	path[path.size() - 6] = '0' + number;
+	// コントローラーが接続されてない場合は0
+	if (number <= 0)
+	{
+		// npcの文字を表示
+		path = "Assets/modelData/UI/Player/npc.dds";
+	}
 
 	m_uiCanvas = new UICanvas();
 	m_uiCanvas->m_transform.m_localPosition = Vector3(0.0f, 0.0f, 0.0f);

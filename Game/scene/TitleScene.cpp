@@ -6,12 +6,22 @@
 // @todo for test
 #include "ui/UIBase.h"
 #include "actor/Player.h"
+#include "core/SaveData.h"
 
 namespace
 {
-	constexpr float MAX_SPRITE_WIDTH = 1920.0f;
-	constexpr float MAX_SPRITE_HIGHT = 1080.0f;
+	//const Vector3 MAX_PLAYER_POS = { -250.0f, 100.0f, 0.0f };
+	constexpr float MAX_PLAYER_WIDTH = 300.0f;
+	constexpr float MAX_PLAYER_HIGHT = 300.0f;
 
+	//const Vector3 MAX_ICON_POS = { -250.0f, 100.0f, 0.0f };
+	constexpr float MAX_ICON_WIDTH = 125.0f;
+	constexpr float MAX_ICON_HIGHT = 75.0f;
+	
+}
+
+namespace
+{
 	struct TitleSpriteInformation
 	{
 		std::string assetPath;
@@ -33,6 +43,60 @@ namespace
 	//	//TitleSpriteInformation("Assets/modelData/title/titlelog.dds", Vector3(0.0f, 300.0f, 0.0f), 800.0f, 150.0f),
 	//	//TitleSpriteInformation("Assets/modelData/title/push_a.dds", Vector3(0.0f, -150.0f, 0.0f), 300, 70),
 	//};
+
+	struct TitlePlayerSpriteInformation 
+	{
+		
+		std::string playerPath;
+		std::string upPath;
+		Vector3 iconPosition;
+		Vector3 playerPostion;
+		float width;
+		float hight;
+		//プレイヤースプライト情報
+		TitlePlayerSpriteInformation(const std::string& palyer, const std::string& up, const Vector3& playerPos, const float w, const float h)
+			: playerPath(palyer)
+			, upPath(up)
+			, playerPostion(playerPos)
+			, width(w)
+			, hight(h)
+		{
+		}
+	};
+
+	static const TitlePlayerSpriteInformation titlePlayerSpriteInfoList[] = {
+		TitlePlayerSpriteInformation("Assets/modelData/menu/karioba.dds","Assets/modelData/menu/obake_hansup.dds",Vector3(-250.0f, -100.0f, 0.0f),MAX_PLAYER_WIDTH, MAX_PLAYER_HIGHT),
+		TitlePlayerSpriteInformation("Assets/modelData/menu/karioba.dds","Assets/modelData/menu/obake_hansup.dds",Vector3(  50.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
+		TitlePlayerSpriteInformation("Assets/modelData/menu/karioba.dds","Assets/modelData/menu/obake_hansup.dds",Vector3( 350.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
+		TitlePlayerSpriteInformation("Assets/modelData/menu/karioba.dds","Assets/modelData/menu/obake_hansup.dds",Vector3( 650.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
+	};
+
+
+	struct TitleIconSpriteInformation
+	{
+		std::string iconPath;
+		std::string selectedIconPath;
+		Vector3 iconPosition;
+		float width;
+		float hight;
+		//アイコンスプライト情報
+		TitleIconSpriteInformation(const std::string icon, const std::string selectedIcon, const Vector3& iconPos, const float w, const float h)
+			: iconPath(icon)
+			, selectedIconPath(selectedIcon)
+			, iconPosition(iconPos)
+			, width(w)
+			, hight(h)
+		{
+		}
+	};
+
+	static const TitleIconSpriteInformation titleIconSpriteInfoList[] = {
+	TitleIconSpriteInformation("Assets/modelData/UI/player/npc.dds","Assets/modelData/UI/player/1p.dds",Vector3(-250.0f, 100.0f, 0.0f),MAX_ICON_WIDTH, MAX_ICON_HIGHT),
+	TitleIconSpriteInformation("Assets/modelData/UI/player/npc.dds","Assets/modelData/UI/player/2p.dds",Vector3(50.0f, 100.0f, 0.0f),MAX_ICON_WIDTH, MAX_ICON_HIGHT),
+	TitleIconSpriteInformation("Assets/modelData/UI/player/npc.dds","Assets/modelData/UI/player/3p.dds",Vector3(350.0f, 100.0f, 0.0f),MAX_ICON_WIDTH, MAX_ICON_HIGHT),
+	TitleIconSpriteInformation("Assets/modelData/UI/player/npc.dds","Assets/modelData/UI/player/4p.dds",Vector3( 650.0f, 100.0f, 0.0f),MAX_ICON_WIDTH, MAX_ICON_HIGHT),
+	};
+	
 }
 
 
@@ -91,7 +155,8 @@ void TitleStartMenu::Update()
 		if (g_pad[0]->IsTrigger(enButtonA)) {
 			m_titleIcon->PlaySpriteAnimation();
 		}
-	} else {
+	}
+	else {
 		m_isChange = true;
 	}
 
@@ -105,9 +170,13 @@ void TitleStartMenu::Render(RenderContext& rc)
 }
 
 
-bool TitleStartMenu::CanChange()
+bool TitleStartMenu::CanChange(int& request)
 {
-	return m_isChange;
+	if (m_isChange) {
+		request = enTitleMenuType_Select;
+		return true;
+	}
+	return false;
 }
 
 
@@ -132,14 +201,14 @@ bool TitleSelectMenu::Start()
 	m_selectMenu = m_uiCanvas->CreateUI<UIIcon>();
 	m_selectMenu->Initialize("Assets/modelData/menu/menu.dds", 800.0f, 1050.0f, Vector3(-450.0f, 0.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	// アニメーション
-		std::vector<Vector4> targetAlphaList = { Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f) };
-		std::vector<float> timeList = { 1.0f };
-		auto* menuAnimation = new ColorSpriteAnimation(m_selectMenu->GetSpriteRender(), false, timeList, targetAlphaList);
-		m_selectMenu->AddSpriteAnimation(menuAnimation);
-		m_selectMenu->PlaySpriteAnimation();
-		m_selectMenu->GetSpriteRender()->SetMulColor(Vector4(1.0f,1.0f,1.0f,0.0f));
-	
-	
+	std::vector<Vector4> targetAlphaList = { Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f) };
+	std::vector<float> timeList = { 1.0f };
+	auto* menuAnimation = new ColorSpriteAnimation(m_selectMenu->GetSpriteRender(), false, timeList, targetAlphaList);
+	m_selectMenu->AddSpriteAnimation(menuAnimation);
+	m_selectMenu->PlaySpriteAnimation();
+	m_selectMenu->GetSpriteRender()->SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
+
+
 	// ゲームスタート
 	auto* ward = m_uiCanvas->CreateUI<UIIcon>();
 	ward->Initialize("Assets/modelData/menu/gamestart.dds", 300.0f, 55.0f, Vector3(-450.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
@@ -218,7 +287,7 @@ void TitleSelectMenu::Update()
 		// 最大値
 		if (m_currentSelectIndex >= enSelectMenuType_Num)
 		{
-			m_currentSelectIndex = enSelectMenuType_Num -1; //範囲外にならないように調整
+			m_currentSelectIndex = enSelectMenuType_Num - 1; //範囲外にならないように調整
 		}
 	}
 
@@ -232,13 +301,16 @@ void TitleSelectMenu::Update()
 	m_sen->m_transform.m_localScale = Vector3(senScaleList[m_currentSelectIndex], 1.0f, 1.0f);
 
 
-	if (!m_selectMenu->IsCompleted()) {
+	if (!m_isPlayAnimation) {
 		if (g_pad[0]->IsTrigger(enButtonA)) {
 			m_selectMenu->PlaySpriteAnimation();
+			m_isPlayAnimation = true;
 		}
 	}
 	else {
-		m_isChange = true;
+		if (m_selectMenu->IsCompleted()) {
+			m_isChange = true;
+		}
 	}
 
 	m_uiCanvas->Update();
@@ -251,11 +323,41 @@ void TitleSelectMenu::Render(RenderContext& rc)
 }
 
 
-bool TitleSelectMenu::CanChange()
+bool TitleSelectMenu::CanChange(int& request)
 {
 	if (m_isChange)
 	{
-		return true;
+		switch (m_currentSelectIndex)
+		{
+		case enSelectMenuType_GameStart:
+		{
+			// TODO: プレイ人数選択にしたい
+			//TitleScene::SetStartGame(true);
+			request = enTitleMenuType_Play;
+			return true;
+		}
+		case enSelectMenuType_Operation:
+		{
+			request = enTitleMenuType_Cotrol;
+			return true;
+		}
+		case enSelectMenuType_Setting:
+		{
+			// 設定画面は未実装
+			break;
+		}
+		case enSelectMenuType_End:
+		{
+			// ゲーム終了
+			exit(0);
+			break;
+		}
+		default:
+		{
+			K2_ASSERT(false, "未実装");
+			break;
+		}
+		}
 	}
 
 	return false;
@@ -285,36 +387,49 @@ bool TitlePlayerSelectMenu::Start()
 	auto* playerBack = m_uiCanvas->CreateUI<UIIcon>();
 	playerBack->Initialize("Assets/modelData/menu/player_num.dds", 1700.0f, 1050.0f, Vector3::Zero, Vector3::One, Quaternion::Identity);
 
-	// おばけ
-	m_playerObake[0] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerObake[0]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3(-250.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
-	// プレイヤーナンバー
-	m_playerNumber[0] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerNumber[0]->Initialize("Assets/modelData/UI/player/1P.dds", 125.0f, 75.0f, Vector3(-250.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	//
+	for (int i = 0; i < MAX_PLAYER_NUM; i++)
+	{
+		// おばけ
+		m_playerObake[i] = m_uiCanvas->CreateUI<UIIcon>();
+		m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].playerPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight, titlePlayerSpriteInfoList[i].playerPostion,Vector3::One,Quaternion::Identity);
+		// プレイヤーナンバー
+		m_playerNumber[i] = m_uiCanvas->CreateUI<UIIcon>();
+		m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].iconPath.c_str(), titleIconSpriteInfoList[i].width, titleIconSpriteInfoList[i].hight, titleIconSpriteInfoList[i].iconPosition,Vector3::One,Quaternion::Identity);
+	}
 
-	// おばけ
-	m_playerObake[1] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerObake[1]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3(  50.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
-	// プレイヤーナンバー
-	m_playerNumber[1] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerNumber[1]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f, Vector3(50.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
-	// おばけ
-	m_playerObake[2] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerObake[2]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3( 350.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
-	// プレイヤーナンバー
-	m_playerNumber[2] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerNumber[2]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f, Vector3(350.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	//// おばけ
+	//m_playerObake[0] = m_uiCanvas->CreateUI<UIIcon>();
+	//m_playerObake[0]->Initialize("Assets/modelData/menu/obake_hansup.dds", 300.0f, 300.0f, Vector3(-250.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	//// プレイヤーナンバー
+	//m_playerNumber[0] = m_uiCanvas->CreateUI<UIIcon>();
+	//m_playerNumber[0]->Initialize("Assets/modelData/UI/player/1P.dds", 125.0f, 75.0f, Vector3(-250.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
-	// おばけ
-	m_playerObake[3] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerObake[3]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3( 650.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
-	// プレイヤーナンバー
-	m_playerNumber[3] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerNumber[3]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f, Vector3(650.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	//// おばけ
+	//m_playerObake[1] = m_uiCanvas->CreateUI<UIIcon>();
+	//m_playerObake[1]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3(50.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	//// プレイヤーナンバー
+	//m_playerNumber[1] = m_uiCanvas->CreateUI<UIIcon>();
+	//m_playerNumber[1]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f, Vector3(50.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
-	
+	//// おばけ
+	//m_playerObake[2] = m_uiCanvas->CreateUI<UIIcon>();
+	//m_playerObake[2]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3(350.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	//// プレイヤーナンバー
+	//m_playerNumber[2] = m_uiCanvas->CreateUI<UIIcon>();
+	//m_playerNumber[2]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f, Vector3(350.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
+	//// おばけ
+	//m_playerObake[3] = m_uiCanvas->CreateUI<UIIcon>();
+	//m_playerObake[3]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3(650.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	//// プレイヤーナンバー
+	//m_playerNumber[3] = m_uiCanvas->CreateUI<UIIcon>();
+	//m_playerNumber[3]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f, Vector3(650.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+
+	// もどる
+	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>();
+	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f, Vector3(-650.0f, -300.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
 	return true;
 }
@@ -323,11 +438,52 @@ void TitlePlayerSelectMenu::Update()
 {
 	for (int i = 0; i < MAX_PLAYER_NUM; i++)
 	{
-		if (g_pad[i]->IsTrigger(enButtonA))
+		if (g_pad[i]->IsTrigger(enButtonUp))
 		{
 			m_isPlayerConected[i] = true;
 		}
+		if (g_pad[i]->IsTrigger(enButtonDown))
+		{
+			m_isPlayerConected[i] = false;
+		}
+		SaveData::GetInstance()->SetContolerConected(i, m_isPlayerConected[i]);
 	}
+
+	for (int i = 0; i < MAX_PLAYER_NUM; i++)
+	{
+		if (m_isPlayerConected[i])
+		{
+			// おばけの手が上がる
+			m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].upPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight, titlePlayerSpriteInfoList[i].playerPostion, Vector3::One, Quaternion::Identity);
+
+			// プレイヤー人数が増える
+			m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].selectedIconPath.c_str(), titleIconSpriteInfoList[i].width, titleIconSpriteInfoList[i].hight, titleIconSpriteInfoList[i].iconPosition, Vector3::One, Quaternion::Identity);
+		}
+		else {
+			// おばけの手が上がる
+			m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].playerPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight, titlePlayerSpriteInfoList[i].playerPostion, Vector3::One, Quaternion::Identity);
+
+			// プレイヤー人数が増える
+			m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].iconPath.c_str(), titleIconSpriteInfoList[i].width, titleIconSpriteInfoList[i].hight, titleIconSpriteInfoList[i].iconPosition, Vector3::One, Quaternion::Identity);
+		}
+	}
+
+	// インゲームに行く
+	if (g_pad[0]->IsTrigger(enButtonA))
+	{
+		TitleScene::SetStartGame(true);
+	}
+
+	// 戻る
+	if (!m_isBack)
+	{
+		if (g_pad[0]->IsTrigger(enButtonB))
+		{
+			m_isBack = true;
+		}
+	}
+
+
 	m_uiCanvas->Update();
 }
 
@@ -336,8 +492,12 @@ void TitlePlayerSelectMenu::Render(RenderContext& rc)
 	m_uiCanvas->Render(rc);
 }
 
-bool TitlePlayerSelectMenu::CanChange()
+bool TitlePlayerSelectMenu::CanChange(int& request)
 {
+	if (m_isBack) {
+		request = enTitleMenuType_Select;
+		return true;
+	}
 	return false;
 }
 
@@ -366,13 +526,20 @@ bool TitleControlGuide::Start()
 	controlGuide->Initialize("Assets/modelData/menu/contlloer.dds", 1700.0f, 1050.0f, Vector3::Zero, Vector3::One, Quaternion::Identity);
 	// もどる
 	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>();
-	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f, Vector3(-650.0f,-300.0f,0.0f), Vector3::One, Quaternion::Identity);
+	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f, Vector3(-650.0f, -300.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
 	return true;
 }
 
 void TitleControlGuide::Update()
 {
+	if (!m_isBack)
+	{
+		if (g_pad[0]->IsTrigger(enButtonB))
+		{
+			m_isBack = true;
+		}
+	}
 	m_uiCanvas->Update();
 }
 
@@ -381,8 +548,12 @@ void TitleControlGuide::Render(RenderContext& rc)
 	m_uiCanvas->Render(rc);
 }
 
-bool TitleControlGuide::CanChange()
+bool TitleControlGuide::CanChange(int& request)
 {
+	if (m_isBack) {
+		request = enTitleMenuType_Select;
+		return true;
+	}
 	return false;
 }
 
@@ -390,6 +561,9 @@ bool TitleControlGuide::CanChange()
 
 
 /**************************************************/
+
+
+bool TitleScene::sIsStartGame = false;
 
 
 TitleScene::TitleScene()
@@ -451,27 +625,26 @@ bool TitleScene::Start()
 
 void TitleScene::Update()
 {
-	if (m_currentMenu >= enTitleMenuType_Num)
+	if (sIsStartGame)
 	{
 		if (!m_isRequestNext) {
-
-			if (g_pad[0]->IsTrigger(enButtonA)) {
-				SoundManager::Get().PlaySE(enSoundKind_Button);
-				m_isRequestNext = true;
+			SoundManager::Get().PlaySE(enSoundKind_Button);
+			m_isRequestNext = true;
+		}
+		sIsStartGame = false;
+	}
+	else
+	{
+		if (m_currentMenu < enTitleMenuType_Num) {
+			int request;
+			if (m_titleMenu->CanChange(request)) {
+				// 次のメニューへ
+				m_currentMenu = request;
+				ChangeTitleMenu();
 			}
 		}
+		m_titleMenu->Update();
 	}
-	//for (int i = 0; i < enTitleSpriteKind_Max; i++) {
-	// m_spriteRender[i].Update();
-	//}
-	if (m_currentMenu < enTitleMenuType_Num) {
-		if (m_titleMenu->CanChange()) {
-			// 次のメニューへ
-			++m_currentMenu;
-			ChangeTitleMenu();
-		}
-	}
-	m_titleMenu->Update();
 }
 
 
@@ -506,30 +679,30 @@ void TitleScene::ChangeTitleMenu()
 	ITtitleMenu* titleMenu = nullptr;
 	switch (m_currentMenu)
 	{
-		case enTitleMenuType_Start:
-		{
-			titleMenu = new TitleStartMenu();
-			break;
-		}
-		case enTitleMenuType_Select:
-		{
-			titleMenu = new TitleSelectMenu();
-			break;
-		}
-		case enTitleMenuType_Play:
-		{
-			titleMenu = new TitlePlayerSelectMenu;
-			break;
-		}
-		case enTitleMenuType_Cotrol:
-		{
-			titleMenu = new TitleControlGuide();
-			break;
-		}
-		default:
-		{
-			K2_ASSERT(false, "Menuを追加してください");
-		}
+	case enTitleMenuType_Start:
+	{
+		titleMenu = new TitleStartMenu();
+		break;
+	}
+	case enTitleMenuType_Select:
+	{
+		titleMenu = new TitleSelectMenu();
+		break;
+	}
+	case enTitleMenuType_Play:
+	{
+		titleMenu = new TitlePlayerSelectMenu;
+		break;
+	}
+	case enTitleMenuType_Cotrol:
+	{
+		titleMenu = new TitleControlGuide();
+		break;
+	}
+	default:
+	{
+		K2_ASSERT(false, "Menuを追加してください");
+	}
 	}
 	titleMenu->Start();
 	m_titleMenu = std::unique_ptr<ITtitleMenu>(titleMenu);

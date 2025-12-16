@@ -8,10 +8,12 @@
 
 #include "core/ParameterManager.h"
 #include "core/Fade.h"
+#include "core/SaveData.h"
 #include "effect/EffectManager.h"
 #include "sound/SoundManager.h"
 #include "scene/SceneManager.h"
 #include "actor/NPCController.h"
+
 
 
 void ReportLiveObjects()
@@ -57,6 +59,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	auto* sceneManagerObject = NewGO<SceneManagerObject>(0, "sceneManagerObject");
 	// NPCコントローラーを呼ぶ
 	NPCController::Initialize();
+	// セーブデータ生成
+	SaveData::CreateInstance();
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
@@ -78,6 +82,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	SoundManager::DestroyInstance();
 	// パラメーターマネージャー破棄
 	ParameterManager::DestroyInstance();
+	// セーブデータの破棄
+	SaveData::DestroyInstance();	
 	// フェード破棄
 	DeleteGO(fadeObject);
 

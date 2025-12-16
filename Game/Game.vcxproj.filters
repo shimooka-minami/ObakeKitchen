@@ -168,6 +168,9 @@
     <ClCompile Include="gimmick\PlateSpace.cpp">
       <Filter>gimmick</Filter>
     </ClCompile>
+    <ClCompile Include="core\SaveData.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -309,6 +312,9 @@
     </ClInclude>
     <ClInclude Include="gimmick\PlateSpace.h">
       <Filter>gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="core\SaveData.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

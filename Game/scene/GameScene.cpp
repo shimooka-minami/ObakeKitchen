@@ -8,6 +8,7 @@
 
 #include "core/SceneLoader.h"
 #include "core/TimeKeeper.h"
+#include "core/SaveData.h"
 
 #include "actor/Player.h"
 #include "actor/PlayerController.h"
@@ -136,6 +137,7 @@ GameScene::~GameScene()
 {
 	DeleteGO(m_uiScore);
 	DeleteGO(m_uiTimer);
+	DeleteGO(m_gameCamera);
 
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i) {
 		DeleteGO(m_playerList[i]);
@@ -164,8 +166,7 @@ bool GameScene::Start()
 		m_npcControllerList[i] = nullptr;
 
 		// コントローラー接続がされているか
-		constexpr int USE_PLAYER_CONTROLLER_INDEX = 0; // 0番目は自操作確定
-		if (g_pad[i]->IsConnected() || i == USE_PLAYER_CONTROLLER_INDEX) {
+		if (SaveData::GetInstance()->IsControlerConected(i)) {
 			// プレイヤーコントローラー
 			m_playerControllerList[i] = NewGO<PlayerController>(0, "playerController");
 			// 対象を設定
@@ -177,7 +178,14 @@ bool GameScene::Start()
 		}
 		// プレイヤー番号
 		m_uiPlayerNumber[i] = NewGO<UIPlayerNumber>(0, "uiPlayerNumber");
-		m_uiPlayerNumber[i]->Initialize(i + 1); // iは0からなので+1して数にする(iはindexなので0から)
+		if (SaveData::GetInstance()->IsControlerConected(i)){
+			m_uiPlayerNumber[i]->Initialize(i + 1); // iは0からなので+1して数にする(iはindexなので0から)
+		}
+		else {
+			// m_uiPlayerNumberが0だった場合イニシャライズは0
+			m_uiPlayerNumber[i]->Initialize(0);
+		}
+		
 	}
 
 	// カメラ

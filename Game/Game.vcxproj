@@ -241,6 +241,7 @@
     <ClCompile Include="collision\Shape.cpp" />
     <ClCompile Include="core\Fade.cpp" />
     <ClCompile Include="core\ParameterManager.cpp" />
+    <ClCompile Include="core\SaveData.cpp" />
     <ClCompile Include="core\SceneLoader.cpp" />
     <ClCompile Include="core\TimeKeeper.cpp" />
     <ClCompile Include="core\TransformHelper.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="collision\Shape.h" />
     <ClInclude Include="core\Fade.h" />
     <ClInclude Include="core\ParameterManager.h" />
+    <ClInclude Include="core\SaveData.h" />
     <ClInclude Include="core\SceneLoader.h" />
     <ClInclude Include="core\TimeKeeper.h" />
     <ClInclude Include="core\TransformHelper.h" />
