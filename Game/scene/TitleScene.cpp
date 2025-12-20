@@ -17,26 +17,28 @@ namespace
 	//const Vector3 MAX_ICON_POS = { -250.0f, 100.0f, 0.0f };
 	constexpr float MAX_ICON_WIDTH = 125.0f;
 	constexpr float MAX_ICON_HIGHT = 75.0f;
-	
+
+	constexpr float MAX_NPC_ICON_WIDHT = 300.0f;
+	constexpr float MAX_NPC_ICON_HIGHT = 55.0f;
 }
 
 namespace
 {
-	struct TitleSpriteInformation
-	{
-		std::string assetPath;
-		Vector3 position;
-		float width;
-		float hight;
-		//タイトルスプライト情報
-		TitleSpriteInformation(const std::string& path, const Vector3& pos, const float w, const float h)
-			: assetPath(path)
-			, position(pos)
-			, width(w)
-			, hight(h)
-		{
-		}
-	};
+	//struct TitleSpriteInformation
+	//{
+	//	std::string assetPath;
+	//	Vector3 position;
+	//	float width;
+	//	float hight;
+	//	//タイトルスプライト情報
+	//	TitleSpriteInformation(const std::string& path, const Vector3& pos, const float w, const float h)
+	//		: assetPath(path)
+	//		, position(pos)
+	//		, width(w)
+	//		, hight(h)
+	//	{
+	//	}
+	//};
 
 	//static const TitleSpriteInformation titleSpriteInfoList[enTitleSpriteKind_Max] = {
 	//	//TitleSpriteInformation("Assets/modelData/title/titleBack.dds", Vector3::Zero, MAX_SPRITE_WIDTH, MAX_SPRITE_HIGHT),
@@ -44,20 +46,22 @@ namespace
 	//	//TitleSpriteInformation("Assets/modelData/title/push_a.dds", Vector3(0.0f, -150.0f, 0.0f), 300, 70),
 	//};
 
+
+	// プレイヤー人数選択の情報
 	struct TitlePlayerSpriteInformation 
 	{
 		
 		std::string playerPath;
 		std::string upPath;
-		Vector3 iconPosition;
-		Vector3 playerPostion;
+		//Vector3 iconPosition;
+		Vector3 playerPosition;
 		float width;
 		float hight;
 		//プレイヤースプライト情報
-		TitlePlayerSpriteInformation(const std::string& palyer, const std::string& up, const Vector3& playerPos, const float w, const float h)
-			: playerPath(palyer)
+		TitlePlayerSpriteInformation(const std::string& player, const std::string& up, const Vector3& playerPos, const float w, const float h)
+			: playerPath(player)
 			, upPath(up)
-			, playerPostion(playerPos)
+			, playerPosition(playerPos)
 			, width(w)
 			, hight(h)
 		{
@@ -65,27 +69,28 @@ namespace
 	};
 
 	static const TitlePlayerSpriteInformation titlePlayerSpriteInfoList[] = {
-		TitlePlayerSpriteInformation("Assets/modelData/menu/karioba.dds","Assets/modelData/menu/obake_hansup.dds",Vector3(-250.0f, -100.0f, 0.0f),MAX_PLAYER_WIDTH, MAX_PLAYER_HIGHT),
-		TitlePlayerSpriteInformation("Assets/modelData/menu/karioba.dds","Assets/modelData/menu/obake_hansup.dds",Vector3(  50.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
-		TitlePlayerSpriteInformation("Assets/modelData/menu/karioba.dds","Assets/modelData/menu/obake_hansup.dds",Vector3( 350.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
-		TitlePlayerSpriteInformation("Assets/modelData/menu/karioba.dds","Assets/modelData/menu/obake_hansup.dds",Vector3( 650.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
+		TitlePlayerSpriteInformation("Assets/modelData/menu/player/obake_player.dds","Assets/modelData/menu/player/obake_hansup.dds",Vector3(-250.0f, -100.0f, 0.0f),MAX_PLAYER_WIDTH, MAX_PLAYER_HIGHT),
+		TitlePlayerSpriteInformation("Assets/modelData/menu/player/obake_player.dds","Assets/modelData/menu/player/obake_hansup.dds",Vector3(350.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
+		TitlePlayerSpriteInformation("Assets/modelData/menu/player/obake_player.dds","Assets/modelData/menu/player/obake_hansup.dds",Vector3(50.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
+		TitlePlayerSpriteInformation("Assets/modelData/menu/player/obake_player.dds","Assets/modelData/menu/player/obake_hansup.dds",Vector3( 650.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
 	};
 
 
+	// 1~4P & NPCアイコンの情報
 	struct TitleIconSpriteInformation
 	{
 		std::string iconPath;
 		std::string selectedIconPath;
 		Vector3 iconPosition;
-		float width;
-		float hight;
+		float npcWidth;
+		float npcHight;
 		//アイコンスプライト情報
-		TitleIconSpriteInformation(const std::string icon, const std::string selectedIcon, const Vector3& iconPos, const float w, const float h)
+		TitleIconSpriteInformation(const std::string icon, const std::string selectedIcon, const Vector3& iconPos, const float npcW, const float npcH)
 			: iconPath(icon)
 			, selectedIconPath(selectedIcon)
 			, iconPosition(iconPos)
-			, width(w)
-			, hight(h)
+			, npcWidth(npcW)
+			, npcHight(npcH)
 		{
 		}
 	};
@@ -97,6 +102,59 @@ namespace
 	TitleIconSpriteInformation("Assets/modelData/UI/player/npc.dds","Assets/modelData/UI/player/4p.dds",Vector3( 650.0f, 100.0f, 0.0f),MAX_ICON_WIDTH, MAX_ICON_HIGHT),
 	};
 	
+
+	// NPCの情報
+	struct TitleNPCTypeSpriteInformation
+	{
+
+		std::string typePath;
+		std::string selectedTypePath;
+		Vector3 npcPosition;
+		float width;
+		float hight;
+		//プレイヤースプライト情報
+		TitleNPCTypeSpriteInformation(const std::string& type, const std::string& selectedType, const Vector3& npcPos, const float w, const float h)
+			: typePath(type)
+			, selectedTypePath(selectedType)
+			, npcPosition(npcPos)
+			, width(w)
+			, hight(h)
+		{
+		}
+	};
+
+	static const TitleNPCTypeSpriteInformation titleNPCTypeSpriteInfoList[] = {
+		TitleNPCTypeSpriteInformation("Assets/modelData/menu/player/obake_player.dds","Assets/modelData/menu/player/obake_hansup.dds",Vector3(-150.0f, -100.0f, 0.0f),MAX_PLAYER_WIDTH, MAX_PLAYER_HIGHT),
+		TitleNPCTypeSpriteInformation("Assets/modelData/menu/player/obake_waru.dds","Assets/modelData/menu/player/waru_hansup.dds",Vector3(200.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
+		TitleNPCTypeSpriteInformation("Assets/modelData/menu/player/obake_rondom.dds","Assets/modelData/menu/player/rondom_hansup.dds",Vector3(550.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
+	};
+
+
+	// 難易度アイコンの情報
+	struct TitleTypeIconSpriteInformation
+	{
+		std::string npcIconPath;
+		std::string selectedNPCIconPath;
+		Vector3 npcIconPosition;
+		float width;
+		float hight;
+		//アイコンスプライト情報
+		TitleTypeIconSpriteInformation(const std::string npcIcon, const std::string selectedNPCIcon, const Vector3& npciconPos, const float w, const float h)
+			: npcIconPath(npcIcon)
+			, selectedNPCIconPath(selectedNPCIcon)
+			, npcIconPosition(npciconPos)
+			, width(w)
+			, hight(h)
+		{
+		}
+	};
+
+	static const TitleTypeIconSpriteInformation titleNPCIconSpriteInfoList[] = {
+	TitleTypeIconSpriteInformation("Assets/modelData/menu/ward/yasa.dds","Assets/modelData/UI/player/1p.dds",Vector3(-150.0f, 100.0f, 0.0f),MAX_NPC_ICON_WIDHT, MAX_NPC_ICON_HIGHT),
+	TitleTypeIconSpriteInformation("Assets/modelData/menu/ward/waru.dds","Assets/modelData/UI/player/2p.dds",Vector3(200.0f, 100.0f, 0.0f),MAX_NPC_ICON_WIDHT, MAX_NPC_ICON_HIGHT),
+	TitleTypeIconSpriteInformation("Assets/modelData/menu/ward/rondom.dds","Assets/modelData/UI/player/3p.dds",Vector3(550.0f, 100.0f, 0.0f),MAX_NPC_ICON_WIDHT, MAX_NPC_ICON_HIGHT),
+	};
+
 }
 
 
@@ -344,7 +402,8 @@ bool TitleSelectMenu::CanChange(int& request)
 		case enSelectMenuType_Setting:
 		{
 			// 設定画面は未実装
-			break;
+			request = enTitleMenuType_Setting;
+			return true;
 		}
 		case enSelectMenuType_End:
 		{
@@ -392,10 +451,10 @@ bool TitlePlayerSelectMenu::Start()
 	{
 		// おばけ
 		m_playerObake[i] = m_uiCanvas->CreateUI<UIIcon>();
-		m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].playerPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight, titlePlayerSpriteInfoList[i].playerPostion,Vector3::One,Quaternion::Identity);
+		m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].playerPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight, titlePlayerSpriteInfoList[i].playerPosition,Vector3::One,Quaternion::Identity);
 		// プレイヤーナンバー
 		m_playerNumber[i] = m_uiCanvas->CreateUI<UIIcon>();
-		m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].iconPath.c_str(), titleIconSpriteInfoList[i].width, titleIconSpriteInfoList[i].hight, titleIconSpriteInfoList[i].iconPosition,Vector3::One,Quaternion::Identity);
+		m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].iconPath.c_str(), titleIconSpriteInfoList[i].npcWidth, titleIconSpriteInfoList[i].npcHight, titleIconSpriteInfoList[i].iconPosition,Vector3::One,Quaternion::Identity);
 	}
 
 
@@ -429,7 +488,7 @@ bool TitlePlayerSelectMenu::Start()
 
 	// もどる
 	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>();
-	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f, Vector3(-650.0f, -300.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f, Vector3(-665.0f, -300.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
 	return true;
 }
@@ -454,17 +513,15 @@ void TitlePlayerSelectMenu::Update()
 		if (m_isPlayerConected[i])
 		{
 			// おばけの手が上がる
-			m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].upPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight, titlePlayerSpriteInfoList[i].playerPostion, Vector3::One, Quaternion::Identity);
-
+			m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].upPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight, titlePlayerSpriteInfoList[i].playerPosition, Vector3::One, Quaternion::Identity);
 			// プレイヤー人数が増える
-			m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].selectedIconPath.c_str(), titleIconSpriteInfoList[i].width, titleIconSpriteInfoList[i].hight, titleIconSpriteInfoList[i].iconPosition, Vector3::One, Quaternion::Identity);
+			m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].selectedIconPath.c_str(), titleIconSpriteInfoList[i].npcWidth, titleIconSpriteInfoList[i].npcHight, titleIconSpriteInfoList[i].iconPosition, Vector3::One, Quaternion::Identity);
 		}
 		else {
-			// おばけの手が上がる
-			m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].playerPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight, titlePlayerSpriteInfoList[i].playerPostion, Vector3::One, Quaternion::Identity);
-
-			// プレイヤー人数が増える
-			m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].iconPath.c_str(), titleIconSpriteInfoList[i].width, titleIconSpriteInfoList[i].hight, titleIconSpriteInfoList[i].iconPosition, Vector3::One, Quaternion::Identity);
+			// おばけの手がさがる
+			m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].playerPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight, titlePlayerSpriteInfoList[i].playerPosition, Vector3::One, Quaternion::Identity);
+			// プレイヤー人数が減る
+			m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].iconPath.c_str(), titleIconSpriteInfoList[i].npcWidth, titleIconSpriteInfoList[i].npcHight, titleIconSpriteInfoList[i].iconPosition, Vector3::One, Quaternion::Identity);
 		}
 	}
 
@@ -482,7 +539,6 @@ void TitlePlayerSelectMenu::Update()
 			m_isBack = true;
 		}
 	}
-
 
 	m_uiCanvas->Update();
 }
@@ -526,7 +582,7 @@ bool TitleControlGuide::Start()
 	controlGuide->Initialize("Assets/modelData/menu/contlloer.dds", 1700.0f, 1050.0f, Vector3::Zero, Vector3::One, Quaternion::Identity);
 	// もどる
 	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>();
-	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f, Vector3(-650.0f, -300.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f, Vector3(-665.0f, -300.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
 	return true;
 }
@@ -554,6 +610,130 @@ bool TitleControlGuide::CanChange(int& request)
 		request = enTitleMenuType_Select;
 		return true;
 	}
+	return false;
+}
+
+
+
+
+/**************************************************/
+
+
+TitleSetting::TitleSetting()
+{
+}
+
+TitleSetting::~TitleSetting()
+{
+}
+
+bool TitleSetting::Start()
+{
+	m_uiCanvas = std::make_unique<UICanvas>();
+	// npcのタイプ設定
+	auto* controlGuide = m_uiCanvas->CreateUI<UIIcon>();
+	controlGuide->Initialize("Assets/modelData/menu/seikaku.dds", 1700.0f, 1050.0f, Vector3::Zero, Vector3::One, Quaternion::Identity);
+
+	//npc
+	for (int i = 0; i < NPC_TYPE_NUM; i++)
+	{
+		// おばけ
+		m_npcTypeObake[i] = m_uiCanvas->CreateUI<UIIcon>();
+		m_npcTypeObake[i]->Initialize(titleNPCTypeSpriteInfoList[i].typePath.c_str(), titleNPCTypeSpriteInfoList[i].width, titleNPCTypeSpriteInfoList[i].hight, titleNPCTypeSpriteInfoList[i].npcPosition, Vector3::One, Quaternion::Identity);
+		// 性格
+		m_npcTypeIcon[i] = m_uiCanvas->CreateUI<UIIcon>();
+		m_npcTypeIcon[i]->Initialize(titleNPCIconSpriteInfoList[i].npcIconPath.c_str(), titleNPCIconSpriteInfoList[i].width, titleNPCIconSpriteInfoList[i].hight, titleNPCIconSpriteInfoList[i].npcIconPosition, Vector3::One, Quaternion::Identity);
+	}
+
+	// もどる
+	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>();
+	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f, Vector3(-665.0f, -300.0f, 0.0f), Vector3::One, Quaternion::Identity);
+
+	return true;
+}
+
+void TitleSetting::Update()
+{
+	int npcType = m_npcTypeIndex;
+
+	if (g_pad[0]->IsTrigger(enButtonRight))
+	{
+		m_isNPCConected[m_npcTypeIndex] = false;
+		npcType++;
+		if (npcType >= NPC_TYPE_NUM) {
+			npcType = NPC_TYPE_NUM - 1;
+		}
+		m_isNPCConected[npcType] = true;
+	}
+	if (g_pad[0]->IsTrigger(enButtonLeft))
+	{
+		m_isNPCConected[m_npcTypeIndex] = false;
+		npcType--;
+		if (npcType <= 0) {
+			npcType = 0;
+		}
+		m_isNPCConected[npcType] = true;
+	}
+	m_npcTypeIndex = npcType;
+	//SaveData::GetInstance()->SetContolerConected(0, m_isNPCConected[0]);
+	
+
+	for (int i = 0; i < NPC_TYPE_NUM; i++)
+	{
+		if (m_isNPCConected[i])
+		{
+			// おばけの手が上がる
+			m_npcTypeObake[i]->Initialize(titleNPCTypeSpriteInfoList[i].selectedTypePath.c_str(), titleNPCTypeSpriteInfoList[i].width, titleNPCTypeSpriteInfoList[i].hight, titleNPCTypeSpriteInfoList[i].npcPosition, Vector3::One, Quaternion::Identity);
+		}
+		else {
+			// おばけの手がさがる
+			m_npcTypeObake[i]->Initialize(titleNPCTypeSpriteInfoList[i].typePath.c_str(), titleNPCTypeSpriteInfoList[i].width, titleNPCTypeSpriteInfoList[i].hight, titleNPCTypeSpriteInfoList[i].npcPosition, Vector3::One, Quaternion::Identity);
+		}
+	}
+
+	//// メニュー選択
+	//if (g_pad[0]->IsTrigger(enButtonUp))
+	//{
+	//	--m_npcTypeIndex;
+	//	// 最小値
+	//	if (m_npcTypeIndex < enNPCType_kind)
+	//	{
+	//		m_npcTypeIndex = enNPCType_kind; //範囲外にならないように調整
+	//	}
+	//}
+	//else if (g_pad[0]->IsTrigger(enButtonDown))
+	//{
+	//	++m_npcTypeIndex;
+	//	// 最大値
+	//	if (m_npcTypeIndex >= enNPCType_Max)
+	//	{
+	//		m_npcTypeIndex = enNPCType_Max - 1; //範囲外にならないように調整
+	//	}
+	//}
+
+	if (!m_isBack)
+	{
+		if (g_pad[0]->IsTrigger(enButtonB))
+		{
+			m_isBack = true;
+		}
+	}
+	m_uiCanvas->Update();
+}
+
+void TitleSetting::Render(RenderContext& rc)
+{
+	m_uiCanvas->Render(rc);
+}
+
+bool TitleSetting::CanChange(int& request)
+{
+
+	if (m_isBack) {
+		request = enTitleMenuType_Select;
+		return true;
+	}
+	
 	return false;
 }
 
@@ -697,6 +877,11 @@ void TitleScene::ChangeTitleMenu()
 	case enTitleMenuType_Cotrol:
 	{
 		titleMenu = new TitleControlGuide();
+		break;
+	}
+	case enTitleMenuType_Setting:
+	{
+		titleMenu = new TitleSetting();
 		break;
 	}
 	default:

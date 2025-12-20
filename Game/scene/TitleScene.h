@@ -25,6 +25,7 @@ enum EnTitleMenuType
 	enTitleMenuType_Select,
 	enTitleMenuType_Play,
 	enTitleMenuType_Cotrol,
+	enTitleMenuType_Setting,
 	enTitleMenuType_Num,
 };
 
@@ -123,18 +124,54 @@ public:
 };
 
 
-/** 操作方法 */
+/** 操作画面 */
 class TitleControlGuide : public ITtitleMenu
 {
 private:
 	std::unique_ptr<UICanvas> m_uiCanvas;
 	UIIcon* m_backObake;
+
 	bool m_isBack = false;
 
 
 public:
 	TitleControlGuide();
 	~TitleControlGuide();
+
+	bool Start() override;
+	void Update() override;
+	void Render(RenderContext& rc)override;
+	bool CanChange(int& request) override;
+};
+
+
+/** 設定画面 */
+class TitleSetting : public ITtitleMenu
+{
+	enum EnNPCType
+	{
+		enNPCType_kind,
+		enNPCType_mean,
+		enNPCType_Random,
+		enNPCType_Max,
+	};
+
+private:
+	std::unique_ptr<UICanvas> m_uiCanvas;
+	UIIcon* m_npcTypeObake[NPC_TYPE_NUM];
+	UIIcon* m_npcTypeIcon[NPC_TYPE_NUM];
+	UIIcon* m_backObake;
+
+	int m_npcTypeIndex = enNPCType_kind;
+
+	bool m_isNPCConected[NPC_TYPE_NUM] = {true,false,false};
+	bool m_isBack = false;
+	bool m_isChange = false;
+
+
+public:
+	TitleSetting();
+	~TitleSetting();
 
 	bool Start() override;
 	void Update() override;

@@ -7,6 +7,8 @@
 
 /** 最大プレイヤー数 */
 static constexpr  uint8_t  MAX_PLAYER_NUM = 4;
+/** NPC難易度 */
+static constexpr uint8_t   NPC_TYPE_NUM = 3;
 
 
 enum EnGameObjectPriority
