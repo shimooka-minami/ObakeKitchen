@@ -130,6 +130,9 @@ bool CollisionHitManager::UpdateHitCookingSpace(CollisionPair& pair)
 		return false;
 	}
 
+	// プレイヤーが近くにいることを知らせる
+	cookingSpace->SetNearPlayer(true);
+
 	// 料理スペースにプレイヤーが入ったときの処理
 	player->GetStateMachine()->SetInCookingSpace(true);
 	
@@ -177,6 +180,9 @@ bool CollisionHitManager::UpdateHitPlateSpace(CollisionPair& pair)
 	if (player == nullptr) {
 		return false;
 	}
+
+	// プレイヤーが近くにいることを知らせる
+	plateSpace->SetNearPlayer(true);
 
 	if (player->GetStateMachine()->IsActionButtonA()) {
 
@@ -309,6 +315,9 @@ bool CollisionHitManager::UpdateHitDeliverySpace(CollisionPair& pair)
 	{
 		return false;
 	}
+
+	// プレイヤーが近くにいることを知らせる
+	deliverySpace->SetNearPlayer(true);
 
 	// 取得
 	FoodPlate* targetFood = player->GetStateMachine()->GetTargetFood();

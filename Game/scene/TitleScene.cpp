@@ -70,8 +70,8 @@ namespace
 
 	static const TitlePlayerSpriteInformation titlePlayerSpriteInfoList[] = {
 		TitlePlayerSpriteInformation("Assets/modelData/menu/player/obake_player.dds","Assets/modelData/menu/player/obake_hansup.dds",Vector3(-250.0f, -100.0f, 0.0f),MAX_PLAYER_WIDTH, MAX_PLAYER_HIGHT),
-		TitlePlayerSpriteInformation("Assets/modelData/menu/player/obake_player.dds","Assets/modelData/menu/player/obake_hansup.dds",Vector3(350.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
-		TitlePlayerSpriteInformation("Assets/modelData/menu/player/obake_player.dds","Assets/modelData/menu/player/obake_hansup.dds",Vector3(50.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
+		TitlePlayerSpriteInformation("Assets/modelData/menu/player/obake_player.dds","Assets/modelData/menu/player/obake_hansup.dds",Vector3(  50.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
+		TitlePlayerSpriteInformation("Assets/modelData/menu/player/obake_player.dds","Assets/modelData/menu/player/obake_hansup.dds",Vector3( 350.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
 		TitlePlayerSpriteInformation("Assets/modelData/menu/player/obake_player.dds","Assets/modelData/menu/player/obake_hansup.dds",Vector3( 650.0f, -100.0f, 0.0f),MAX_PLAYER_HIGHT, MAX_PLAYER_HIGHT),
 	};
 

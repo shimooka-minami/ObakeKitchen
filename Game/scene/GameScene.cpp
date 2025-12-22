@@ -299,6 +299,11 @@ bool GameScene::Start()
 					plateSpace->m_transform.UpdateTransform();
 					plateSpace->SetRadius(info.radius);
 					m_deleteList.push_back(plateSpace);
+
+					// 料理インタラクト
+					auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
+					uiInteractIcon->Initialize(enInteractType_Plate, transform.position);
+					m_deleteList.push_back(uiInteractIcon);
 				}
 				if (j.contains("PlateBoxExportComponent")) {
 					PlateBoxExportInfo info = ParsePlateBoxComponet(j["PlateBoxExportComponent"]);

@@ -33,6 +33,9 @@ bool PlateSpace::Start()
 
 void PlateSpace::Update()
 {
+	// 毎回初期化
+	m_isNearPlayer = false;
+
 	UpdateTransform();
 }
 

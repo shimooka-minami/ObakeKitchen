@@ -11,6 +11,10 @@
  */
 class DeliverySpace : public IGameObject
 {
+private:
+	/** 近くにプレイヤーがいるか */
+	bool m_isNearPlayer = false;
+
 public:
 	/** 例外でpublic */
 	Transform m_transform;
@@ -39,4 +43,11 @@ private:
 public:
 	/** 半径の設定 */
 	inline void SetRadius(const float radius) { m_radius = radius; }
+
+
+	/** プレイヤーが近くにいるかの設定 */
+	inline void SetNearPlayer(const bool isNearPlayer) { m_isNearPlayer = isNearPlayer; }
+
+	/** プレイヤーが近くにいるかの取得 */
+	inline bool IsNearPlayer() const { return m_isNearPlayer; }
 };

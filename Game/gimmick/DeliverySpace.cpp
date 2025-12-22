@@ -32,6 +32,9 @@ bool DeliverySpace::Start()
 
 void DeliverySpace::Update()
 {
+	// 毎回初期化
+	m_isNearPlayer = false;
+
 	UpdateTransform();
 }
 

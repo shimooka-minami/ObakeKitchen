@@ -17,7 +17,9 @@ private:
 	UICanvas* m_uiCanvas = nullptr;
 	UIDigit* m_uiDigit = nullptr;
 	UIIcon* m_uiHourGlass = nullptr;
+
 	float m_timer = 0;
+
 	bool m_isTimeLimit = false;
 
 	TimeKeeper* m_timeKeeper = nullptr;

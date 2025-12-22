@@ -12,13 +12,11 @@ class UIBase : public Noncopyable
 {
 public:
 	Transform m_transform;
-
-
-protected:
-	bool isStart = false;
-	bool isUpdate = true;
+	//bool isStart = false;
+	//bool isUpdate = true;
 	bool isDraw = true;
 
+protected:
 	std::vector<SpriteAnimationBase*> m_spriteAnimationList;
 
 

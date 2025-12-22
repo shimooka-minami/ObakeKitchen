@@ -14,7 +14,11 @@ class UIInteractIcon : public IGameObject
 private:
 	std::unique_ptr<UICanvas> m_uiCanvas = nullptr;
 	
+	UIIcon* m_aButton = nullptr;
+
 	Vector3 m_position;
+
+	bool m_isDrawAButton = false;
 
 
 public:
@@ -31,6 +35,9 @@ public:
 public:
 	// @todo for あとでコメント
 	void Initialize(const EnInteractType type, const Vector3& position);
+
+
+	void SetDrawAButton(const bool draw) { m_isDrawAButton = draw; }
 };
 
 

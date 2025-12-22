@@ -32,6 +32,9 @@ bool CoockingSpace::Start()
 
 void CoockingSpace::Update()
 {
+	// 毎回初期化
+	m_isNearPlayer = false;
+
 	UpdateTransform();
 }
 

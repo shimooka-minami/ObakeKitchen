@@ -10,11 +10,17 @@ class Player;
 class PlayerController;
 class GameCamera;
 class BackGround;
+
 class UIScore;
-class TimeKeeper;
 class UITimer;
 class UIPlayerNumber;
+class UIInteractIcon;
 
+class CookingSpace;
+class DeliverySpace;
+class PlateSpace;
+
+class TimeKeeper;
 class NPCController;
 
 
@@ -24,6 +30,29 @@ class NPCController;
 class GameScene : public IScene
 {
 	appScene(GameScene);
+
+
+private:
+	// 料理スペースとUIを紐づけ
+	struct CookingSpaceInformation
+	{
+		CookingSpace* m_cookingSpace = nullptr;
+		UIInteractIcon* m_uiInteracIcon = nullptr;
+	};
+
+	// 納品場とUIの紐づけ
+	struct DeliverySpaceInformation
+	{
+		DeliverySpace* m_deliverySpace = nullptr;
+		UIInteractIcon* m_uiInteracIcon = nullptr;
+	};
+
+	// お皿とUIの紐づけ
+	struct PlateSpaceInformation
+	{
+		PlateSpace* m_plateSpace = nullptr;
+		UIInteractIcon* m_uiInteracIcon = nullptr;
+	};
 
 private:
 	GameCamera* m_gameCamera = nullptr;

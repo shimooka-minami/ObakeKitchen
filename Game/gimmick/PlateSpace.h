@@ -11,6 +11,9 @@
  */
 class PlateSpace : public IGameObject
 {
+private:
+	bool m_isNearPlayer = false;
+
 public:
 	/** 例外でpublic */
 	Transform m_transform;
@@ -51,4 +54,10 @@ public:
 
 	// Lesson ここでAssetPathを設定するセッター関数を追加して
 	inline void SetAssetPath(const std::string assetPath) { m_assetPath = assetPath; };
+
+	/** プレイヤーが近くにいるかの設定 */
+	inline void SetNearPlayer(const bool isNearPlayer) { m_isNearPlayer = isNearPlayer; }
+
+	/** プレイヤーが近くにいるかの取得 */
+	inline bool IsNearPlayer() const { return m_isNearPlayer; }
 };

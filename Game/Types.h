@@ -22,4 +22,5 @@ enum EnInteractType
 {
 	enInteractType_Cooking,
 	enInteractType_Delivery,
+	enInteractType_Plate,
 };

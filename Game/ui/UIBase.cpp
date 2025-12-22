@@ -160,7 +160,9 @@ void UIIcon::Update()
 
 void UIIcon::Render(RenderContext& rc)
 {
-	m_spriteRender.Draw(rc);
+	if (isDraw) {
+		m_spriteRender.Draw(rc);
+	}
 }
 
 
