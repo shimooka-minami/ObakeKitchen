@@ -49,7 +49,7 @@ void UIInteractIcon::Render(RenderContext& rc)
 
 void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& position)
 {
-	// UI
+	// インタラクトアイコン
 	std::string path;
 	std::string pathB;
 	// 吹き出し
@@ -66,14 +66,14 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 	}
 	else if (type == enInteractType_Delivery)
 	{
-		pathB = "Assets/modelData/UI/inGame/nouhin.dds";
-		backPathB = "Assets/modelData/UI/inGame/hukidashi.dds";
+		path = "Assets/modelData/UI/inGame/nouhin.dds";
+		backPath = "Assets/modelData/UI/inGame/hukidashi.dds";
 		buttonPath = "Assets/modelData/UI/inGame/abutton.dds";
 	}
 	else if (type == enInteractType_Plate)
 	{
-		pathB = "Assets/modelData/UI/inGame/plate.dds";
-		backPathB = "Assets/modelData/UI/inGame/hukidashi.dds";
+		path = "Assets/modelData/UI/inGame/plate.dds";
+		backPath = "Assets/modelData/UI/inGame/hukidashi.dds";
 		buttonPath = "Assets/modelData/UI/inGame/abutton.dds";
 	}
 
@@ -85,39 +85,25 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 	std::vector<float> timeList = { 1.8f, 1.8f };
 
 	// 吹き出し
+	Vector3 backGroundPosition = type == enInteractType_Cooking ? Vector3::Zero : Vector3(100.0f, 0.0f, 0.0f);
 	auto* backGround = m_uiCanvas->CreateUI<UIIcon>();
-	backGround->Initialize(backPath.c_str(), 100.0f, 100.0f, Vector3::Zero, Vector3::One, Quaternion::Identity);
+	backGround->Initialize(backPath.c_str(), 100.0f, 100.0f, backGroundPosition, Vector3::One, Quaternion::Identity);
 	{
 		auto* render = backGround->GetSpriteRender();
 		TranslateOffsetSpriteAnimation* translateSpriteAnimation = new TranslateOffsetSpriteAnimation(render, true, timeList, targetTranslateList, &backGround->m_transform);
 		backGround->AddSpriteAnimation(translateSpriteAnimation);
 		backGround->PlaySpriteAnimation();
 	}
-	auto* backGroundB = m_uiCanvas->CreateUI<UIIcon>();
-	backGroundB->Initialize(backPathB.c_str(), 100.0f, 100.0f, Vector3(100.0f,0.0f,0.0f), Vector3::One, Quaternion::Identity);
-	{
-		auto* render = backGroundB->GetSpriteRender();
-		TranslateOffsetSpriteAnimation* translateSpriteAnimation = new TranslateOffsetSpriteAnimation(render, true, timeList, targetTranslateList, &backGroundB->m_transform);
-		backGroundB->AddSpriteAnimation(translateSpriteAnimation);
-		backGroundB->PlaySpriteAnimation();
-	}
 
 	// インタラクトアイコン
+	Vector3 interactPosition = type == enInteractType_Cooking ? Vector3(-5.0f, 3.0f, 0.0f) : Vector3(100.0f, 5.0f, 0.0f);
 	auto* interactIcon = m_uiCanvas->CreateUI<UIIcon>();
-	interactIcon->Initialize(path.c_str(), 55.0f, 55.0f, Vector3(-5.0f,3.0f,0.0f)/*::Zero*/, Vector3::One, Quaternion::Identity);
+	interactIcon->Initialize(path.c_str(), 55.0f, 55.0f, interactPosition, Vector3::One, Quaternion::Identity);
 	{
 		auto* render = interactIcon->GetSpriteRender();
 		TranslateOffsetSpriteAnimation* translateSpriteAnimation = new TranslateOffsetSpriteAnimation(render, true, timeList, targetTranslateList, &interactIcon->m_transform);
 		interactIcon->AddSpriteAnimation(translateSpriteAnimation);
 		interactIcon->PlaySpriteAnimation();
-	}
-	auto* interactIconB = m_uiCanvas->CreateUI<UIIcon>();
-	interactIconB->Initialize(pathB.c_str(), 70.0f, 70.0f, Vector3(100.0f, 5.0f, 0.0f), Vector3::One, Quaternion::Identity);
-	{
-		auto* render = interactIconB->GetSpriteRender();
-		TranslateOffsetSpriteAnimation* translateSpriteAnimation = new TranslateOffsetSpriteAnimation(render, true, timeList, targetTranslateList, &interactIconB->m_transform);
-		interactIconB->AddSpriteAnimation(translateSpriteAnimation);
-		interactIconB->PlaySpriteAnimation();
 	}
 
 	// Aボタン

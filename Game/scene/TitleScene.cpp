@@ -191,10 +191,15 @@ bool TitleStartMenu::Start()
 	m_titleIcon = m_uiCanvas->CreateUI<UIIcon>();
 	m_titleIcon->Initialize("Assets/modelData/title/kanban.dds", 500.0f, 657.0f, Vector3(-600.0f, 250.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	{
-		std::vector<Vector3> targetTanslateList = { Vector3::Zero, Vector3(0.0f, 600.0f, 0.0f) };
+	/*	std::vector<Vector3> targetTanslateList = { Vector3::Zero, Vector3(0.0f, 600.0f, 0.0f) };
 		std::vector<float> timeList = { 1.0f };
 		auto* titleAnimation = new TranslateOffsetSpriteAnimation(m_titleIcon->GetSpriteRender(), false, timeList, targetTanslateList, &m_titleIcon->m_transform);
-		m_titleIcon->AddSpriteAnimation(titleAnimation);
+		m_titleIcon->AddSpriteAnimation(titleAnimation);*/
+
+		std::vector<Vector3> targetTanslateList = { Vector3::Zero, Vector3(0.0f, 600.0f, 0.0f) };
+		std::vector<float> timeList = { 1.0f };
+		auto titleAnimation = std::make_unique<UIIcon>();
+		//titleAnimation->SetSpriteAnimation
 	}
 	{
 		std::vector<Vector4> targetAlphaList = { Vector4::White, Vector4(1.0f, 1.0f, 1.0f, 0.8f), Vector4(1.0f, 1.0f, 1.0f, 0.0f) };

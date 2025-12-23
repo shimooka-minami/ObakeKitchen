@@ -12,12 +12,15 @@ class UIBase : public Noncopyable
 {
 public:
 	Transform m_transform;
+	Vector4 color = Vector4::White;
+
 	//bool isStart = false;
 	//bool isUpdate = true;
 	bool isDraw = true;
 
-protected:
-	std::vector<SpriteAnimationBase*> m_spriteAnimationList;
+protected:	
+	// deleteがいらない
+	std::vector<std::unique_ptr<SpriteAnimationBase>> m_spriteAnimationList;
 
 
 public:
@@ -27,10 +30,7 @@ public:
 	}
 	virtual ~UIBase()
 	{
-		for (auto* spriteAnimation : m_spriteAnimationList) {
-			delete spriteAnimation;
-			spriteAnimation = nullptr;
-		}
+		// 明示的に消しているだけ。本来は要らない
 		m_spriteAnimationList.clear();
 	}
 
@@ -40,14 +40,32 @@ public:
 
 
 public:
-	/** スプライトアニメーションの追加 */
-	void AddSpriteAnimation(SpriteAnimationBase* animation)
+	void UpdateSpriteAnimation()
 	{
-		m_spriteAnimationList.push_back(animation);
+		for (auto& animation : m_spriteAnimationList) {
+			animation.get()->Update();
+		}
 	}
-	void PlaySpriteAnimation();
-	void StopSpriteAnimation();
-	bool IsCompleted() const;
+	void PlaySpriteAnimation()
+	{
+		for (auto& animation : m_spriteAnimationList) {
+			animation.get()->Play();
+		}
+	}
+	void StopSpriteAnimation()
+	{
+		for (auto& animation : m_spriteAnimationList) {
+			animation.get()->Stop();
+		}
+	}
+	bool IsCompleted() const
+	{
+		for (auto& animation : m_spriteAnimationList) {
+			return animation.get()->IsCompleted();
+		}
+	}
+
+	void SetSpriteAnimation(std::unique_ptr<SpriteAnimationBase>animation);
 };
 
 

@@ -219,17 +219,23 @@ bool GameScene::Start()
 				if (j.contains("InteractExportComponent")) {
 					InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
 
-					auto* cookingSpace = NewGO<CoockingSpace>(0, "coockingSpace");
-					cookingSpace->m_transform.SetParent(&staticGimmick->m_transform);
-					cookingSpace->m_transform.m_localPosition = info.position;
-					cookingSpace->m_transform.UpdateTransform();
-					cookingSpace->SetRadius(info.radius);
-					m_deleteList.push_back(cookingSpace);
+					auto* coockingSpace = NewGO<CoockingSpace>(0, "coockingSpace");
+					coockingSpace->m_transform.SetParent(&staticGimmick->m_transform);
+					coockingSpace->m_transform.m_localPosition = info.position;
+					coockingSpace->m_transform.UpdateTransform();
+					coockingSpace->SetRadius(info.radius);
+					m_deleteList.push_back(coockingSpace);
 
 					// 料理インタラクト
 					auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
 					uiInteractIcon->Initialize(enInteractType_Cooking, transform.position);
 					m_deleteList.push_back(uiInteractIcon);
+
+					// 料理スペースとUIインタラクト
+					CoockingSpacePair pair;
+					pair.m_coockingSpace = coockingSpace;
+					pair.m_uiInteracIcon = uiInteractIcon;
+					m_coockingSpacePairList.push_back(pair);
 				}
 				return true;
 			}
@@ -304,6 +310,12 @@ bool GameScene::Start()
 					auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
 					uiInteractIcon->Initialize(enInteractType_Plate, transform.position);
 					m_deleteList.push_back(uiInteractIcon);
+
+					// お皿箱スペースとUIインタラクト
+					PlateSpacePair pair;
+					pair.m_plateSpace = plateSpace;
+					pair.m_uiInteracIcon = uiInteractIcon;
+					m_plateSpacePairList.push_back(pair);
 				}
 				if (j.contains("PlateBoxExportComponent")) {
 					PlateBoxExportInfo info = ParsePlateBoxComponet(j["PlateBoxExportComponent"]);
@@ -360,6 +372,12 @@ bool GameScene::Start()
 					auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
 					uiInteractIcon->Initialize(enInteractType_Delivery, transform.position);
 					m_deleteList.push_back(uiInteractIcon);
+
+					// 納品スペースとUIインタラクト
+					DeliverySpacePair pair;
+					pair.m_deliverySpace = deliverySpace;
+					pair.m_uiInteracIcon = uiInteractIcon;
+					m_deliverySpacePairList.push_back(pair);
 				}
 			}
 			// ランタン
@@ -410,12 +428,51 @@ void GameScene::Update()
 	// @todo for test
 	CollisionHitManager::Get().Update();
 
+	// スコアの表示
 	m_uiScore->SetScore(Score::GetInstance()->GetScore());
 
 	// 制限時間
 	m_timeKeeper->Update();									// 時間進める		// 29.0f;
 	m_uiTimer->SetTimer(m_timeKeeper->GetRemainingTime());	// 時間設定			// 30.0f
 
+	// 料理スペースに入ったらAボタンの表示
+	for (auto& coockingSpacePair : m_coockingSpacePairList)
+	{
+		if (coockingSpacePair.m_coockingSpace->IsNearPlayer())
+		{
+			coockingSpacePair.m_uiInteracIcon->SetDrawAButton(true);
+		}
+		else
+		{
+			coockingSpacePair.m_uiInteracIcon->SetDrawAButton(false);
+		}
+	}
+
+	// お皿箱のスペースに入ったらAボタンの表示
+	for (auto& plateSpacePair : m_plateSpacePairList)
+	{
+		if (plateSpacePair.m_plateSpace->IsNearPlayer())
+		{
+			plateSpacePair.m_uiInteracIcon->SetDrawAButton(true);
+		}
+		else
+		{
+			plateSpacePair.m_uiInteracIcon->SetDrawAButton(false);
+		}
+	}
+
+	// 納品場のスペースに入ったらAボタンの表示
+	for (auto& deliverySpacePair : m_deliverySpacePairList)
+	{
+		if (deliverySpacePair.m_deliverySpace->IsNearPlayer())
+		{
+			deliverySpacePair.m_uiInteracIcon->SetDrawAButton(true);
+		}
+		else
+		{
+			deliverySpacePair.m_uiInteracIcon->SetDrawAButton(false);
+		}
+	}
 	
 	// 制限時間をこえたら次のシーン
 	if(m_timeKeeper->IsTimeOver())

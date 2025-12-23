@@ -9,7 +9,7 @@
 
 void UIBase::PlaySpriteAnimation()
 {
-	for (auto* animation : m_spriteAnimationList)
+	for (auto& animation : m_spriteAnimationList)
 	{
 		animation->Play();
 	}
@@ -18,7 +18,7 @@ void UIBase::PlaySpriteAnimation()
 
 void UIBase::StopSpriteAnimation()
 {
-	for (auto* animation : m_spriteAnimationList)
+	for (auto& animation : m_spriteAnimationList)
 	{
 		animation->Stop();
 	}
@@ -27,7 +27,7 @@ void UIBase::StopSpriteAnimation()
 
 bool UIBase::IsCompleted() const
 {
-	for (auto* animation : m_spriteAnimationList)
+	for (auto& animation : m_spriteAnimationList)
 	{
 		if (!animation->IsCompleted()) {
 			return false;
@@ -36,6 +36,11 @@ bool UIBase::IsCompleted() const
 	return true;
 }
 
+
+void UIBase::SetSpriteAnimation(std::unique_ptr<SpriteAnimationBase> animation)
+{
+	animation->
+}
 
 
 
@@ -146,13 +151,20 @@ bool UIIcon::Start()
 
 void UIIcon::Update()
 {
+	// @too for test
+	for (auto& animation : m_spriteAnimationList)
+	{
+		UpdateSpriteAnimation();
+		animation->Update();
+	}
+
 	m_transform.UpdateTransform();
 	m_spriteRender.SetPosition(m_transform.m_position);
 	m_spriteRender.SetScale(m_transform.m_scale);
 	m_spriteRender.SetRotation(m_transform.m_rotation);
 	m_spriteRender.Update();
 
-	for (auto* animation : m_spriteAnimationList) {
+	for (auto& animation : m_spriteAnimationList) {
 		animation->Update();
 	}
 }
@@ -221,7 +233,7 @@ void UIDigit::Update()
 		spriteRender->Update();
 	}
 
-	for (auto* animation : m_spriteAnimationList) {
+	for (auto& animation : m_spriteAnimationList) {
 		animation->Update();
 	}
 }
@@ -368,3 +380,5 @@ void UICanvas::Render(RenderContext& rc)
 		ui->Render(rc);
 	}
 }
+
+

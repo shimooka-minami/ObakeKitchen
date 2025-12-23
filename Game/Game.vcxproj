@@ -246,6 +246,7 @@
     <ClCompile Include="core\TimeKeeper.cpp" />
     <ClCompile Include="core\TransformHelper.cpp" />
     <ClCompile Include="effect\EffectManager.cpp" />
+    <ClCompile Include="Event\EventManager.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="gimmick\CoockingSpace.cpp" />
     <ClCompile Include="gimmick\DeliverySpace.cpp" />
@@ -269,12 +270,13 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Types.cpp" />
-    <ClCompile Include="ui\SpriteAnimation.cpp" />
+    <ClCompile Include="ui\UIAnimation.cpp" />
     <ClCompile Include="ui\UIBase.cpp" />
     <ClCompile Include="ui\UIInteractIcon.cpp" />
     <ClCompile Include="ui\UIPlayerNumber.cpp" />
     <ClCompile Include="ui\UIScore.cpp" />
     <ClCompile Include="ui\UITimer.cpp" />
+    <ClCompile Include="util\Curve.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Actor.h" />
@@ -301,6 +303,7 @@
     <ClInclude Include="core\TransformHelper.h" />
     <ClInclude Include="effect\EffectManager.h" />
     <ClInclude Include="effect\Types.h" />
+    <ClInclude Include="Event\EventManager.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="gimmick\CoockingSpace.h" />
     <ClInclude Include="gimmick\DeliverySpace.h" />
@@ -321,13 +324,14 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Types.h" />
-    <ClInclude Include="ui\SpriteAnimation.h" />
+    <ClInclude Include="ui\UIAnimation.h" />
     <ClInclude Include="ui\UIBase.h" />
     <ClInclude Include="ui\UIInteractIcon.h" />
     <ClInclude Include="ui\UIPlayerNumber.h" />
     <ClInclude Include="ui\UIScore.h" />
     <ClInclude Include="ui\UITimer.h" />
     <ClInclude Include="util\CRC32.h" />
+    <ClInclude Include="util\Curve.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
