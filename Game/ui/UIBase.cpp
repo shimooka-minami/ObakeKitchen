@@ -4,43 +4,46 @@
  */
 #include "stdafx.h"
 #include "UIBase.h"
-#include "SpriteAnimation.h"
 
 
-void UIBase::PlaySpriteAnimation()
-{
-	for (auto& animation : m_spriteAnimationList)
-	{
-		animation->Play();
-	}
+void UIBase::SetUIAnimation(std::unique_ptr<UIAnimationBase> animation) {
+	animation->SetUI(this);
+	m_uiAnimationList.push_back(std::move(animation));
 }
-
-
-void UIBase::StopSpriteAnimation()
-{
-	for (auto& animation : m_spriteAnimationList)
-	{
-		animation->Stop();
-	}
-}
-
-
-bool UIBase::IsCompleted() const
-{
-	for (auto& animation : m_spriteAnimationList)
-	{
-		if (!animation->IsCompleted()) {
-			return false;
-		}
-	}
-	return true;
-}
-
-
-void UIBase::SetSpriteAnimation(std::unique_ptr<SpriteAnimationBase> animation)
-{
-	animation->
-}
+//  void UIBase::PlayAnimation()
+//  {
+//  	for (auto& animation : m_spriteAnimationList)
+//  	{
+//  		animation->Play();
+//  	}
+//  }
+//  
+//  
+//  void UIBase::StopSpriteAnimation()
+//  {
+//  	for (auto& animation : m_spriteAnimationList)
+//  	{
+//  		animation->Stop();
+//  	}
+//  }
+//  
+//  
+//  bool UIBase::IsCompleted() const
+//  {
+//  	for (auto& animation : m_spriteAnimationList)
+//  	{
+//  		if (!animation->IsCompleted()) {
+//  			return false;
+//  		}
+//  	}
+//  	return true;
+//  }
+//  
+//  
+//  void UIBase::SetSpriteAnimation(std::unique_ptr<SpriteAnimationBase> animation)
+//  {
+//  	animation->
+//  }
 
 
 
@@ -152,9 +155,9 @@ bool UIIcon::Start()
 void UIIcon::Update()
 {
 	// @too for test
-	for (auto& animation : m_spriteAnimationList)
+	for (auto& animation : m_uiAnimationList)
 	{
-		UpdateSpriteAnimation();
+		UpdateAnimation();
 		animation->Update();
 	}
 
@@ -164,7 +167,7 @@ void UIIcon::Update()
 	m_spriteRender.SetRotation(m_transform.m_rotation);
 	m_spriteRender.Update();
 
-	for (auto& animation : m_spriteAnimationList) {
+	for (auto& animation : m_uiAnimationList) {
 		animation->Update();
 	}
 }
@@ -233,7 +236,7 @@ void UIDigit::Update()
 		spriteRender->Update();
 	}
 
-	for (auto& animation : m_spriteAnimationList) {
+	for (auto& animation : m_uiAnimationList) {
 		animation->Update();
 	}
 }

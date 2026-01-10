@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Fade.h"
+class UIAnimation;
 
 
 Fade* Fade::m_instance = nullptr;
@@ -17,8 +18,8 @@ Fade::Fade()
 
 	std::vector<Vector3> targetTranslateList = { Vector3(900.0f, -410.0f, 0.0f), Vector3(900.0f, -390.0f, 0.0f), Vector3(900.0f, -410.0f, 0.0f) };
 	std::vector<float> timeList = { 1.0f,1.0f };
-	m_spriteAnimation = std::make_unique<TranslateSpriteAnimation>(&m_iconRender, true, timeList, targetTranslateList);
-	m_spriteAnimation->Play();
+	//m_uiAnimation = std::make_unique<UIAnimation>(&m_iconRender, true, timeList, targetTranslateList);
+	//m_uiAnimation->Play();
 }
 
 
@@ -36,7 +37,7 @@ void Fade::Update()
 	m_nowloadingRender.Update();
 	m_iconRender.Update();
 
-	m_spriteAnimation->Update();
+	//m_uiAnimation->Update();
 }
 
 

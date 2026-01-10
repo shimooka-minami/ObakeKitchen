@@ -36,7 +36,7 @@ bool UITimer::Start()
 	m_uiHourGlass->Initialize("Assets/modelData/UI/timer.dds", 80.0f, 80.0f, Vector3(50.0f, 0.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	// UIアニメーションの追加
 	{
-		auto* render = m_uiHourGlass->GetSpriteRender();
+		/*auto* render = m_uiHourGlass->GetSpriteRender();
 		Quaternion start;
 		start.SetRotationDegZ(30.0f);
 		Quaternion end;
@@ -44,7 +44,7 @@ bool UITimer::Start()
 		std::vector<Quaternion> m_rotationList = { start, end, start };
 		std::vector<float> m_timeList = { 0.1f, 0.1f };
 		RotationSpriteAnimation* rotationSpriteAnimation = new RotationSpriteAnimation(render, true, m_timeList, m_rotationList);
-		m_uiHourGlass->AddSpriteAnimation(rotationSpriteAnimation);
+		m_uiHourGlass->AddSpriteAnimation(rotationSpriteAnimation);*/
 	}
 
 	// @todo for test
@@ -79,7 +79,7 @@ void UITimer::Update()
 		{
 			m_isTimeLimit = true;
 			
-			auto& spriteRenderList = m_uiDigit->GetSpriteRenderList();
+		/*	auto& spriteRenderList = m_uiDigit->GetSpriteRenderList();
 			for (int i = 0; i < spriteRenderList.size(); ++i)
 			{
 				auto* render = spriteRenderList[i];
@@ -90,7 +90,7 @@ void UITimer::Update()
 				m_uiDigit->AddSpriteAnimation(alphaSpriteAnimation);
 			}
 			m_uiHourGlass->PlaySpriteAnimation();
-			m_uiDigit->PlaySpriteAnimation();
+			m_uiDigit->PlaySpriteAnimation();*/
 		}
 	}
 

@@ -6,7 +6,6 @@
 #include "UIInteractIcon.h"
 #include "UIBase.h"
 
-
 namespace
 {
 	constexpr float OFFSET_Y = 50.0f;
@@ -89,10 +88,10 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 	auto* backGround = m_uiCanvas->CreateUI<UIIcon>();
 	backGround->Initialize(backPath.c_str(), 100.0f, 100.0f, backGroundPosition, Vector3::One, Quaternion::Identity);
 	{
-		auto* render = backGround->GetSpriteRender();
+		/*auto* render = backGround->GetSpriteRender();
 		TranslateOffsetSpriteAnimation* translateSpriteAnimation = new TranslateOffsetSpriteAnimation(render, true, timeList, targetTranslateList, &backGround->m_transform);
 		backGround->AddSpriteAnimation(translateSpriteAnimation);
-		backGround->PlaySpriteAnimation();
+		backGround->PlaySpriteAnimation();*/
 	}
 
 	// インタラクトアイコン
@@ -100,10 +99,10 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 	auto* interactIcon = m_uiCanvas->CreateUI<UIIcon>();
 	interactIcon->Initialize(path.c_str(), 55.0f, 55.0f, interactPosition, Vector3::One, Quaternion::Identity);
 	{
-		auto* render = interactIcon->GetSpriteRender();
+		/*auto* render = interactIcon->GetSpriteRender();
 		TranslateOffsetSpriteAnimation* translateSpriteAnimation = new TranslateOffsetSpriteAnimation(render, true, timeList, targetTranslateList, &interactIcon->m_transform);
 		interactIcon->AddSpriteAnimation(translateSpriteAnimation);
-		interactIcon->PlaySpriteAnimation();
+		interactIcon->PlaySpriteAnimation();*/
 	}
 
 	// Aボタン
@@ -111,10 +110,10 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 	m_aButton = m_uiCanvas->CreateUI<UIIcon>();
 	m_aButton->Initialize(buttonPath.c_str(), 30.0f, 30.0f, buttonPosition, Vector3::One, Quaternion::Identity);
 	{
-		auto* render = m_aButton->GetSpriteRender();
+		/*auto* render = m_aButton->GetSpriteRender();
 		TranslateOffsetSpriteAnimation* translateSpriteAnimation = new TranslateOffsetSpriteAnimation(render, true, timeList, targetTranslateList, &m_aButton->m_transform);
 		m_aButton->AddSpriteAnimation(translateSpriteAnimation);
-		m_aButton->PlaySpriteAnimation();
+		m_aButton->PlaySpriteAnimation();*/
 	}
 
 	m_position = position;

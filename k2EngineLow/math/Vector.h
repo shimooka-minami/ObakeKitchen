@@ -122,6 +122,14 @@ namespace nsK2EngineLow {
 			Set(x, y, z);
 		}
 		/// <summary>
+		/// コンストラクタ。
+		/// </summary>
+		/// <param name="xyz"></param>
+		Vector3(float xyz)
+		{
+			Set(xyz, xyz, xyz);
+		}
+		/// <summary>
 		/// 線形補完
 		/// </summary>
 		/// <remarks>
@@ -508,23 +516,6 @@ namespace nsK2EngineLow {
 			this->y = _y;
 			this->z = _z;
 			this->w = _w;
-		}
-		/// <summary>
-		/// 線形補完
-		/// </summary>
-		/// <remarks>
-		/// this = v0 + (v1-v0) * t;
-		/// </remarks>
-		/// <param name="t">補完率。</param>
-		/// <param name="v0">補完開始のベクトル。</param>
-		/// <param name="v1">補完終了のベクトル。</param>
-		void Lerp(float t, const Vector4& v0, const Vector4& v1)
-		{
-			DirectX::XMVECTOR _v = DirectX::XMVectorLerp(
-				DirectX::XMLoadFloat4(&v0.vec),
-				DirectX::XMLoadFloat4(&v1.vec),
-				t);
-			DirectX::XMStoreFloat4(&vec, _v);
 		}
 		/// <summary>
 		/// ベクトルを正規化。
@@ -976,6 +967,42 @@ namespace nsK2EngineLow {
 			int v[4];
 		};
 	};
+
+
+
+
+	/// <summary>
+	/// ベクトル同士の加算。
+	/// </summary>
+	static inline Vector2 operator+(const Vector2& v0, const Vector2& v1)
+	{
+		return Vector2(v0.x + v1.x, v0.y + v1.y);
+	}
+	/// <summary>
+	/// ベクトルとスカラーの乗算。
+	/// </summary>
+
+	static inline Vector2 operator*(const Vector2& v, float s)
+	{
+		return Vector2(v.x * s, v.y * s);
+	}
+	/// <summary>
+	/// ベクトルとスカラーの除算。
+	/// </summary>
+	static inline Vector2 operator/(const Vector2& v, float s)
+	{
+		return Vector2(v.x / s, v.y / s);
+	}
+	/// <summary>
+	/// ベクトル同士の減算。
+	/// </summary>
+	static inline Vector2 operator-(const Vector2& v0, const Vector2& v1)
+	{
+		return Vector2(v0.x - v1.x, v0.y - v1.y);
+	}
+
+
+
 	/// <summary>
 	/// ベクトル同士の加算。
 	/// </summary>

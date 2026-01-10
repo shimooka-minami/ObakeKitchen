@@ -188,7 +188,7 @@ class TitleScene : public IScene
 
 private:
 	//SpriteRender m_spriteRender[enTitleSpriteKind_Max];
-	std::unique_ptr<SpriteAnimationBase> m_buttonAnimation;
+	//std::unique_ptr<SpriteAnimationBase> m_buttonAnimation;
 
 	Player* m_player;
 	std::unique_ptr<ModelRender> m_titleBack;

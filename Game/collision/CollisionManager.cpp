@@ -35,14 +35,14 @@ void CollisionHitManager::Update()
 	// ヒットするオブジェクトのペアを作る
 	const uint32_t colSize = static_cast<uint32_t>(m_collisionInfoList.size());
 	for (uint32_t i = 0; i < colSize; ++i) {
-		for (uint32_t j = i+1; j < colSize; ++j) {
+		for (uint32_t j = i + 1; j < colSize; ++j) {
 			CollisionInfo* infoA = &m_collisionInfoList[i];
 			CollisionInfo* infoB = &m_collisionInfoList[j];
 
-			const bool isCheckA= infoA->m_collision->IsHit(infoB->m_collision.get());
+			const bool isCheckA = infoA->m_collision->IsHit(infoB->m_collision.get());
 			const bool isCheckB = infoB->m_collision->IsHit(infoA->m_collision.get());
 
-			if(isCheckA  || isCheckB)
+			if (isCheckA || isCheckB)
 			{
 				// CollisionPairの中に同じ組み合わせがないかチェック
 				bool exists = false;
@@ -63,7 +63,7 @@ void CollisionHitManager::Update()
 	// ヒットしたペアで衝突した時の処理をする
 	// 今回のゲームではないがプレイヤーの攻撃がエネミーにあたったのでHPを減らすみたいなことをする
 	for (auto& pair : m_collisionPairList) {
-		
+
 		// 納品スぺース用の処理
 		if (UpdateHitDeliverySpace(pair)) {
 			continue;
@@ -80,6 +80,10 @@ void CollisionHitManager::Update()
 		if (UpdateHitPlateSpace(pair)) {
 			continue;
 		}
+		//皿と食べ物の処理
+		if (UpdateHitPlateAndFood(pair)) {
+			continue;
+		}
 		// プレイヤーと食べ物の処理
 		if (UpdateHitFoodPlate(pair)) {
 			continue;
@@ -88,6 +92,7 @@ void CollisionHitManager::Update()
 		if (UpdateHitPlate(pair)) {
 			continue;
 		}
+
 
 	}
 
@@ -104,9 +109,9 @@ void CollisionHitManager::RegisterCollisionObject(EnCollisionType type, IGameObj
 
 void CollisionHitManager::UnregisterCollisionObject(IGameObject* object)
 {
-	for(auto it = m_collisionInfoList.begin(); it != m_collisionInfoList.end(); ++it)
+	for (auto it = m_collisionInfoList.begin(); it != m_collisionInfoList.end(); ++it)
 	{
-		if(it->m_object == object)
+		if (it->m_object == object)
 		{
 			m_collisionInfoList.erase(it);
 			break;
@@ -135,7 +140,7 @@ bool CollisionHitManager::UpdateHitCookingSpace(CollisionPair& pair)
 
 	// 料理スペースにプレイヤーが入ったときの処理
 	player->GetStateMachine()->SetInCookingSpace(true);
-	
+
 	return true;
 }
 
@@ -193,7 +198,7 @@ bool CollisionHitManager::UpdateHitPlateSpace(CollisionPair& pair)
 			return true;
 		}
 
-		// @tod ofor test
+		// @todo for test
 		float posX = rand() % 500;
 		float posZ = rand() % 200;
 		//FoodPlate* foodPlate = NewGO<FoodPlate>(0, "foodPlate");
@@ -220,6 +225,16 @@ bool CollisionHitManager::UpdateHitFoodPlate(CollisionPair& pair)
 	{
 		return false;
 	}
+
+	// すでに皿に載っているなら、プレイヤーは直接
+
+	//if (player->GetStateMachine()->IsActionButtonA()) {
+	//	//食材が皿などの親を持っているかチェック
+	//	if (foodPlate->m_transform.HasParent()) {
+	//		//親子関係を解除(皿から引き離す)
+	//		foodPlate->m_transform.ClearParent();
+	//	}
+	//}
 
 	// プレイヤーの前に皿がない場合
 	if (!player->GetStateMachine()->IsForwardFood())
@@ -248,6 +263,42 @@ bool CollisionHitManager::UpdateHitFoodPlate(CollisionPair& pair)
 		// フードクラスをターゲットに設定
 		player->GetStateMachine()->SetTargetFood(foodPlate);
 	}
+
+	return true;
+}
+
+bool CollisionHitManager::UpdateHitPlateAndFood(CollisionPair& pair)
+{
+	// ペアからPlateとFoodPlateを取得
+	Plate* plate = GetTargetObject<Plate>(pair, enCollisionType_Plate);
+	FoodPlate* food = GetTargetObject<FoodPlate>(pair, enCollisionType_Food);
+
+	// 両方が揃っていないなら終了
+	if (plate == nullptr
+		|| food == nullptr) {
+		return false;
+	}
+
+	//ここまで来たら当たったということ
+	OutputDebugStringA("皿と食材が衝突しました！！\n");
+
+	// そのさらに既に何かが載っているなら、新しい料理は載せない
+	if (plate->IsFull()) {
+		return false;
+	}
+
+	// 自分自身同士の衝突なら無視
+	if ((void*)plate == (void*)food) {
+		return false;
+	}
+
+	// 食べ物がすでに何かに載っていないかチェック
+	if (food->m_transform.HasParent()) {
+		return false;
+	}
+
+	// 皿に食べ物を載せる
+	plate->AttachFood(food);
 
 	return true;
 }
@@ -324,7 +375,7 @@ bool CollisionHitManager::UpdateHitDeliverySpace(CollisionPair& pair)
 	if (targetFood == nullptr)
 	{
 		return false;
-	}	
+	}
 	if (targetFood->IsCoocked())
 	{
 		// 親子関係終わり

@@ -71,7 +71,7 @@ public:
 		m_parent->AddChild(this);
 	}
 
-	/** 親トランスフォームがあるか */ 
+	/** 親トランスフォームがあるか */
 	bool HasParent() const
 	{
 		return m_parent != nullptr;
@@ -80,5 +80,17 @@ public:
 	void ClearParent()
 	{
 		m_parent = nullptr;
+	}
+
+	/**
+	 * 最初の子Transformを取得
+	 * @return 子が存在すればそのポインタ、なければnullptr
+	 */
+	Transform* GetChild() const
+	{
+		if (!m_children.empty()) {
+			return m_children.front();
+		}
+		return nullptr;
 	}
 };

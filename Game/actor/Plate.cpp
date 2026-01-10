@@ -4,7 +4,7 @@
 #include "collision/CollisionManager.h"
 
 
-Plate::Plate() 
+Plate::Plate()
 {
 	m_status = CreateStatus<FoodStatus>();
 }
@@ -22,6 +22,8 @@ bool Plate::Start()
 	// 物体ではない当たり判定の初期化
 	m_ghostBody = std::make_unique<SphereGhostBody>();
 	m_ghostBody->Create(this, m_transform.m_position, GetStatus()->GetRadius(), enCollisionType_Plate);
+
+	CollisionHitManager::Get().RegisterCollisionObject(enCollisionType_Plate, this, m_ghostBody->GetCollider());
 
 	m_status = CreateStatus<FoodStatus>();
 
@@ -94,6 +96,26 @@ void Plate::Put(const Vector3& direction)
 	//m_addForce = direction * addForcePower;
 }
 
+void Plate::AttachFood(FoodPlate* food)
+{
+	////すでに親がいるなら載せない
+	//if (food->m_transform.HasParent()) {
+	//	return;
+	//}
+
+	// 親子関係を結ぶ
+	food->m_transform.SetParent(&m_transform);
+
+	// 親の中心から見て、少し上に配置
+	food->m_transform.m_localPosition = Vector3(0.0f, 15.0f, 0.0f);
+
+	// 料理側の当たり判定を一時的に削除
+	CollisionHitManager::Get().UnregisterCollisionObject(food);
+
+	// 座標変更を即座に反映
+	food->m_transform.UpdateTransform();
+}
+
 
 
 
@@ -117,11 +139,16 @@ FoodPlate::~FoodPlate()
 
 bool FoodPlate::Start()
 {
+	//読んでしまうとPlateの判定が作られるので共通の変数初期化だけを行い、判定作成はFoodPlate独自で行う
+	//SuperClass::Start();
+
 	// 物理当たり判定の初期化
 	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_transform.m_position, enCollsiionAttr_Food);
 	// 物体ではない当たり判定の初期化
 	m_ghostBody = std::make_unique<SphereGhostBody>();
 	m_ghostBody->Create(this, m_transform.m_position, GetStatus()->GetRadius(), enCollisionType_Food);  //
+
+	CollisionHitManager::Get().RegisterCollisionObject(enCollisionType_Food, this, m_ghostBody->GetCollider());
 	return true;
 }
 
@@ -136,7 +163,7 @@ void FoodPlate::Update()
 	// 物理当たり判定を実行
 	if (!m_transform.HasParent()) {
 		m_addForce.y -= 100.0f;
-		m_transform.m_localPosition = m_characterController.Execute(m_addForce, deltaTime);		
+		m_transform.m_localPosition = m_characterController.Execute(m_addForce, deltaTime);
 	}
 	// 座標を更新
 	m_transform.UpdateTransform();
@@ -147,7 +174,8 @@ void FoodPlate::Update()
 	if (m_state == enState_Coocked) {
 		m_coockedRender.SetPosition(m_transform.m_position);
 		m_coockedRender.Update();
-	} else {
+	}
+	else {
 		m_modelRender.SetPosition(m_transform.m_position);
 		m_modelRender.Update();
 	}
@@ -158,7 +186,8 @@ void FoodPlate::Render(RenderContext& rc)
 {
 	if (m_state == enState_Coocked) {
 		m_coockedRender.Draw(rc);
-	} else {
+	}
+	else {
 		m_modelRender.Draw(rc);
 	}
 }

@@ -1,3 +1,5 @@
+#include "../k2EngineLow/math/Vector.h" // 追加: Vector2, Vector3, Vector4型の定義が必要
+
 #pragma once
 
 // 汎用的なclamp関数テンプレート
@@ -12,18 +14,16 @@ T clamp(T value, T low, T high) {
     return value;
 }
 
-
 /**
  * @brief イージングとループの種類
  */
 enum class EasingType { Linear, EaseIn, EaseOut, EaseInOut }; // 線形補間、イーズイン、イーズアウト、イーズインアウト
 enum class LoopMode { Once, Loop, PingPong }; // 片道、周回(上から下、上から下を繰り返す)、往復(上から下、下から上を繰り返す)
 
-
 template <typename T>
 class Curve
 {
-private:
+public:
     T _startValue;          //!< 始める数値
     T _endValue;            //!< 終わる数値
     float _duration;        //!< 時間の間隔
@@ -33,7 +33,6 @@ private:
     bool _isPlaying;        //!< 再生するか
     int _direction;         //!< 方向
 
-    /* イージングタイプごとの時間の計算ロジック（ここは float のままでOK）*/
     float ApplyEasingInternal(float t) const {
         switch (_easingType) {
         case EasingType::Linear:    return t;
@@ -61,7 +60,6 @@ public:
         _direction = 1;
     }
 
-    /* 更新処理(前回と全く同じ) */
     void Update(float deltaTime) {
         if (!_isPlaying) return;
 
@@ -89,25 +87,17 @@ public:
         }
     }
 
-    /* 現在の値を取得 */
-    T GetCurrentValue() const {
-        float t = clamp<float>(_currentTime / _duration, 0.0f, 1.0f); //!< 時間によるクランプ処理
-        float rate = ApplyEasingInternal(t); //!< イージングタイプごとの時間の設定
-
-        //!< 線形補間 (Lerp)
-        //!< 注意: T型(Vector3等)は、演算子 +, -, * (float) を持っている必要があります
+    T GetCurrentValue() const
+    {
+        float t = clamp<float>(_currentTime / _duration, 0.0f, 1.0f);
+        float rate = this->ApplyEasingInternal(t);
         return _startValue + (_endValue - _startValue) * rate;
     }
 
-    bool IsPlaying() const { return _isPlaying; } // 現在再生中かどうか
+    bool IsPlaying() const { return _isPlaying; }
 };
 
-/*
- * 名前ごとに型を設定
- * Curve<template> : template :何の型でも設定可能
- * そのため使う型ごとに名前を設定
- */
+using FloatCurve = Curve<float>;
 using Vector2Curve = Curve<Vector2>;
 using Vector3Curve = Curve<Vector3>;
 using Vector4Curve = Curve<Vector4>;
-using QuaternionCurve = Curve<Quaternion>;

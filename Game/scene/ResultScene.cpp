@@ -5,6 +5,10 @@
 
 #include "ui/UIBase.h"
 #include "ui/UiScore.h"
+#include "ui/UIAnimation.h"
+
+// @todo for test
+#include "Util/Curve.h"
 
 #include "score/Score.h"
 
@@ -41,12 +45,20 @@ bool ResultScene::Start()
 	uiStageClear->Initialize("Assets/modelData/UI/result/stage_clear.dds", 800.0f, 99.0f, Vector3(-560.0f,450.0f,0.0f), Vector3::One, Quaternion::Identity);
 	// ステージクリアのアニメーション
 	{
-		auto* render = uiStageClear->GetSpriteRender();
+		/*auto* render = uiStageClear->GetSpriteRender();
 		std::vector<Vector3> targetTranslateList = { Vector3(-1500.0f, 450.0f, 0.0f), Vector3(-560.0f, 450.0f, 0.0f) };
-		std::vector<float> timeList = { 0.5f };
- 		TranslateSpriteAnimation* translateSpriteAnimation = new TranslateSpriteAnimation(render, false, timeList, targetTranslateList);
+		std::vector<float> timeList = { 0.5f };*/
+		
+		// test
+		auto translateAnimation = std::make_unique<UIVector3Animation>();
+		translateAnimation->SetParameter(Vector3(-1500.0f, 450.0f, 0.0f), Vector3(-560.0f, 450.0f, 0.0f), 0.5f, EasingType::Linear, LoopMode::Loop);
+		uiStageClear->SetUIAnimation(std::move(translateAnimation));
+		uiStageClear->PlayAnimation();
+		//translateAnimation->Update();
+
+		/*UIVector3Animation* translateUIAnimation = new UIVector3Animation(render, false, timeList, targetTranslateList);
 		uiStageClear->AddSpriteAnimation(translateSpriteAnimation);
-		uiStageClear->PlaySpriteAnimation();
+		uiStageClear->PlaySpriteAnimation();*/
 	}
 
 	// スコア表示用背景
@@ -61,9 +73,15 @@ bool ResultScene::Start()
 		auto* render = uiGhostLeft->GetSpriteRender();
 		std::vector<Vector3> targetTranslateList = { Vector3(-725.0f, -200.0f, 0.0f), Vector3(-725.0, 0.0f, 0.0f), Vector3(-725.0f, -200.0f, 0.0f) };
 		std::vector<float> timeList = { 1.8f,1.8f };
-		TranslateSpriteAnimation* translateSpriteAnimation = new TranslateSpriteAnimation(render, true, timeList, targetTranslateList );
+
+		auto translateAnimation = std::make_unique<UIVector3Animation>();
+		translateAnimation->SetParameter(Vector3(-1500.0f, 450.0f, 0.0f), Vector3(-560.0f, 450.0f, 0.0f), 1.8f, EasingType::EaseIn, LoopMode::Loop);
+		uiGhostLeft->SetUIAnimation(std::move(translateAnimation));
+		uiGhostLeft->PlayAnimation();
+
+		/*TranslateSpriteAnimation* translateSpriteAnimation = new TranslateSpriteAnimation(render, true, timeList, targetTranslateList );
 		uiGhostLeft->AddSpriteAnimation(translateSpriteAnimation);
-		uiGhostLeft->PlaySpriteAnimation();
+		uiGhostLeft->PlaySpriteAnimation();*/
 	}
 	// おばけ 右
 	auto* uiGhostRight = m_uiCanvas->CreateUI<UIIcon>();
@@ -73,9 +91,15 @@ bool ResultScene::Start()
 		auto* render = uiGhostRight->GetSpriteRender();
 		std::vector<Vector3> targetTranslateList = { Vector3(725.0f, 200.0f, 0.0f), Vector3(725.0, 0.0f, 0.0f), Vector3(725.0f, 200.0f, 0.0f) };
 		std::vector<float> timeList = { 1.8f,1.8f };
-		TranslateSpriteAnimation* translateSpriteAnimation = new TranslateSpriteAnimation(render, true, timeList, targetTranslateList);
-		uiGhostRight->AddSpriteAnimation(translateSpriteAnimation);
-		uiGhostRight->PlaySpriteAnimation();
+
+		auto translateAnimation = std::make_unique<UIVector3Animation>();
+		translateAnimation->SetParameter(Vector3(725.0f, 200.0f, 0.0f), Vector3(725.0, 0.0f, 0.0f), 1.8f, EasingType::EaseIn, LoopMode::Loop);
+		uiGhostRight->SetUIAnimation(std::move(translateAnimation));
+		uiGhostRight->PlayAnimation();
+
+		//TranslateSpriteAnimation* translateSpriteAnimation = new TranslateSpriteAnimation(render, true, timeList, targetTranslateList);
+		//uiGhostRight->AddSpriteAnimation(translateSpriteAnimation);
+		//uiGhostRight->PlaySpriteAnimation();
 	}
 
 	// 星の窪み1
@@ -96,9 +120,16 @@ bool ResultScene::Start()
 		auto* render = m_starList[0]->GetSpriteRender();
 		std::vector<Vector2> scaleList = { Vector2(0.0f,0.0f), Vector2(0.0f,0.0f), Vector2(2.0f,2.0f), Vector2(1.0f,1.0f) };
 		std::vector<float> timeList = { 1.0f, 0.2f, 0.2f };
-		ScaleSpriteAnimation* scaleSpriteAnimation = new ScaleSpriteAnimation(render, false, timeList, scaleList);
+
+		auto scaleAnimation = std::make_unique<UIVector2Animation>();
+		scaleAnimation->SetParameter(Vector2(0.0f, 0.0f), Vector2(2.0f, 2.0f),1.0f, EasingType::Linear, LoopMode::Once);
+		scaleAnimation->SetParameter(Vector2(2.0f, 2.0f), Vector2(1.0f, 1.0f), 0.2f, EasingType::Linear, LoopMode::Once);
+		m_starList[0]->SetUIAnimation(std::move(scaleAnimation));
+		m_starList[0]->PlayAnimation();
+
+		/*ScaleSpriteAnimation* scaleSpriteAnimation = new ScaleSpriteAnimation(render, false, timeList, scaleList);
 		m_starList[0]->AddSpriteAnimation(scaleSpriteAnimation);
-		m_starList[0]->m_transform.m_localScale = Vector3::Zero;
+		m_starList[0]->m_transform.m_localScale = Vector3::Zero;*/
 	}
 	// 星2
 	m_starList[1] = m_uiCanvas->CreateUI<UIIcon>();
@@ -107,10 +138,20 @@ bool ResultScene::Start()
 	{
 		auto* render = m_starList[1]->GetSpriteRender();
 		std::vector<Vector2> scaleList = { Vector2(0.0f,0.0f), Vector2(0.0f,0.0f), Vector2(2.0f,2.0f), Vector2(1.0f,1.0f) };
+		std::vector<float> timeList = { 1.0f, 0.2f, 0.2f };
+
+		auto scaleAnimation = std::make_unique<UIVector2Animation>();
+		scaleAnimation->SetParameter(Vector2(0.0f, 0.0f), Vector2(2.0f, 2.0f), 1.0f, EasingType::Linear, LoopMode::Once);
+		scaleAnimation->SetParameter(Vector2(2.0f, 2.0f), Vector2(1.0f, 1.0f), 0.2f, EasingType::Linear, LoopMode::Once);
+		m_starList[1]->SetUIAnimation(std::move(scaleAnimation));
+		m_starList[1]->PlayAnimation();
+
+		/*auto* render = m_starList[1]->GetSpriteRender();
+		std::vector<Vector2> scaleList = { Vector2(0.0f,0.0f), Vector2(0.0f,0.0f), Vector2(2.0f,2.0f), Vector2(1.0f,1.0f) };
 		std::vector<float> timeList = { 1.3f, 0.2f, 0.2f };
 		ScaleSpriteAnimation* scaleSpriteAnimation = new ScaleSpriteAnimation(render, false, timeList, scaleList);
 		m_starList[1]->AddSpriteAnimation(scaleSpriteAnimation);
-		m_starList[1]->m_transform.m_localScale = Vector3::Zero;
+		m_starList[1]->m_transform.m_localScale = Vector3::Zero;*/
 	}
 	// 星3
 	m_starList[2] = m_uiCanvas->CreateUI<UIIcon>();
@@ -119,24 +160,44 @@ bool ResultScene::Start()
 	{
 		auto* render = m_starList[2]->GetSpriteRender();
 		std::vector<Vector2> scaleList = { Vector2(0.0f,0.0f), Vector2(0.0f,0.0f), Vector2(2.0f,2.0f), Vector2(1.0f,1.0f) };
+		std::vector<float> timeList = { 1.0f, 0.2f, 0.2f };
+
+		auto scaleAnimation = std::make_unique<UIVector2Animation>();
+		scaleAnimation->SetParameter(Vector2(0.0f, 0.0f), Vector2(2.0f, 2.0f), 1.0f, EasingType::Linear, LoopMode::Once);
+		scaleAnimation->SetParameter(Vector2(2.0f, 2.0f), Vector2(1.0f, 1.0f), 0.2f, EasingType::Linear, LoopMode::Once);
+		m_starList[2]->SetUIAnimation(std::move(scaleAnimation));
+		m_starList[2]->PlayAnimation();
+
+		/*auto* render = m_starList[2]->GetSpriteRender();
+		std::vector<Vector2> scaleList = { Vector2(0.0f,0.0f), Vector2(0.0f,0.0f), Vector2(2.0f,2.0f), Vector2(1.0f,1.0f) };
 		std::vector<float> timeList = { 1.6f, 0.2f, 0.2f };
 		ScaleSpriteAnimation* scaleSpriteAnimation = new ScaleSpriteAnimation(render, false, timeList, scaleList);
 		m_starList[2]->AddSpriteAnimation(scaleSpriteAnimation);
-		m_starList[2]->m_transform.m_localScale = Vector3::Zero;
+		m_starList[2]->m_transform.m_localScale = Vector3::Zero*/;
 	}
 
 	// リザルトスコアテキスト
 	auto* uiText = m_uiCanvas->CreateUI<UIIcon>();
 	uiText->Initialize("Assets/modelData/UI/score_text.dds", 300.0f, 44.0f, Vector3(-250.0f, -150.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	{
-		std::vector<float> timeList = { 1.9f, 0.1f };
+		auto* render = uiText->GetSpriteRender();
+		std::vector<Vector4> targetColorList = { Vector4(0.0f,0.0f,0.0f,0.0f),Vector4(0.0f,0.0f,0.0f,0.0f),Vector4(0.0f,0.0f,0.0f,1.0f) };
+		std::vector<float> timeList = { 1.9f,1.0f };
+		
+		auto colorAnimation = std::make_unique<UIVector4Animation>();
+		colorAnimation->SetParameter(Vector4(0.0f, 0.0f, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 0.0f, 1.0f), 1.9f, EasingType::Linear, LoopMode::Once);
+		uiText->SetUIAnimation(std::move(colorAnimation));
+		uiText->PlayAnimation();
+
+
+	/*	std::vector<float> timeList = { 1.9f, 0.1f };
 		std::vector<Vector4> targetColorList = { Vector4(0.0f,0.0f,0.0f,0.0f), Vector4(0.0f, 0.0f, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 0.0f, 1.0f) };
 		auto* render = uiText->GetSpriteRender();
 		render->SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
 		ColorSpriteAnimation* alphaSpriteAnimation = new ColorSpriteAnimation(render, false, timeList, targetColorList);
-		uiText->AddSpriteAnimation(alphaSpriteAnimation);
+		uiText->AddSpriteAnimation(alphaSpriteAnimation);*/
 	}
-	uiText->PlaySpriteAnimation();
+	//uiText->PlaySpriteAnimation();
 
 	// スコアの数字
 	auto* uiDigit = m_uiCanvas->CreateUI<UIDigit>();
@@ -144,7 +205,17 @@ bool ResultScene::Start()
 	uiDigit->SetNumber(Score::GetInstance()->GetScore());
 	// UIアニメーション追加
 	{
-		std::vector<float> timeList = { 1.9f, 0.1f };
+		auto& spriteRenderList = uiDigit->GetSpriteRenderList();
+		for (int i = 0; i < spriteRenderList.size(); ++i) {
+			auto* render = spriteRenderList[i];
+			render->SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
+			auto colorAnimation = std::make_unique<UIVector4Animation>();
+			colorAnimation->SetParameter(Vector4(0.0f, 0.0f, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 0.0f, 1.0f), 1.9f, EasingType::Linear, LoopMode::Once);
+			uiDigit->SetUIAnimation(std::move(colorAnimation));
+		}
+		uiDigit->PlayAnimation();
+
+		/*std::vector<float> timeList = { 1.9f, 0.1f };
 		std::vector<Vector4> targetColorList = {Vector4(0.0f,0.0f,0.0f,0.0f), Vector4(0.0f, 0.0f, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 0.0f, 1.0f) };
 		auto& spriteRenderList = uiDigit->GetSpriteRenderList();
 		for (int i = 0; i < spriteRenderList.size(); ++i) {
@@ -153,24 +224,27 @@ bool ResultScene::Start()
 			ColorSpriteAnimation* alphaSpriteAnimation = new ColorSpriteAnimation(render, false, timeList, targetColorList);
 			uiDigit->AddSpriteAnimation(alphaSpriteAnimation);
 		}
-		uiDigit->PlaySpriteAnimation();
+		uiDigit->PlaySpriteAnimation();*/
 	}
 
 	const int score = Score::GetInstance()->GetScore();
 	// @todo for あとで外部パラメーターにする
 	// 星1
 	if (score >= 500) {
-		m_starList[0]->PlaySpriteAnimation();
+		//m_starList[0]->PlaySpriteAnimation();
+		m_starList[0]->PlayAnimation();
 		m_starList[0]->m_transform.m_localScale = Vector3::One;
 	}
 	// 星2
 	if (score >= 1000) {
-		m_starList[1]->PlaySpriteAnimation();
+		//m_starList[1]->PlaySpriteAnimation();
+		m_starList[1]->PlayAnimation();
 		m_starList[1]->m_transform.m_localScale = Vector3::One;
 	}
 	// 星3
 	if (score >= 1500) {
-		m_starList[2]->PlaySpriteAnimation();
+		//m_starList[2]->PlaySpriteAnimation();
+		m_starList[2]->PlayAnimation();
 		m_starList[2]->m_transform.m_localScale = Vector3::One;
 	}
 

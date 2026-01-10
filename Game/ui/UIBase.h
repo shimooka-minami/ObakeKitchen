@@ -3,35 +3,36 @@
  * UIの基本的な処理をするクラス群
  */
 #pragma once
+#include "UIAnimation.h"
+#include <memory>
+#include <vector>
 
-
-class SpriteAnimationBase;
-
+class UIAnimationBase;
 
 class UIBase : public Noncopyable
 {
 public:
 	Transform m_transform;
-	Vector4 color = Vector4::White;
-
-	//bool isStart = false;
-	//bool isUpdate = true;
+	Vector4 m_color = Vector4::White;
+	
+	bool isStart = false;
+	bool isUpdate = true;
 	bool isDraw = true;
 
-protected:	
+public:
 	// deleteがいらない
-	std::vector<std::unique_ptr<SpriteAnimationBase>> m_spriteAnimationList;
+	std::vector<std::unique_ptr<UIAnimationBase>> m_uiAnimationList;
 
 
 public:
 	UIBase()
 	{
-		m_spriteAnimationList.clear();
+		m_uiAnimationList.clear();
 	}
 	virtual ~UIBase()
 	{
 		// 明示的に消しているだけ。本来は要らない
-		m_spriteAnimationList.clear();
+		m_uiAnimationList.clear();
 	}
 
 	virtual bool Start() = 0;
@@ -40,32 +41,38 @@ public:
 
 
 public:
-	void UpdateSpriteAnimation()
+	void UpdateAnimation()
 	{
-		for (auto& animation : m_spriteAnimationList) {
-			animation.get()->Update();
+		for (auto& ui : m_uiAnimationList) {
+			ui.get()->Update();
 		}
 	}
-	void PlaySpriteAnimation()
+	void PlayAnimation()
 	{
-		for (auto& animation : m_spriteAnimationList) {
+		for (auto& animation : m_uiAnimationList) {
 			animation.get()->Play();
 		}
 	}
-	void StopSpriteAnimation()
-	{
-		for (auto& animation : m_spriteAnimationList) {
-			animation.get()->Stop();
+	void IsPlayAnimation() {
+		for (auto& ui : m_uiAnimationList) {
+			ui.get()->IsPlay();
 		}
 	}
-	bool IsCompleted() const
-	{
-		for (auto& animation : m_spriteAnimationList) {
-			return animation.get()->IsCompleted();
-		}
-	}
+	  void StopSpriteAnimation()
+	  {
+	  	/*for (auto& animation : m_spriteAnimationList) {
+	  		animation.get()->Stop();
+	  	}*/
+	  }
+	  bool IsCompleted() const
+	  {
+	  	/*for (auto& animation : m_uiAnimationList) {
+	  		return animation.get()->IsCompleted();
+	  	}*/
+		  return true;
+	  }
 
-	void SetSpriteAnimation(std::unique_ptr<SpriteAnimationBase>animation);
+	void SetUIAnimation(std::unique_ptr<UIAnimationBase>animation);
 };
 
 
@@ -129,7 +136,8 @@ class UIIcon : public UIImage
 {
 	friend class UICanvas;
 
-private:
+//private:
+public:
 	UIIcon();
 	~UIIcon();
 

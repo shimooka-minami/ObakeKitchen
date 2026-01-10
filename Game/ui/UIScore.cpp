@@ -5,7 +5,7 @@
 #include "stdafx.h"
 #include "UIScore.h"
 #include "UIBase.h"
-#include "SpriteAnimation.h"
+//#include "SpriteAnimation.h"
 
 
 UIScore::UIScore()
@@ -58,13 +58,13 @@ bool UIScore::Start()
 		std::vector<Vector4> targetColorList = { Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f) };
 		auto& spriteRenderList = m_uiAddScoreDigit->GetSpriteRenderList();
 		for (int i = 0; i < spriteRenderList.size(); ++i) {
-			auto* render = spriteRenderList[i];
+		/*	auto* render = spriteRenderList[i];
 			render->SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
 			std::vector<Vector3> targetPositionList = { Vector3(-650.0f - (50.0f * i), -400.0f, 0.0f), Vector3(-650.0f - (50.0f * i), -350.0f, 0.0f) };
 			TranslateSpriteAnimation* translateSpriteAnimation = new TranslateSpriteAnimation(render, false, timeList, targetPositionList );
 			m_uiAddScoreDigit->AddSpriteAnimation(translateSpriteAnimation);
 			ColorSpriteAnimation* alphaSpriteAnimation = new ColorSpriteAnimation(render, false, timeList, targetColorList);
-			m_uiAddScoreDigit->AddSpriteAnimation(alphaSpriteAnimation);
+			m_uiAddScoreDigit->AddSpriteAnimation(alphaSpriteAnimation);*/
 		}
 	}
 
@@ -76,7 +76,7 @@ void UIScore::Update()
 {
 	if (m_requestAddScore != 0) {
 		m_addScore = m_requestAddScore;
-		m_uiAddScoreDigit->PlaySpriteAnimation();
+		//////m_uiAddScoreDigit->PlaySpriteAnimation();
 	}
 
 	// スコアを設定

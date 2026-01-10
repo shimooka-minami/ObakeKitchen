@@ -3,7 +3,8 @@
  * ì«Ç›çûÇ›Ç»Ç«Ç≈ï\é¶Ç∑ÇÈÇΩÇﬂFadeèàóù
  */
 #pragma once
-#include "ui/SpriteAnimation.h"
+#include "ui/UIAnimation.h"
+#include "memory"
 
 
 /**
@@ -17,8 +18,8 @@ private:
 	SpriteRender m_iconRender;
 	bool isEnable = false;
 
-	std::unique_ptr<TranslateSpriteAnimation> m_spriteAnimation;
-
+	//std::unique_ptr<TranslateSpriteAnimation> m_spriteAnimation;
+	//std::unique_ptr<UIAnimation> m_uiAnimation;
 
 private:
 	Fade();

@@ -3,7 +3,7 @@
  * ŠÔŠÇ—
  */
 #pragma once
-#include "ui/SpriteAnimation.h"
+#include "ui/UIAnimation.h"
 
 
 class TimeKeeper

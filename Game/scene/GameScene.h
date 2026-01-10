@@ -8,7 +8,6 @@
 
 class Player;
 class PlayerController;
-class NPCController;
 class GameCamera;
 class BackGround;
 
@@ -17,12 +16,12 @@ class UITimer;
 class UIPlayerNumber;
 class UIInteractIcon;
 
-class CoockingSpace;
+class CookingSpace;
 class DeliverySpace;
 class PlateSpace;
 
 class TimeKeeper;
-
+class NPCController;
 
 
 /**
@@ -35,34 +34,26 @@ class GameScene : public IScene
 
 private:
 	// 料理スペースとUIを紐づけ
-	struct CoockingSpacePair
+	struct CookingSpaceInformation
 	{
-		CoockingSpace* m_coockingSpace = nullptr;
+		CookingSpace* m_cookingSpace = nullptr;
 		UIInteractIcon* m_uiInteracIcon = nullptr;
 	};
 
 	// 納品場とUIの紐づけ
-	struct DeliverySpacePair
+	struct DeliverySpaceInformation
 	{
 		DeliverySpace* m_deliverySpace = nullptr;
 		UIInteractIcon* m_uiInteracIcon = nullptr;
 	};
 
 	// お皿とUIの紐づけ
-	struct PlateSpacePair
+	struct PlateSpaceInformation
 	{
 		PlateSpace* m_plateSpace = nullptr;
 		UIInteractIcon* m_uiInteracIcon = nullptr;
 	};
 
-	//PlateSpaceInformation* plateSpaceInfo = nullptr;
-
-	// 各スペースのポインタ
-	std::vector<CoockingSpacePair> m_coockingSpacePairList;
-	std::vector<DeliverySpacePair> m_deliverySpacePairList;
-	std::vector<PlateSpacePair> m_plateSpacePairList;
-	
-	
 private:
 	GameCamera* m_gameCamera = nullptr;
 	BackGround* m_backGround = nullptr;

@@ -83,6 +83,7 @@ private:
 	bool UpdateHitPlateSpace(CollisionPair& pair);
 	bool UpdateHitFoodPlate(CollisionPair& pair);
 	bool UpdateHitPlate(CollisionPair& pair);
+	bool UpdateHitPlateAndFood(CollisionPair& pair);
 	bool UpdateHitDeliverySpace(CollisionPair& pair);
 
 
