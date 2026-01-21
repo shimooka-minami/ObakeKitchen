@@ -92,6 +92,11 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 		TranslateOffsetSpriteAnimation* translateSpriteAnimation = new TranslateOffsetSpriteAnimation(render, true, timeList, targetTranslateList, &backGround->m_transform);
 		backGround->AddSpriteAnimation(translateSpriteAnimation);
 		backGround->PlaySpriteAnimation();*/
+
+		auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
+		translateAnimation->SetParameter(Vector3(0.0f, -5.0f, 0.0f), Vector3(0.0f, 5.0f, 0.0f), 2.0f, EasingType::Linear, LoopMode::PingPong);
+		backGround->SetUIAnimation(std::move(translateAnimation));
+		backGround->PlayAnimation();
 	}
 
 	// インタラクトアイコン
@@ -103,6 +108,11 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 		TranslateOffsetSpriteAnimation* translateSpriteAnimation = new TranslateOffsetSpriteAnimation(render, true, timeList, targetTranslateList, &interactIcon->m_transform);
 		interactIcon->AddSpriteAnimation(translateSpriteAnimation);
 		interactIcon->PlaySpriteAnimation();*/
+
+		auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
+		translateAnimation->SetParameter(Vector3(0.0f, -5.0f, 0.0f), Vector3(0.0f, 5.0f, 0.0f), 2.0f, EasingType::Linear, LoopMode::PingPong);
+		interactIcon->SetUIAnimation(std::move(translateAnimation));
+		interactIcon->PlayAnimation();
 	}
 
 	// Aボタン
@@ -114,6 +124,11 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 		TranslateOffsetSpriteAnimation* translateSpriteAnimation = new TranslateOffsetSpriteAnimation(render, true, timeList, targetTranslateList, &m_aButton->m_transform);
 		m_aButton->AddSpriteAnimation(translateSpriteAnimation);
 		m_aButton->PlaySpriteAnimation();*/
+
+		auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
+		translateAnimation->SetParameter(Vector3(0.0f, -5.0f, 0.0f), Vector3(0.0f, 5.0f, 0.0f), 2.0f, EasingType::Linear, LoopMode::PingPong);
+		m_aButton->SetUIAnimation(std::move(translateAnimation));
+		m_aButton->PlayAnimation();
 	}
 
 	m_position = position;

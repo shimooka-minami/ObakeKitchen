@@ -45,6 +45,16 @@ bool UITimer::Start()
 		std::vector<float> m_timeList = { 0.1f, 0.1f };
 		RotationSpriteAnimation* rotationSpriteAnimation = new RotationSpriteAnimation(render, true, m_timeList, m_rotationList);
 		m_uiHourGlass->AddSpriteAnimation(rotationSpriteAnimation);*/
+
+		/*auto translateAnimation = std::make_unique<UIVector3Animation>();
+		translateAnimation->SetParameter(Vector3(-1500.0f, 450.0f, 0.0f), Vector3(-560.0f, 450.0f, 0.0f), 0.5f, EasingType::Linear, LoopMode::Loop);
+		uiStageClear->SetUIAnimation(std::move(translateAnimation));
+		uiStageClear->PlayAnimation();*/
+
+		auto rotationAnimation = std::make_unique<UIRotationAnimation>();
+		rotationAnimation->SetParameter(30.0f, -30.0f, 0.1f, EasingType::Linear, LoopMode::Loop);
+		m_uiHourGlass->SetUIAnimation(std::move(rotationAnimation));
+		m_uiHourGlass->PlayAnimation();
 	}
 
 	// @todo for test
@@ -79,7 +89,7 @@ void UITimer::Update()
 		{
 			m_isTimeLimit = true;
 			
-		/*	auto& spriteRenderList = m_uiDigit->GetSpriteRenderList();
+			/*auto& spriteRenderList = m_uiDigit->GetSpriteRenderList();
 			for (int i = 0; i < spriteRenderList.size(); ++i)
 			{
 				auto* render = spriteRenderList[i];
@@ -91,6 +101,17 @@ void UITimer::Update()
 			}
 			m_uiHourGlass->PlaySpriteAnimation();
 			m_uiDigit->PlaySpriteAnimation();*/
+
+			auto& spriteRenderList = m_uiDigit->GetSpriteRenderList();
+			for (int i = 0; i < spriteRenderList.size(); ++i)
+			{
+				auto render = std::make_unique<UIVector4Animation>();
+				render->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Loop);
+				m_uiDigit->SetUIAnimation(std::move(render));
+			}
+			m_uiHourGlass->PlayAnimation();
+			m_uiDigit->PlayAnimation();
+
 		}
 	}
 

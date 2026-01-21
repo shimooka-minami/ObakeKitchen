@@ -65,6 +65,9 @@ bool UIScore::Start()
 			m_uiAddScoreDigit->AddSpriteAnimation(translateSpriteAnimation);
 			ColorSpriteAnimation* alphaSpriteAnimation = new ColorSpriteAnimation(render, false, timeList, targetColorList);
 			m_uiAddScoreDigit->AddSpriteAnimation(alphaSpriteAnimation);*/
+
+			auto render = std::make_unique<UIVector4Animation>();
+			//render->SetParameter();
 		}
 	}
 

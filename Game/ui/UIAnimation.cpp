@@ -25,6 +25,9 @@ UIScaleVector3Animation::UIScaleVector3Animation() {
 
 
 
+/*******************************************************/
+
+
 UITranslateVector3Aniamtion::UITranslateVector3Aniamtion()
 {
 	SetFunc([&](Vector3 s) {
@@ -33,6 +36,24 @@ UITranslateVector3Aniamtion::UITranslateVector3Aniamtion()
 		});
 }
 
+
+
+
+/*******************************************************/
+
+
+UIOffsetVector3Animation::UIOffsetVector3Animation()
+{
+	SetFunc([&](Vector3 offset) {
+		m_ui->m_transform.m_localPosition.Add(offset);
+		m_ui->m_transform.UpdateTransform();
+		});
+}
+
+
+
+
+/*******************************************************/
 
 
 

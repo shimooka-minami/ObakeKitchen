@@ -157,19 +157,20 @@ void UIIcon::Update()
 	// @too for test
 	for (auto& animation : m_uiAnimationList)
 	{
-		UpdateAnimation();
+		//UpdateAnimation();
 		animation->Update();
 	}
 
+	m_spriteRender.SetMulColor(m_color);
 	m_transform.UpdateTransform();
 	m_spriteRender.SetPosition(m_transform.m_position);
 	m_spriteRender.SetScale(m_transform.m_scale);
 	m_spriteRender.SetRotation(m_transform.m_rotation);
 	m_spriteRender.Update();
 
-	for (auto& animation : m_uiAnimationList) {
-		animation->Update();
-	}
+	//for (auto& animation : m_uiAnimationList) {
+	//	animation->Update();
+	//}
 }
 
 

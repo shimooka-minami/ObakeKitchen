@@ -289,8 +289,13 @@ public:
 		m_applyFunc = func;
 	}
 };
-//
-//
+
+
+
+
+/*****************************************/
+
+
 //class UIQuaternionAnimation : public UIAnimationBase
 //{
 //protected:
@@ -320,10 +325,10 @@ public:
 //		//消しといて
 //		//m_applyFunc(m_curve.GetCurrentQuaternionValue());
 //
-//		if (m_ui) {
+//		/*if (m_ui) {
 //			m_ui->m_transform.m_localRotation = tmpRot;
 //			m_ui->m_transform.UpdateTransform();
-//		}
+//		}*/
 //	}
 //
 //	void Play() override
@@ -516,18 +521,18 @@ public:
 //  };
 
 /** 元座標との差分変更 */
-//class UIOffsetVector3Animation : public UIVector3Animation
-//{
-//public:
-//	UIOffsetVector3Animation();
-//	~UIOffsetVector3Animation() {}
-//
-//	void Update() override
-//	{
-//		m_curve.Update(g_gameTime->GetFrameDeltaTime());
-//		m_applyFunc(m_curve.GetCurrentValue());
-//	}
-//};
+class UIOffsetVector3Animation : public UIVector3Animation
+{
+public:
+	UIOffsetVector3Animation();
+	~UIOffsetVector3Animation() {}
+
+	void Update() override
+	{
+		m_curve.Update(g_gameTime->GetFrameDeltaTime());
+		m_applyFunc(m_curve.GetCurrentValue());
+	}
+};
 
 //  /** 元座標との差分変更 */
 //  class UIOffsetVector4Animation : public UIVector4Animation

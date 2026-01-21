@@ -50,6 +50,7 @@ private:
 	UIIcon* m_titleIcon = nullptr;
 
 	bool m_isChange = false;
+	bool m_isPressed = false;
 
 
 public:

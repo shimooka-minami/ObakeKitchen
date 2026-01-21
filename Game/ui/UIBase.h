@@ -66,6 +66,11 @@ public:
 	  }
 	  bool IsCompleted() const
 	  {
+		  for (const auto& animation : m_uiAnimationList) {
+			  if (animation->IsPlay()) {
+				  return false;
+			  }
+		  }
 	  	/*for (auto& animation : m_uiAnimationList) {
 	  		return animation.get()->IsCompleted();
 	  	}*/

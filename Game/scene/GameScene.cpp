@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 #include "GameScene.h"
 #include "ResultScene.h"
@@ -37,42 +37,42 @@
 
 namespace
 {
-	// ƒV[ƒ“‚©‚ç“Ç‚İ‚ñ‚¾ƒIƒuƒWƒFƒNƒg‚Ì–¼‘O‚ªŠ®‘Sˆê’v‚©
+	// ã‚·ãƒ¼ãƒ³ã‹ã‚‰èª­ã¿è¾¼ã‚“ã ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åå‰ãŒå®Œå…¨ä¸€è‡´ã‹
 	bool IsMatchObjectName(const char* jsonNameA, const char* nameB)
 	{
 		if (strcmp(jsonNameA, nameB) == 0) {
-			// Š®‘Sˆê’v
+			// å®Œå…¨ä¸€è‡´
 			return true;
 		}
-		// ˆê’v‚µ‚È‚¢
+		// ä¸€è‡´ã—ãªã„
 		return false;
 	}
 
-	// æ“ª‚©‚ç len •¶š•ª‚ªˆê’v‚µ‚Ä‚¢‚é‚©”»’è‚·‚éŠÖ”
-	// ƒIƒuƒWƒFƒNƒg“¯m1F1‚Å–¼‘O‚ªˆê’v‚µ‚Ä‚¢‚é‚©‚ğ’²‚×‚é
+	// å…ˆé ­ã‹ã‚‰ len æ–‡å­—åˆ†ãŒä¸€è‡´ã—ã¦ã„ã‚‹ã‹åˆ¤å®šã™ã‚‹é–¢æ•°
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåŒå£«1ï¼š1ã§åå‰ãŒä¸€è‡´ã—ã¦ã„ã‚‹ã‹ã‚’èª¿ã¹ã‚‹
 	bool IsForwardMatchObjectName(const char* jsonNameA, const char* nameB)
 	{
 		auto len = strlen(nameB);
 		auto namelen = strlen(jsonNameA);
 		if (len > namelen) {
-			//–¼‘O‚ª’·‚¢B•sˆê’vB
+			//åå‰ãŒé•·ã„ã€‚ä¸ä¸€è‡´ã€‚
 			return false;
 		}
 		if (strncmp(jsonNameA, nameB, len) == 0) {
-			// Š®‘Sˆê’v
+			// å®Œå…¨ä¸€è‡´
 			return true;
 		}
-		// ˆê’v‚µ‚È‚¢
+		// ä¸€è‡´ã—ãªã„
 		return false;
 	}
 
 
 	/**
-	 * json‚©‚çî•ñ‚ğæ“¾‚·‚éˆ—‚ğ‰º‹L‚É‘‚­
+	 * jsonã‹ã‚‰æƒ…å ±ã‚’å–å¾—ã™ã‚‹å‡¦ç†ã‚’ä¸‹è¨˜ã«æ›¸ã
 	 */
 
 
-	 /** Ã“I‚ÈƒIƒuƒWƒFƒNƒg‚Ìî•ñæ“¾ */
+	 /** é™çš„ãªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æƒ…å ±å–å¾— */
 	std::string ParseStaticMeshExportComponent(const nlohmann::json& j)
 	{
 		const std::string assetPath = j.at("assetPath").get<std::string>();
@@ -80,7 +80,7 @@ namespace
 	}
 
 
-	/** ƒCƒ“ƒ^ƒ‰ƒNƒgî•ñ‚Ìæ“¾ */
+	/** ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆæƒ…å ±ã®å–å¾— */
 	struct InteractExportInfo
 	{
 		Vector3 position;
@@ -95,7 +95,7 @@ namespace
 	}
 
 
-	/** HŞ” ‚Ìî•ñ‚ğæ“¾ */
+	/** é£Ÿæç®±ã®æƒ…å ±ã‚’å–å¾— */
 	struct FoodBoxExportInfo
 	{
 		std::string assetsPath;
@@ -154,7 +154,7 @@ GameScene::~GameScene()
 
 bool GameScene::Start()
 {
-	// ƒvƒŒƒCƒ„[
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i) {
 		char name[] = "playerA";
 		name[6] = 'A' + i;
@@ -165,240 +165,264 @@ bool GameScene::Start()
 		m_playerControllerList[i] = nullptr;
 		m_npcControllerList[i] = nullptr;
 
-		// ƒRƒ“ƒgƒ[ƒ‰[Ú‘±‚ª‚³‚ê‚Ä‚¢‚é‚©
+		// ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼æ¥ç¶šãŒã•ã‚Œã¦ã„ã‚‹ã‹
 		if (SaveData::GetInstance()->IsControlerConected(i)) {
-			// ƒvƒŒƒCƒ„[ƒRƒ“ƒgƒ[ƒ‰[
+			// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼
 			m_playerControllerList[i] = NewGO<PlayerController>(0, "playerController");
-			// ‘ÎÛ‚ğİ’è
+			// å¯¾è±¡ã‚’è¨­å®š
 			m_playerControllerList[i]->SetTarget(m_playerList[i], i);
 		}
 		else {
 			m_npcControllerList[i] = NewGO<NPCController>(0, "npcController");
 			m_npcControllerList[i]->SetTarget(m_playerList[i]);
 		}
-		// ƒvƒŒƒCƒ„[”Ô†
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç•ªå·
 		m_uiPlayerNumber[i] = NewGO<UIPlayerNumber>(0, "uiPlayerNumber");
 		if (SaveData::GetInstance()->IsControlerConected(i)) {
-			m_uiPlayerNumber[i]->Initialize(i + 1); // i‚Í0‚©‚ç‚È‚Ì‚Å+1‚µ‚Ä”‚É‚·‚é(i‚Íindex‚È‚Ì‚Å0‚©‚ç)
+			m_uiPlayerNumber[i]->Initialize(i + 1); // iã¯0ã‹ã‚‰ãªã®ã§+1ã—ã¦æ•°ã«ã™ã‚‹(iã¯indexãªã®ã§0ã‹ã‚‰)
 		}
 		else {
-			// m_uiPlayerNumber‚ª0‚¾‚Á‚½ê‡ƒCƒjƒVƒƒƒ‰ƒCƒY‚Í0
+			// m_uiPlayerNumberãŒ0ã ã£ãŸå ´åˆã‚¤ãƒ‹ã‚·ãƒ£ãƒ©ã‚¤ã‚ºã¯0
 			m_uiPlayerNumber[i]->Initialize(0);
 		}
-
 	}
 
-	// ƒJƒƒ‰
+	// ã‚«ãƒ¡ãƒ©
 	m_gameCamera = NewGO<GameCamera>(0, "gameCamera");
 
 	// 
 	LoadScene("Assets/scene/SceneExport.json", [&](const nlohmann::json& j)
-		{
-			// Unity‚Å”z’u‚µ‚Ä‚¢‚éƒIƒuƒWƒFƒNƒg‚Ì–¼‘O
-			const std::string& name = j["name"];
-			// À•W
-			json::Transform transform = json::ParseTransformComponents(j["Transform"]);
+	{
+		// Unityã§é…ç½®ã—ã¦ã„ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åå‰
+		const std::string& name = j["name"];
+		// åº§æ¨™
+		json::Transform transform = json::ParseTransformComponents(j["Transform"]);
 
-			// @todo for Œã‚ÅÁ‚·
-			//’n–Ê
-			//if (IsForwardMatchObjectName(name.c_str(), "Env_Road_Free 1")) {
-			// auto* staticGimmick = NewGO<StaticGimmick>(0, "ground");
-			// const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-			// staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
-			// return true;
-			//}
+		// @todo for å¾Œã§æ¶ˆã™
+		//åœ°é¢
+		//if (IsForwardMatchObjectName(name.c_str(), "Env_Road_Free 1")) {
+		// auto* staticGimmick = NewGO<StaticGimmick>(0, "ground");
+		// const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+		// staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+		// return true;
+		//}
 
 
-			// ƒLƒbƒ`ƒ“
-			if (IsForwardMatchObjectName(name.c_str(), "Prop_KitchenCabinet_01")) {
-				auto* staticGimmick = NewGO<StaticGimmick>(0, "kitchen");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
-				m_deleteList.push_back(staticGimmick);
+		// ã‚­ãƒƒãƒãƒ³
+		if (IsForwardMatchObjectName(name.c_str(), "Prop_KitchenCabinet_01")) {
+			auto* staticGimmick = NewGO<StaticGimmick>(0, "kitchen");
+			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			m_deleteList.push_back(staticGimmick);
 
-				if (j.contains("InteractExportComponent")) {
-					InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
+			if (j.contains("InteractExportComponent")) {
+				InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
 
-					auto* cookingSpace = NewGO<CoockingSpace>(0, "coockingSpace");
-					cookingSpace->m_transform.SetParent(&staticGimmick->m_transform);
-					cookingSpace->m_transform.m_localPosition = info.position;
-					cookingSpace->m_transform.UpdateTransform();
-					cookingSpace->SetRadius(info.radius);
-					m_deleteList.push_back(cookingSpace);
+				auto* cookingSpace = NewGO<CoockingSpace>(0, "coockingSpace");
+				cookingSpace->m_transform.SetParent(&staticGimmick->m_transform);
+				cookingSpace->m_transform.m_localPosition = info.position;
+				cookingSpace->m_transform.UpdateTransform();
+				cookingSpace->SetRadius(info.radius);
+				m_deleteList.push_back(cookingSpace);
 
-					// —¿—ƒCƒ“ƒ^ƒ‰ƒNƒg
-					auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
-					uiInteractIcon->Initialize(enInteractType_Cooking, transform.position);
-					m_deleteList.push_back(uiInteractIcon);
-				}
-				return true;
-			}
-			// ƒLƒbƒ`ƒ“2
-			if (IsForwardMatchObjectName(name.c_str(), "Prop_KitchenCabinet_02")) {
-				auto* staticGimmick = NewGO<StaticGimmick>(0, "kitchen2");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
-				m_deleteList.push_back(staticGimmick);
-			}
-			// ‚Ü‚È”Â
-			if (IsForwardMatchObjectName(name.c_str(), "Prop_CuttingPlate")) {
-				auto* staticGimmick = NewGO<StaticGimmick>(0, "cookingBoard");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
-				m_deleteList.push_back(staticGimmick);
-			}
-			//•ï’š
-			if (IsForwardMatchObjectName(name.c_str(), "Prop_Knife_04")) {
-				auto* staticGimmick = NewGO<StaticGimmick>(0, "knife");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
-				m_deleteList.push_back(staticGimmick);
-			}
-			// HŞ‚ÌƒAƒCƒRƒ“(ƒgƒ}ƒg)
-			if (IsForwardMatchObjectName(name.c_str(), "tomato_top")) {
-				auto* staticGimmick = NewGO<StaticGimmick>(0, "tomato_top");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
-				m_deleteList.push_back(staticGimmick);
-			}
-			// HŞ‚ÌƒAƒCƒRƒ“(ƒŒƒ^ƒX)
-			if (IsForwardMatchObjectName(name.c_str(), "retasu_top")) {
-				auto* staticGimmick = NewGO<StaticGimmick>(0, "retasu_top");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
-				m_deleteList.push_back(staticGimmick);
-			}
-			// HŞ‚ÌƒAƒCƒRƒ“(‚¨‚É‚­)
-			if (IsForwardMatchObjectName(name.c_str(), "meet_top")) {
-				auto* staticGimmick = NewGO<StaticGimmick>(0, "meet_top");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
-				m_deleteList.push_back(staticGimmick);
-			}
-			// ‚¨M
-			if (IsForwardMatchObjectName(name.c_str(), "Prop_Plate_02")) {
-				auto* staticGimmick = NewGO<StaticGimmick>(0, "plane");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
-				m_deleteList.push_back(staticGimmick);
-			}
-			// ‚¨M” 
-			if (IsForwardMatchObjectName(name.c_str(), "Prop_KitchenCabinet_03")) {
-				auto* staticGimmick = NewGO<StaticGimmick>(0, "plateSpawn");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One/*transform.scale*/, transform.rotation); // TODO: Unity‚©‚ç‚Ì•ÏŠ·‚ª‚¨‚©‚µ‚¢H‚©‚çA‘å‚«‚³‚ÍŒÅ’è‚É‚·‚é
-				m_deleteList.push_back(staticGimmick);
+				// æ–™ç†ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆ
+				auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
+				uiInteractIcon->Initialize(enInteractType_Cooking, transform.position);
+				m_deleteList.push_back(uiInteractIcon);
 
-				PlateSpace* plateSpace = nullptr;
-				if (j.contains("InteractExportComponent")) {
-					InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
-
-					plateSpace = NewGO<PlateSpace>(0, "plateSpace");
-					plateSpace->m_transform.SetParent(&staticGimmick->m_transform);
-					plateSpace->m_transform.m_localPosition = info.position;
-					plateSpace->m_transform.UpdateTransform();
-					plateSpace->SetRadius(info.radius);
-					m_deleteList.push_back(plateSpace);
-
-					// —¿—ƒCƒ“ƒ^ƒ‰ƒNƒg
-					auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
-					uiInteractIcon->Initialize(enInteractType_Plate, transform.position);
-					m_deleteList.push_back(uiInteractIcon);
-				}
-				if (j.contains("PlateBoxExportComponent")) {
-					PlateBoxExportInfo info = ParsePlateBoxComponet(j["PlateBoxExportComponent"]);
-					if (plateSpace) {
-						plateSpace->SetAssetPath(info.assetsPath);
-					}
-				}
-			}
-			// HŞ” 
-			if (IsForwardMatchObjectName(name.c_str(), "BoxReady")) {
-				auto* staticGimmick = NewGO<StaticGimmick>(0, "foodBox");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position,/* Vector3::One*/transform.scale, transform.rotation); // TODO: Unity‚©‚ç‚Ì•ÏŠ·‚ª‚¨‚©‚µ‚¢H‚©‚çA‘å‚«‚³‚ÍŒÅ’è‚É‚·‚é
-				m_deleteList.push_back(staticGimmick);
-
-				FoodSpace* foodSpace = nullptr;
-				if (j.contains("InteractExportComponent")) {
-					InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
-
-					foodSpace = NewGO<FoodSpace>(0, "foodSpace");
-					foodSpace->m_transform.SetParent(&staticGimmick->m_transform);
-					foodSpace->m_transform.m_localPosition = info.position;
-					foodSpace->m_transform.UpdateTransform();
-					foodSpace->SetRadius(info.radius);
-					m_deleteList.push_back(foodSpace);
-				}
-				if (j.contains("FoodBoxExportComponent")) {
-					FoodBoxExportInfo info = ParseFoodBoxComponent(j["FoodBoxExportComponent"]);
-					if (foodSpace) {
-						foodSpace->SetAssetPath(info.assetsPath);
-						foodSpace->SetCookedAssetsPath(info.cookedAssetsPath);
-					}
-				}
-			}
-			// ”[•iê
-			if (IsForwardMatchObjectName(name.c_str(), "Prop_Fridge_04")) {
-				auto* staticGimmick = NewGO<StaticGimmick>(0, "delivery");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One/*transform.scale*/, transform.rotation);
-				m_deleteList.push_back(staticGimmick);
-
-				DeliverySpace* deliverySpace = nullptr;
-				if (j.contains("InteractExportComponent")) {
-					InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
-
-					deliverySpace = NewGO<DeliverySpace>(0, "deliverySpace");
-					deliverySpace->m_transform.SetParent(&staticGimmick->m_transform);
-					deliverySpace->m_transform.m_localPosition = info.position;
-					deliverySpace->m_transform.UpdateTransform();
-					deliverySpace->SetRadius(info.radius);
-					m_deleteList.push_back(deliverySpace);
-
-					// —¿—ƒCƒ“ƒ^ƒ‰ƒNƒg
-					auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
-					uiInteractIcon->Initialize(enInteractType_Delivery, transform.position);
-					m_deleteList.push_back(uiInteractIcon);
-				}
-			}
-			// ƒ‰ƒ“ƒ^ƒ“
-			if (IsForwardMatchObjectName(name.c_str(), "PP_Lantern_02_Yellow_Light_Iron")) {
-				auto* staticGimmick = NewGO<PointLightGimmick>(0, "lantern");
-				const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
-				staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One /*transform.scale*/, transform.rotation);
-				m_deleteList.push_back(staticGimmick);
+				// ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½yï¿½[ï¿½Xï¿½ï¿½UIï¿½Cï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½Nï¿½g
+				CoockingSpacePair pair;
+				pair.m_coockingSpace = cookingSpace;
+				pair.m_uiInteracIcon = uiInteractIcon;
+				m_coockingSpacePairList.push_back(pair);
 			}
 			return true;
-		});
+		}
+		// ã‚­ãƒƒãƒãƒ³2
+		if (IsForwardMatchObjectName(name.c_str(), "Prop_KitchenCabinet_02")) {
+			auto* staticGimmick = NewGO<StaticGimmick>(0, "kitchen2");
+			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			m_deleteList.push_back(staticGimmick);
+		}
+		// ã¾ãªæ¿
+		if (IsForwardMatchObjectName(name.c_str(), "Prop_CuttingPlate")) {
+			auto* staticGimmick = NewGO<StaticGimmick>(0, "cookingBoard");
+			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			m_deleteList.push_back(staticGimmick);
+		}
+		//åŒ…ä¸
+		if (IsForwardMatchObjectName(name.c_str(), "Prop_Knife_04")) {
+			auto* staticGimmick = NewGO<StaticGimmick>(0, "knife");
+			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			m_deleteList.push_back(staticGimmick);
+		}
+		// é£Ÿæã®ã‚¢ã‚¤ã‚³ãƒ³(ãƒˆãƒãƒˆ)
+		if (IsForwardMatchObjectName(name.c_str(), "tomato_top")) {
+			auto* staticGimmick = NewGO<StaticGimmick>(0, "tomato_top");
+			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			m_deleteList.push_back(staticGimmick);
+		}
+		// é£Ÿæã®ã‚¢ã‚¤ã‚³ãƒ³(ãƒ¬ã‚¿ã‚¹)
+		if (IsForwardMatchObjectName(name.c_str(), "retasu_top")) {
+			auto* staticGimmick = NewGO<StaticGimmick>(0, "retasu_top");
+			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			m_deleteList.push_back(staticGimmick);
+		}
+		// é£Ÿæã®ã‚¢ã‚¤ã‚³ãƒ³(ãŠã«ã)
+		if (IsForwardMatchObjectName(name.c_str(), "meet_top")) {
+			auto* staticGimmick = NewGO<StaticGimmick>(0, "meet_top");
+			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			m_deleteList.push_back(staticGimmick);
+		}
+		// ãŠçš¿
+		if (IsForwardMatchObjectName(name.c_str(), "Prop_Plate_02")) {
+			auto* staticGimmick = NewGO<StaticGimmick>(0, "plane");
+			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
+			m_deleteList.push_back(staticGimmick);
+		}
+		// ãŠçš¿ç®±
+		if (IsForwardMatchObjectName(name.c_str(), "Prop_KitchenCabinet_03")) {
+			auto* staticGimmick = NewGO<StaticGimmick>(0, "plateSpawn");
+			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One/*transform.scale*/, transform.rotation); // TODO: Unityã‹ã‚‰ã®å¤‰æ›ãŒãŠã‹ã—ã„ï¼Ÿã‹ã‚‰ã€å¤§ãã•ã¯å›ºå®šã«ã™ã‚‹
+			m_deleteList.push_back(staticGimmick);
 
-	// ”»’èŠÇ—¶¬
+			PlateSpace* plateSpace = nullptr;
+			if (j.contains("InteractExportComponent")) {
+				InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
+
+				plateSpace = NewGO<PlateSpace>(0, "plateSpace");
+				plateSpace->m_transform.SetParent(&staticGimmick->m_transform);
+				plateSpace->m_transform.m_localPosition = info.position;
+				plateSpace->m_transform.UpdateTransform();
+				plateSpace->SetRadius(info.radius);
+				m_deleteList.push_back(plateSpace);
+
+				// æ–™ç†ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆ
+				auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
+				uiInteractIcon->Initialize(enInteractType_Plate, transform.position);
+				m_deleteList.push_back(uiInteractIcon);
+			}
+			/*if (j.contains("PlateBoxExportComponent")) {
+				PlateBoxExportInfo info = ParsePlateBoxComponet(j["PlateBoxExportComponent"]);
+				if (plateSpace) {
+					plateSpace->SetAssetPath(info.assetsPath);
+				}
+			}*/
+			// ãŠçš¿ç®±ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆ
+			auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
+			uiInteractIcon->Initialize(enInteractType_Delivery, transform.position);
+			m_deleteList.push_back(uiInteractIcon);
+
+			// ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½Xï¿½yï¿½[ï¿½Xï¿½ï¿½UIï¿½Cï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½Nï¿½g
+			PlateSpacePair pair;
+			pair.m_plateSpace = plateSpace;
+			pair.m_uiInteracIcon = uiInteractIcon;
+			m_plateSpacePairList.push_back(pair);
+		}
+		// é£Ÿæç®±
+		if (IsForwardMatchObjectName(name.c_str(), "BoxReady")) {
+			auto* staticGimmick = NewGO<StaticGimmick>(0, "foodBox");
+			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			staticGimmick->Initialize(assetPath.c_str(), transform.position,/* Vector3::One*/transform.scale, transform.rotation); // TODO: Unityã‹ã‚‰ã®å¤‰æ›ãŒãŠã‹ã—ã„ï¼Ÿã‹ã‚‰ã€å¤§ãã•ã¯å›ºå®šã«ã™ã‚‹
+			m_deleteList.push_back(staticGimmick);
+
+			FoodSpace* foodSpace = nullptr;
+			if (j.contains("InteractExportComponent")) {
+				InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
+
+				foodSpace = NewGO<FoodSpace>(0, "foodSpace");
+				foodSpace->m_transform.SetParent(&staticGimmick->m_transform);
+				foodSpace->m_transform.m_localPosition = info.position;
+				foodSpace->m_transform.UpdateTransform();
+				foodSpace->SetRadius(info.radius);
+				m_deleteList.push_back(foodSpace);
+			}
+			if (j.contains("FoodBoxExportComponent")) {
+				FoodBoxExportInfo info = ParseFoodBoxComponent(j["FoodBoxExportComponent"]);
+				if (foodSpace) {
+					foodSpace->SetAssetPath(info.assetsPath);
+					foodSpace->SetCookedAssetsPath(info.cookedAssetsPath);
+				}
+				
+			}
+			return true;
+		}	
+		// ç´å“å ´
+		if (IsForwardMatchObjectName(name.c_str(), "Prop_Fridge_04")) {
+			auto* staticGimmick = NewGO<StaticGimmick>(0, "delivery");
+			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One/*transform.scale*/, transform.rotation);
+			m_deleteList.push_back(staticGimmick);
+
+			DeliverySpace* deliverySpace = nullptr;
+			if (j.contains("InteractExportComponent")) {
+				InteractExportInfo info = ParseInteractExportComponent(j["InteractExportComponent"]);
+
+				deliverySpace = NewGO<DeliverySpace>(0, "deliverySpace");
+				deliverySpace->m_transform.SetParent(&staticGimmick->m_transform);
+				deliverySpace->m_transform.m_localPosition = info.position;
+				deliverySpace->m_transform.UpdateTransform();
+				deliverySpace->SetRadius(info.radius);
+				m_deleteList.push_back(deliverySpace);
+
+				// æ–™ç†ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆ
+				auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
+				uiInteractIcon->Initialize(enInteractType_Delivery, transform.position);
+				m_deleteList.push_back(uiInteractIcon);
+
+				// ï¿½[ï¿½iï¿½Xï¿½yï¿½[ï¿½Xï¿½ï¿½UIï¿½Cï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½Nï¿½g
+				DeliverySpacePair pair;
+				pair.m_deliverySpace = deliverySpace;
+				pair.m_uiInteracIcon = uiInteractIcon;
+				m_deliverySpacePairList.push_back(pair);
+			}
+			return true;
+		}
+		// ãƒ©ãƒ³ã‚¿ãƒ³
+		if (IsForwardMatchObjectName(name.c_str(), "PP_Lantern_02_Yellow_Light_Iron")) {
+			auto* staticGimmick = NewGO<PointLightGimmick>(0, "lantern");
+			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
+			staticGimmick->Initialize(assetPath.c_str(), transform.position, Vector3::One /*transform.scale*/, transform.rotation);
+			m_deleteList.push_back(staticGimmick);
+		}
+		return true;
+	});
+
+	// åˆ¤å®šç®¡ç†ç”Ÿæˆ
 	CollisionHitManager::Create();
 
-	// ƒ^ƒCƒ€ƒL[ƒp[‚Ì¶¬
+	// ã‚¿ã‚¤ãƒ ã‚­ãƒ¼ãƒ‘ãƒ¼ã®ç”Ÿæˆ
 	m_timeKeeper = std::make_unique<TimeKeeper>();
 
 	// @todo for test 
-	// ‰¼‚Å§ŒÀŠÔ‚ğ“ü‚ê‚é
-	m_timeKeeper->SetLimitTime(900);
+	// ä»®ã§åˆ¶é™æ™‚é–“ã‚’å…¥ã‚Œã‚‹
+	m_timeKeeper->SetLimitTime(40);
 
-	// ƒXƒRƒAŠÇ—‚Ì¶¬
+	// ã‚¹ã‚³ã‚¢ç®¡ç†ã®ç”Ÿæˆ
 	Score::CreateInstance();
 
-	// BGMÄ¶
+	// BGMå†ç”Ÿ
 	SoundManager::Get().PlayBGM(enSoundKind_Game);
 
-	// ƒXƒRƒA•\¦UI
+	// ã‚¹ã‚³ã‚¢è¡¨ç¤ºUI
 	m_uiScore = NewGO<UIScore>(0, "uiScore");
 
-	// §ŒÀŠÔ‚ÌUI
+	// åˆ¶é™æ™‚é–“ã®UI
 	m_uiTimer = NewGO<UITimer>(0, "uiTimer");
 
-	// ’n–Ê
+	// åœ°é¢
 	auto* ground = NewGO<BackGround>(0, "backGround");
 	m_deleteList.push_back(ground);
 
-	// ƒ‰ƒCƒg’²®
+	// ãƒ©ã‚¤ãƒˆèª¿æ•´
 	g_sceneLight->SetDirectionLight(0, Vector3(0.0f, -1.0f, 0.5f), Vector3(0.7f, 0.2f, 0.8f));
 	g_sceneLight->SetAmbinet(Vector3(0.1f, 0.1f, 0.1f));
 
@@ -412,19 +436,57 @@ void GameScene::Update()
 
 	m_uiScore->SetScore(Score::GetInstance()->GetScore());
 
-	// §ŒÀŠÔ
-	m_timeKeeper->Update();									// ŠÔi‚ß‚é		// 29.0f;
-	m_uiTimer->SetTimer(m_timeKeeper->GetRemainingTime());	// ŠÔİ’è			// 30.0f
+	// åˆ¶é™æ™‚é–“
+	m_timeKeeper->Update();									// æ™‚é–“é€²ã‚ã‚‹		// 29.0f;
+	m_uiTimer->SetTimer(m_timeKeeper->GetRemainingTime());	// æ™‚é–“è¨­å®š			// 30.0f
 
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½yï¿½[ï¿½Xï¿½É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½{ï¿½^ï¿½ï¿½ï¿½Ì•\ï¿½ï¿½
+	for (auto& coockingSpacePair : m_coockingSpacePairList)
+	{
+		if (coockingSpacePair.m_coockingSpace->IsNearPlayer())
+		{
+			coockingSpacePair.m_uiInteracIcon->SetDrawAButton(true);
+		}
+		else
+		{
+			coockingSpacePair.m_uiInteracIcon->SetDrawAButton(false);
+		}
+	}
 
-	// §ŒÀŠÔ‚ğ‚±‚¦‚½‚çŸ‚ÌƒV[ƒ“
+	// ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½ÌƒXï¿½yï¿½[ï¿½Xï¿½É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½{ï¿½^ï¿½ï¿½ï¿½Ì•\ï¿½ï¿½
+	for (auto& plateSpacePair : m_plateSpacePairList)
+	{
+		if (plateSpacePair.m_plateSpace->IsNearPlayer())
+		{
+			plateSpacePair.m_uiInteracIcon->SetDrawAButton(true);
+		}
+		else
+		{
+			plateSpacePair.m_uiInteracIcon->SetDrawAButton(false);
+		}
+	}
+
+	// ï¿½[ï¿½iï¿½ï¿½ÌƒXï¿½yï¿½[ï¿½Xï¿½É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½{ï¿½^ï¿½ï¿½ï¿½Ì•\ï¿½ï¿½
+	for (auto& deliverySpacePair : m_deliverySpacePairList)
+	{
+		if (deliverySpacePair.m_deliverySpace->IsNearPlayer())
+		{
+			deliverySpacePair.m_uiInteracIcon->SetDrawAButton(true);
+		}
+		else
+		{
+			deliverySpacePair.m_uiInteracIcon->SetDrawAButton(false);
+		}
+	}
+
+	// åˆ¶é™æ™‚é–“ã‚’ã“ãˆãŸã‚‰æ¬¡ã®ã‚·ãƒ¼ãƒ³
 	if (m_timeKeeper->IsTimeOver())
 	{
 		m_isNextScene = true;
 	}
 
 
-	// UI‚ÌÀ•W‚ğXV
+	// UIã®åº§æ¨™ã‚’æ›´æ–°
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i) {
 		m_uiPlayerNumber[i]->SetPosition(m_playerList[i]->m_transform.m_position);
 	}
@@ -444,4 +506,4 @@ bool GameScene::RequestScene(uint32_t& id, float& waitTime)
 		return true;
 	}
 	return false;
-}
+};

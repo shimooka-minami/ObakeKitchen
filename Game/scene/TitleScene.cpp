@@ -180,8 +180,8 @@ bool TitleStartMenu::Start()
 	auto* startButtonIcon = m_uiCanvas->CreateUI<UIIcon>();
 	startButtonIcon->Initialize("Assets/modelData/title/push_a.dds", 300, 70, Vector3(0.0f, -150.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	{
-		auto colorAnimaiton = std::make_unique<UIVector4Animation>();
-		colorAnimaiton->SetParameter(Vector4(0.8f, 0.8f, 0.8f, 1.0f), Vector4(0.6f, 0.6f, 0.6f, 0.0f), 0.4f, EasingType::Linear, LoopMode::Loop);
+		auto colorAnimaiton = std::make_unique<UIColorVector4Animation>();
+		colorAnimaiton->SetParameter(Vector4(0.6f, 0.6f, 0.6f, 0.4f), Vector4(0.8f, 0.8f, 0.8f, 1.0f), 1.5f, EasingType::Linear, LoopMode::PingPong);
 		startButtonIcon->SetUIAnimation(std::move(colorAnimaiton));
 		startButtonIcon->PlayAnimation();
 
@@ -196,10 +196,10 @@ bool TitleStartMenu::Start()
 	m_titleIcon = m_uiCanvas->CreateUI<UIIcon>();
 	m_titleIcon->Initialize("Assets/modelData/title/kanban.dds", 500.0f, 657.0f, Vector3(-600.0f, 250.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	{
-		auto translateAnimation = std::make_unique<UIVector3Animation>();
-		translateAnimation->SetParameter(Vector3::Zero, Vector3(0.0f, 600.0f, 0.0f), 1.0f, EasingType::Linear, LoopMode::Loop);
-		m_titleIcon->SetUIAnimation(std::move(translateAnimation));
-		m_titleIcon->PlayAnimation();
+		/*auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
+		translateAnimation->SetParameter(Vector3::Zero, Vector3(0.0f,600.0f,0.0f), 300.0f, EasingType::Linear, LoopMode::Once);
+		m_titleIcon->SetUIAnimation(std::move(translateAnimation));*/
+		//m_titleIcon->PlayAnimation();
 
 	/*	std::vector<Vector3> targetTanslateList = { Vector3::Zero, Vector3(0.0f, 600.0f, 0.0f) };
 		std::vector<float> timeList = { 1.0f };
@@ -212,11 +212,11 @@ bool TitleStartMenu::Start()
 		//titleAnimation->SetSpriteAnimation
 	}
 	{
-		auto colorAnimation = std::make_unique<UIVector4Animation>();
+	/*	auto colorAnimation = std::make_unique<UIColorVector4Animation>();
 		colorAnimation->SetParameter(Vector4::White, Vector4(1.0f, 1.0f, 1.0f, 0.8f), 0.7f, EasingType::Linear, LoopMode::Once);
 		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.8f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 0.1f, EasingType::Linear, LoopMode::Once);
 		m_titleIcon->SetUIAnimation(std::move(colorAnimation));
-		m_titleIcon->PlayAnimation();
+		m_titleIcon->PlayAnimation();*/
 
 		/*std::vector<Vector4> targetAlphaList = { Vector4::White, Vector4(1.0f, 1.0f, 1.0f, 0.8f), Vector4(1.0f, 1.0f, 1.0f, 0.0f) };
 		std::vector<float> timeList = { 0.7f, 0.1f };
@@ -230,13 +230,37 @@ bool TitleStartMenu::Start()
 
 void TitleStartMenu::Update()
 {
-	if (!m_titleIcon->IsCompleted()) {
+	////if (!m_titleIcon->IsCompleted()) {
+	////	if (g_pad[0]->IsTrigger(enButtonA)) {
+	////		m_titleIcon->PlayAnimation();
+	////	}
+	////}
+	////else {
+	////	//m_isChange = true;
+	////}
+
+	//if (g_pad[0]->IsPress(enButtonA)) {
+	//	m_isChange = true;
+	//}
+
+	if (m_isChange) {
+		m_uiCanvas->Update();
+		return;
+	}
+
+	if (!m_isPressed) {
 		if (g_pad[0]->IsTrigger(enButtonA)) {
-			m_titleIcon->PlayAnimation();
+			m_isPressed = true;
+
+			auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
+			translateAnimation->SetParameter(Vector3::Zero, Vector3(0.0f, 40.0f, 0.0f), 0.5f, EasingType::Linear, LoopMode::Once);
+			m_titleIcon->SetUIAnimation(std::move(translateAnimation));
 		}
 	}
 	else {
-		m_isChange = true;
+		if (m_titleIcon->IsCompleted()) {
+			m_isChange = true;
+		}
 	}
 
 	m_uiCanvas->Update();
@@ -281,8 +305,8 @@ bool TitleSelectMenu::Start()
 	m_selectMenu = m_uiCanvas->CreateUI<UIIcon>();
 	m_selectMenu->Initialize("Assets/modelData/menu/menu.dds", 800.0f, 1050.0f, Vector3(-450.0f, 0.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	//// アニメーション
-	auto colorAnimation = std::make_unique<UIVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Loop);
+	auto colorAnimation = std::make_unique<UIColorVector4Animation>();
+	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
 	m_selectMenu->SetUIAnimation(std::move(colorAnimation));
 	m_selectMenu->PlayAnimation();
 
@@ -298,8 +322,8 @@ bool TitleSelectMenu::Start()
 	auto* ward = m_uiCanvas->CreateUI<UIIcon>();
 	ward->Initialize("Assets/modelData/menu/gamestart.dds", 300.0f, 55.0f, Vector3(-450.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	//// アニメーション
-	//auto colorAnimation = std::make_unique<UIVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Loop);
+	colorAnimation = std::make_unique<UIColorVector4Animation>();
+	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
 	ward->SetUIAnimation(std::move(colorAnimation));
 	ward->PlayAnimation();
 
@@ -312,8 +336,8 @@ bool TitleSelectMenu::Start()
 	ward = m_uiCanvas->CreateUI<UIIcon>();
 	ward->Initialize("Assets/modelData/menu/sousahoho.dds", 300.0f, 55.0f, Vector3(-450.0f, 0.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	//// アニメーション
-	//auto colorAnimation = std::make_unique<UIVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Loop);
+	colorAnimation = std::make_unique<UIColorVector4Animation>();
+	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
 	ward->SetUIAnimation(std::move(colorAnimation));
 	ward->PlayAnimation();
 
@@ -326,8 +350,8 @@ bool TitleSelectMenu::Start()
 	ward = m_uiCanvas->CreateUI<UIIcon>();
 	ward->Initialize("Assets/modelData/menu/settei.dds", 300.0f, 55.0f, Vector3(-450.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	//// アニメーション
-	//auto colorAnimation = std::make_unique<UIVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Loop);
+	colorAnimation = std::make_unique<UIColorVector4Animation>();
+	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
 	ward->SetUIAnimation(std::move(colorAnimation));
 	ward->PlayAnimation();
 
@@ -340,8 +364,8 @@ bool TitleSelectMenu::Start()
 	ward = m_uiCanvas->CreateUI<UIIcon>();
 	ward->Initialize("Assets/modelData/menu/owaru.dds", 300.0f, 55.0f, Vector3(-450.0f, -200.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	//// アニメーション
-	//auto colorAnimation = std::make_unique<UIVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Loop);
+	colorAnimation = std::make_unique<UIColorVector4Animation>();
+	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
 	ward->SetUIAnimation(std::move(colorAnimation));
 	ward->PlayAnimation();
 
@@ -355,8 +379,8 @@ bool TitleSelectMenu::Start()
 	m_hanePen = m_uiCanvas->CreateUI<UIIcon>();
 	m_hanePen->Initialize("Assets/modelData/menu/hane.dds", 80.0f, 106.0f, m_penPosition, Vector3::One, Quaternion::Identity);
 	//// アニメーション
-	//auto colorAnimation = std::make_unique<UIVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Loop);
+	colorAnimation = std::make_unique<UIColorVector4Animation>();
+	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
 	ward->SetUIAnimation(std::move(colorAnimation));
 	ward->PlayAnimation();
 
@@ -370,8 +394,8 @@ bool TitleSelectMenu::Start()
 	m_sen = m_uiCanvas->CreateUI<UIIcon>();
 	m_sen->Initialize("Assets/modelData/menu/sen.dds", 250.0f, 11.0f, m_senPosition, Vector3::One, Quaternion::Identity);
 	//// アニメーション
-	//auto colorAnimation = std::make_unique<UIVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Loop);
+	colorAnimation = std::make_unique<UIColorVector4Animation>();
+	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
 	ward->SetUIAnimation(std::move(colorAnimation));
 	ward->PlayAnimation();
 
