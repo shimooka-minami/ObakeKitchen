@@ -6,7 +6,8 @@
 #include "UIBase.h"
 
 
-void UIBase::SetUIAnimation(std::unique_ptr<UIAnimationBase> animation) {
+void UIBase::SetUIAnimation(std::unique_ptr<UIAnimationBase> animation)
+{
 	animation->SetUI(this);
 	m_uiAnimationList.push_back(std::move(animation));
 }

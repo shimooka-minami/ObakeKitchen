@@ -440,7 +440,7 @@ void GameScene::Update()
 	m_timeKeeper->Update();									// 時間進める		// 29.0f;
 	m_uiTimer->SetTimer(m_timeKeeper->GetRemainingTime());	// 時間設定			// 30.0f
 
-	// �����X�y�[�X�ɓ�������A�{�^���̕\��
+	// 料理スペースとプレイヤーの距離感によってAボタンを表示
 	for (auto& coockingSpacePair : m_coockingSpacePairList)
 	{
 		if (coockingSpacePair.m_coockingSpace->IsNearPlayer())
@@ -453,7 +453,7 @@ void GameScene::Update()
 		}
 	}
 
-	// ���M���̃X�y�[�X�ɓ�������A�{�^���̕\��
+	// お皿箱スペースとプレイヤーの距離感によってAボタンを表示
 	for (auto& plateSpacePair : m_plateSpacePairList)
 	{
 		if (plateSpacePair.m_plateSpace->IsNearPlayer())
@@ -466,7 +466,7 @@ void GameScene::Update()
 		}
 	}
 
-	// �[�i��̃X�y�[�X�ɓ�������A�{�^���̕\��
+	// 納品場スペースとプレイヤーの距離感によってAボタンを表示
 	for (auto& deliverySpacePair : m_deliverySpacePairList)
 	{
 		if (deliverySpacePair.m_deliverySpace->IsNearPlayer())

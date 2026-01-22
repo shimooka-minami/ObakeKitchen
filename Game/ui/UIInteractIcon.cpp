@@ -9,6 +9,12 @@
 namespace
 {
 	constexpr float OFFSET_Y = 50.0f;
+
+	// 始めの位置
+	const Vector3 START_VEC = { 0.0f, -0.5f, 0.0f };
+
+	// 終わりの位置
+	const Vector3 END_VEC = { 0.0f, 0.5f, 0.0f };
 }
 
 
@@ -94,7 +100,7 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 		backGround->PlaySpriteAnimation();*/
 
 		auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
-		translateAnimation->SetParameter(Vector3(0.0f, -5.0f, 0.0f), Vector3(0.0f, 5.0f, 0.0f), 2.0f, EasingType::Linear, LoopMode::PingPong);
+		translateAnimation->SetParameter(START_VEC, END_VEC, 2.0f, EasingType::Linear, LoopMode::PingPong);
 		backGround->SetUIAnimation(std::move(translateAnimation));
 		backGround->PlayAnimation();
 	}
@@ -110,7 +116,7 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 		interactIcon->PlaySpriteAnimation();*/
 
 		auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
-		translateAnimation->SetParameter(Vector3(0.0f, -5.0f, 0.0f), Vector3(0.0f, 5.0f, 0.0f), 2.0f, EasingType::Linear, LoopMode::PingPong);
+		translateAnimation->SetParameter(START_VEC, END_VEC, 2.0f, EasingType::Linear, LoopMode::PingPong);
 		interactIcon->SetUIAnimation(std::move(translateAnimation));
 		interactIcon->PlayAnimation();
 	}
@@ -126,10 +132,10 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 		m_aButton->PlaySpriteAnimation();*/
 
 		auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
-		translateAnimation->SetParameter(Vector3(0.0f, -5.0f, 0.0f), Vector3(0.0f, 5.0f, 0.0f), 2.0f, EasingType::Linear, LoopMode::PingPong);
+		translateAnimation->SetParameter(START_VEC, END_VEC, 2.0f, EasingType::Linear, LoopMode::PingPong);
 		m_aButton->SetUIAnimation(std::move(translateAnimation));
 		m_aButton->PlayAnimation();
 	}
-
+	
 	m_position = position;
 }

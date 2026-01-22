@@ -72,7 +72,7 @@ protected:
 			m_type = type;
 			m_loopMode = loopMode;
 			/* 即時反映のためにPlayと同じ引き数でセット */
-			m_curve.Play(start, end, timeSec, type, loopMode);
+			//m_curve.Play(start, end, timeSec, type, loopMode);
 		}
 	
 		float GetCurrendtValue()
@@ -138,7 +138,7 @@ public:
 		m_timeSec = timeSec;
 		m_type = type;
 		m_loopMode = loopMode;
-		m_curve.Play(start, end, timeSec, type, loopMode);
+		//m_curve.Play(start, end, timeSec, type, loopMode);
 	}
 
 	/** アニメーション中の現在の値を取得 */
@@ -208,7 +208,7 @@ public:
 		m_timeSec = timeSec;
 		m_type = type;
 		m_loopMode = loopMode;
-		m_curve.Play(start, end, timeSec, type, loopMode);
+		//m_curve.Play(start, end, timeSec, type, loopMode);
 	}
 
 	Vector3 GetCurrentValue()
@@ -275,7 +275,7 @@ public:
 		m_timeSec = timeSec;
 		m_type = type;
 		m_loopMode = loopMode;
-		m_curve.Play(start, end, timeSec, type, loopMode);
+		//m_curve.Play(start, end, timeSec, type, loopMode);
 	}
 
 

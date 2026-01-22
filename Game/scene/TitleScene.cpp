@@ -196,9 +196,9 @@ bool TitleStartMenu::Start()
 	m_titleIcon = m_uiCanvas->CreateUI<UIIcon>();
 	m_titleIcon->Initialize("Assets/modelData/title/kanban.dds", 500.0f, 657.0f, Vector3(-600.0f, 250.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	{
-		/*auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
-		translateAnimation->SetParameter(Vector3::Zero, Vector3(0.0f,600.0f,0.0f), 300.0f, EasingType::Linear, LoopMode::Once);
-		m_titleIcon->SetUIAnimation(std::move(translateAnimation));*/
+		auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
+		translateAnimation->SetParameter(Vector3::Zero, Vector3(0.0f,600.0f,0.0f), 10.0f, EasingType::EaseInOut, LoopMode::Once);
+		m_titleIcon->SetUIAnimation(std::move(translateAnimation));
 		//m_titleIcon->PlayAnimation();
 
 	/*	std::vector<Vector3> targetTanslateList = { Vector3::Zero, Vector3(0.0f, 600.0f, 0.0f) };
@@ -230,18 +230,19 @@ bool TitleStartMenu::Start()
 
 void TitleStartMenu::Update()
 {
-	////if (!m_titleIcon->IsCompleted()) {
-	////	if (g_pad[0]->IsTrigger(enButtonA)) {
-	////		m_titleIcon->PlayAnimation();
-	////	}
-	////}
-	////else {
-	////	//m_isChange = true;
-	////}
+	/*if (!m_titleIcon->IsCompleted()) {
+		if (g_pad[0]->IsTrigger(enButtonA)) {
+			m_titleIcon->PlayAnimation();
+		}
+	}
+	else {
+		m_isChange = true;
+	}*/
 
-	//if (g_pad[0]->IsPress(enButtonA)) {
-	//	m_isChange = true;
-	//}
+	/*if (g_pad[0]->IsPress(enButtonA)) {
+		m_isChange = true;
+		m_titleIcon->PlayAnimation();
+	}*/
 
 	if (m_isChange) {
 		m_uiCanvas->Update();
@@ -251,10 +252,7 @@ void TitleStartMenu::Update()
 	if (!m_isPressed) {
 		if (g_pad[0]->IsTrigger(enButtonA)) {
 			m_isPressed = true;
-
-			auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
-			translateAnimation->SetParameter(Vector3::Zero, Vector3(0.0f, 40.0f, 0.0f), 0.5f, EasingType::Linear, LoopMode::Once);
-			m_titleIcon->SetUIAnimation(std::move(translateAnimation));
+			m_titleIcon->PlayAnimation();
 		}
 	}
 	else {
@@ -262,6 +260,8 @@ void TitleStartMenu::Update()
 			m_isChange = true;
 		}
 	}
+
+	
 
 	m_uiCanvas->Update();
 }
@@ -309,7 +309,7 @@ bool TitleSelectMenu::Start()
 	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
 	m_selectMenu->SetUIAnimation(std::move(colorAnimation));
 	m_selectMenu->PlayAnimation();
-
+	m_selectMenu->m_uiAnimationList.clear();
 	//std::vector<Vector4> targetAlphaList = { Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f) };
 	//std::vector<float> timeList = { 1.0f };
 	//auto* menuAnimation = new ColorSpriteAnimation(m_selectMenu->GetSpriteRender(), false, timeList, targetAlphaList);
