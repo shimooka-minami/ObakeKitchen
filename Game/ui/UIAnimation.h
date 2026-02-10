@@ -10,10 +10,12 @@ class UIBase;
 template <typename T> 
 using UIAnimationApplyFunc = std::function<void(const T&)>;
 
-class UIAnimationBase
+/** UIアニメーション基底クラス */
+class UIAnimationBase : public Noncopyable
 {
 protected:
 	UIBase* m_ui = nullptr;
+	float m_timeSec = 0.0f;
 
 
 public:
@@ -22,19 +24,22 @@ public:
 
 	virtual void Update() = 0;
 	virtual void Play() = 0;
+	virtual void Stop() = 0;
 	virtual bool IsPlay() = 0;
+	
 
 	void SetUI(UIBase* ui) { m_ui = ui; }
 };
 
 
+/** floatのアニメーション */
 class UIFloatAnimation :public UIAnimationBase {
 protected:
 		FloatCurve m_curve;
 		/** カーブ用のパラメーター */
 		float m_start = 0.0f;
 		float m_end = 0.0f;
-		float m_timeSec = 0.0f;
+		
 		EasingType m_type = EasingType::Linear;
 		LoopMode m_loopMode = LoopMode::Once;
 	
@@ -54,16 +59,25 @@ protected:
 			}
 		}
 	
+		/** 再生 */
 		void Play() override
 		{
-			m_curve.Play(m_start, m_end, m_timeSec, m_type, m_loopMode);
+			m_curve.Play();
+		}
+
+		/** 停止 */
+		void Stop() override
+		{
+			m_curve.Stop();
 		}
 	
+		/** 再生中か */
 		bool IsPlay() override
 		{
 			return m_curve.IsPlaying();
 		}
-	
+
+		/** UIアニメーションのパラメーターを設定 */
 		void SetParameter(float start, float end, float timeSec, EasingType type, LoopMode loopMode)
 		{
 			m_start = start;
@@ -73,13 +87,16 @@ protected:
 			m_loopMode = loopMode;
 			/* 即時反映のためにPlayと同じ引き数でセット */
 			//m_curve.Play(start, end, timeSec, type, loopMode);
+			m_curve.Initialize(m_start, m_end, m_timeSec, m_type, m_loopMode);
 		}
 	
+		/** アニメーション中の現在の値を取得 */
 		float GetCurrendtValue()
 		{
 			return m_curve.GetCurrentValue();
 		}
 	
+		/** アニメーション後の情報を適用する関数を設定 */
 		void SetFunc(const UIAnimationApplyFunc<float>& func)
 		{
 			m_applyFunc = func;
@@ -94,7 +111,7 @@ protected:
 	/** カーブ用のパラメーター */
 	Vector2 m_start = Vector2::Zero;
 	Vector2 m_end = Vector2::Zero;
-	float m_timeSec = 0.0f;
+	
 	EasingType m_type = EasingType::Linear;
 	LoopMode m_loopMode = LoopMode::Once;
 
@@ -113,21 +130,23 @@ public:
 		if (m_applyFunc) {
 			m_applyFunc(m_curve.GetCurrentValue());
 		}
-		else {
-			// Handle the error or log a message
-		}
 	}
 
 	/** 再生 */
 	void Play() override
 	{
-		m_curve.Play(m_start, m_end, m_timeSec, m_type, m_loopMode);
+		m_curve.Play();
 	}
 
 	/** 再生してるか */
 	bool IsPlay() override
 	{
 		return m_curve.IsPlaying();
+	}
+
+	/** 停止 */
+	void Stop() override {
+		m_curve.Stop();
 	}
 
 	/** UIアニメーションの情報を設定 */
@@ -139,6 +158,7 @@ public:
 		m_type = type;
 		m_loopMode = loopMode;
 		//m_curve.Play(start, end, timeSec, type, loopMode);
+
 	}
 
 	/** アニメーション中の現在の値を取得 */
@@ -193,12 +213,16 @@ public:
 
 	void Play() override
 	{
-		m_curve.Play(m_start, m_end, m_timeSec, m_type, m_loopMode);
+		m_curve.Play();
 	}
 
 	bool IsPlay() override
 	{
 		return m_curve.IsPlaying();
+	}
+
+	void Stop() override {
+		m_curve.Stop();
 	}
 
 	void SetParameter(Vector3 start, Vector3 end, float timeSec, EasingType type, LoopMode loopMode)
@@ -208,7 +232,7 @@ public:
 		m_timeSec = timeSec;
 		m_type = type;
 		m_loopMode = loopMode;
-		//m_curve.Play(start, end, timeSec, type, loopMode);
+		m_curve.Initialize(start, end, timeSec, type, loopMode);
 	}
 
 	Vector3 GetCurrentValue()
@@ -260,12 +284,16 @@ public:
 
 	void Play() override
 	{
-		m_curve.Play(m_start, m_end, m_timeSec, m_type, m_loopMode);
+		m_curve.Play();
 	}
 
 	bool IsPlay() override
 	{
 		return m_curve.IsPlaying();
+	}
+
+	void Stop() override {
+		m_curve.Stop();
 	}
 
 	void SetParameter(Vector4 start, Vector4 end, float timeSec, EasingType type, LoopMode loopMode)
@@ -275,7 +303,7 @@ public:
 		m_timeSec = timeSec;
 		m_type = type;
 		m_loopMode = loopMode;
-		//m_curve.Play(start, end, timeSec, type, loopMode);
+		m_curve.Initialize(start, end, timeSec, type, loopMode);
 	}
 
 
@@ -296,8 +324,8 @@ public:
 /*****************************************/
 
 
-//class UIQuaternionAnimation : public UIAnimationBase
-//{
+//{//class UIQuaternionAnimation : public UIAnimationBase
+
 //protected:
 //	Curve<float> m_curve;
 //	/** カーブ用のパラメーター */
@@ -397,12 +425,12 @@ public:
 //	}
 //};
 
-/** 色変更 */
-class UIColorVector4Animation : public UIVector4Animation
+/** カラーアニメーション */
+class UIColorAnimation : public UIVector4Animation
 {
 public:
-	UIColorVector4Animation();
-	~UIColorVector4Animation() {}
+	UIColorAnimation();
+	~UIColorAnimation() {}
 
 	void Update() override
 	{
@@ -414,33 +442,33 @@ public:
 
 
 
-//  /** 大きさ変更 */
-//  class UIScaleAnimation : public UIVector2Animation
-//  {
-//  public:
-//  	UIScaleAnimation();
-//  	~UIScaleAnimation() {}
-//  
-//  	void Update() override
-//  	{
-//  		m_curve.Update(g_gameTime->GetFrameDeltaTime());
-//  		m_applyFunc(m_curve.GetCurrentValue());
-//  	}
-//  };
+  /** 拡縮アニメーション */
+  class UIScaleAnimation : public UIVector3Animation
+  {
+  public:
+  	UIScaleAnimation();
+  	~UIScaleAnimation() {}
+  
+  	void Update() override
+  	{
+  		m_curve.Update(g_gameTime->GetFrameDeltaTime());
+  		m_applyFunc(m_curve.GetCurrentValue());
+  	}
+  };
 
 
-class UIScaleVector3Animation : public UIVector3Animation
-{
-public:
-	UIScaleVector3Animation();
-	~UIScaleVector3Animation() {}
-
-	void Update() override
-	{
-		m_curve.Update(g_gameTime->GetFrameDeltaTime());
-		m_applyFunc(m_curve.GetCurrentValue());
-	}
-};
+//class UIScaleVector3Animation : public UIVector3Animation
+//{
+//public:
+//	UIScaleVector3Animation();
+//	~UIScaleVector3Animation() {}
+//
+//	void Update() override
+//	{
+//		m_curve.Update(g_gameTime->GetFrameDeltaTime());
+//		m_applyFunc(m_curve.GetCurrentValue());
+//	}
+//};
 
 
 //  class UIScaleVector4Animation : public UIVector4Animation
@@ -474,12 +502,12 @@ public:
 //  };
 
 
-/** 座標変更 */
-class UITranslateVector3Aniamtion : public UIVector3Animation
+/** 座標アニメーション */
+class UITranslateAniamtion : public UIVector3Animation
 {
 public:
-	UITranslateVector3Aniamtion();
-	~UITranslateVector3Aniamtion() {}
+	UITranslateAniamtion();
+	~UITranslateAniamtion() {}
 
 	void Update() override
 	{
@@ -520,12 +548,12 @@ public:
 //  	}
 //  };
 
-/** 元座標との差分変更 */
-class UIOffsetVector3Animation : public UIVector3Animation
+/** 元座標との差分アニメーション */
+class UITranslateOffsetAnimation : public UIVector3Animation
 {
 public:
-	UIOffsetVector3Animation();
-	~UIOffsetVector3Animation() {}
+	UITranslateOffsetAnimation();
+	~UITranslateOffsetAnimation() {}
 
 	void Update() override
 	{
@@ -549,7 +577,7 @@ public:
 //  };
 
 
-/** 回転変更 */
+/** 回転アニメーション */
 class UIRotationAnimation : public UIFloatAnimation
 {
 public:
@@ -559,9 +587,10 @@ public:
 	void Update() override
 	{
 		m_curve.Update(g_gameTime->GetFrameDeltaTime());
+		m_applyFunc(m_curve.GetCurrentValue());
 
-		Quaternion tmpRot;
-		tmpRot.SetRotationDegZ(m_curve.GetCurrentValue());
+		/*Quaternion tmpRot;
+		tmpRot.SetRotationDegZ(m_curve.GetCurrentValue());*/
 
 		//float currentZAngle = m_curve.GetCurrentValue();
 		//m_applyFunc(m_curve.GetCurrentQuaternionValue());

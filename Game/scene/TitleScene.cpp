@@ -177,51 +177,32 @@ bool TitleStartMenu::Start()
 {
 	m_uiCanvas = std::make_unique<UICanvas>();
 	// スタートボタン表示生成
-	auto* startButtonIcon = m_uiCanvas->CreateUI<UIIcon>();
-	startButtonIcon->Initialize("Assets/modelData/title/push_a.dds", 300, 70, Vector3(0.0f, -150.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	auto* startButtonIcon = m_uiCanvas->CreateUI<UIIcon>(0);
+	startButtonIcon->Initialize("Assets/modelData/title/push_a.dds", 300, 70);
+	startButtonIcon->m_transform.m_localPosition = Vector3(0.0f, -150.0f, 0.0f);
 	{
-		auto colorAnimaiton = std::make_unique<UIColorVector4Animation>();
+		auto colorAnimaiton = std::make_unique<UIColorAnimation>();
 		colorAnimaiton->SetParameter(Vector4(0.6f, 0.6f, 0.6f, 0.4f), Vector4(0.8f, 0.8f, 0.8f, 1.0f), 1.5f, EasingType::Linear, LoopMode::PingPong);
-		startButtonIcon->SetUIAnimation(std::move(colorAnimaiton));
+		startButtonIcon->AddAnimation(Hash32("startButtonColorAnimation"), std::move(colorAnimaiton));
 		startButtonIcon->PlayAnimation();
-
-		/*std::vector<Vector4> targetAlphaList = { Vector4(0.8f, 0.8f, 0.8f, 1.0f), Vector4(0.6f, 0.6f, 0.6f, 0.4f), Vector4(0.8f, 0.8f, 0.8f, 1.0f) };
-		std::vector<float> timeList = { 0.8f,0.8f };
-		auto* buttonAnimation = new ColorSpriteAnimation(startButtonIcon->GetSpriteRender(), true, timeList, targetAlphaList);
-		startButtonIcon->AddSpriteAnimation(buttonAnimation);
-		startButtonIcon->PlaySpriteAnimation();*/
 	}
 
 	// タイトル表示生成
-	m_titleIcon = m_uiCanvas->CreateUI<UIIcon>();
-	m_titleIcon->Initialize("Assets/modelData/title/kanban.dds", 500.0f, 657.0f, Vector3(-600.0f, 250.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_titleIcon = m_uiCanvas->CreateUI<UIIcon>(1);
+	m_titleIcon->Initialize("Assets/modelData/title/kanban.dds", 500.0f, 657.0f);
+	m_titleIcon->m_transform.m_localPosition = Vector3(-600.0f, 250.0f, 0.0f);
 	{
-		auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
-		translateAnimation->SetParameter(Vector3::Zero, Vector3(0.0f,600.0f,0.0f), 10.0f, EasingType::EaseInOut, LoopMode::Once);
-		m_titleIcon->SetUIAnimation(std::move(translateAnimation));
+		auto translateAnimation = std::make_unique<UITranslateOffsetAnimation>();
+		translateAnimation->SetParameter(Vector3::Zero, Vector3(0.0f, 40.0f, 0.0f), 1.5f, EasingType::Linear, LoopMode::Once);
+		m_titleIcon->AddAnimation(Hash32("titleTranslateAnimation"), std::move(translateAnimation));
 		//m_titleIcon->PlayAnimation();
-
-	/*	std::vector<Vector3> targetTanslateList = { Vector3::Zero, Vector3(0.0f, 600.0f, 0.0f) };
-		std::vector<float> timeList = { 1.0f };
-		auto* titleAnimation = new TranslateOffsetSpriteAnimation(m_titleIcon->GetSpriteRender(), false, timeList, targetTanslateList, &m_titleIcon->m_transform);
-		m_titleIcon->AddSpriteAnimation(titleAnimation);*/
-
-		//std::vector<Vector3> targetTanslateList = { Vector3::Zero, Vector3(0.0f, 600.0f, 0.0f) };
-		//std::vector<float> timeList = { 1.0f };
-		//auto titleAnimation = std::make_unique<UIIcon>();
-		//titleAnimation->SetSpriteAnimation
 	}
 	{
-	/*	auto colorAnimation = std::make_unique<UIColorVector4Animation>();
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
 		colorAnimation->SetParameter(Vector4::White, Vector4(1.0f, 1.0f, 1.0f, 0.8f), 0.7f, EasingType::Linear, LoopMode::Once);
 		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.8f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 0.1f, EasingType::Linear, LoopMode::Once);
-		m_titleIcon->SetUIAnimation(std::move(colorAnimation));
-		m_titleIcon->PlayAnimation();*/
-
-		/*std::vector<Vector4> targetAlphaList = { Vector4::White, Vector4(1.0f, 1.0f, 1.0f, 0.8f), Vector4(1.0f, 1.0f, 1.0f, 0.0f) };
-		std::vector<float> timeList = { 0.7f, 0.1f };
-		auto* titleAnimation = new ColorSpriteAnimation(m_titleIcon->GetSpriteRender(), false, timeList, targetAlphaList);
-		m_titleIcon->AddSpriteAnimation(titleAnimation);*/
+		m_titleIcon->AddAnimation(Hash32("titleColorAnimation"), std::move(colorAnimation));
+		m_titleIcon->PlayAnimation();
 	}
 
 	return true;
@@ -256,7 +237,7 @@ void TitleStartMenu::Update()
 		}
 	}
 	else {
-		if (m_titleIcon->IsCompleted()) {
+		if (m_titleIcon->IsComplted()) {
 			m_isChange = true;
 		}
 	}
@@ -302,108 +283,93 @@ bool TitleSelectMenu::Start()
 	m_uiCanvas = std::make_unique<UICanvas>();
 
 	//// メニューの表示
-	m_selectMenu = m_uiCanvas->CreateUI<UIIcon>();
-	m_selectMenu->Initialize("Assets/modelData/menu/menu.dds", 800.0f, 1050.0f, Vector3(-450.0f, 0.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_selectMenu = m_uiCanvas->CreateUI<UIIcon>(0);
+	m_selectMenu->Initialize("Assets/modelData/menu/menu.dds", 800.0f, 1050.0f);
+	m_selectMenu->m_transform.m_localPosition = Vector3(-450.0f, 0.0f, 0.0f);
 	//// アニメーション
-	auto colorAnimation = std::make_unique<UIColorVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
-	m_selectMenu->SetUIAnimation(std::move(colorAnimation));
-	m_selectMenu->PlayAnimation();
-	m_selectMenu->m_uiAnimationList.clear();
-	//std::vector<Vector4> targetAlphaList = { Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f) };
-	//std::vector<float> timeList = { 1.0f };
-	//auto* menuAnimation = new ColorSpriteAnimation(m_selectMenu->GetSpriteRender(), false, timeList, targetAlphaList);
-	//m_selectMenu->AddSpriteAnimation(menuAnimation);
-	//m_selectMenu->PlaySpriteAnimation();
-	//m_selectMenu->GetSpriteRender()->SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
-
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
+		m_selectMenu->AddAnimation(Hash32("menuColorAnimation"), std::move(colorAnimation));
+		m_selectMenu->PlayAnimation();
+		//m_selectMenu->m_uiAnimationList.clear();
+	}
+	
 
 	//// ゲームスタート
-	auto* ward = m_uiCanvas->CreateUI<UIIcon>();
-	ward->Initialize("Assets/modelData/menu/gamestart.dds", 300.0f, 55.0f, Vector3(-450.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	auto* startWard = m_uiCanvas->CreateUI<UIIcon>(1);
+	startWard->Initialize("Assets/modelData/menu/gamestart.dds", 300.0f, 55.0f);
+	startWard->m_transform.m_localPosition = Vector3(-450.0f, 100.0f, 0.0f);
 	//// アニメーション
-	colorAnimation = std::make_unique<UIColorVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
-	ward->SetUIAnimation(std::move(colorAnimation));
-	ward->PlayAnimation();
-
-	//auto* wordAnimation = new ColorSpriteAnimation(ward->GetSpriteRender(), false, timeList, targetAlphaList);
-	//ward->AddSpriteAnimation(wordAnimation);
-	//ward->PlaySpriteAnimation();
-	//ward->GetSpriteRender()->SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
-
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
+		startWard->AddAnimation(Hash32("startWardColorAnimation"), std::move(colorAnimation));
+		startWard->PlayAnimation();
+	}
+	
 	//// 操作方法
-	ward = m_uiCanvas->CreateUI<UIIcon>();
-	ward->Initialize("Assets/modelData/menu/sousahoho.dds", 300.0f, 55.0f, Vector3(-450.0f, 0.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	auto guideWard = m_uiCanvas->CreateUI<UIIcon>(2);
+	guideWard->Initialize("Assets/modelData/menu/sousahoho.dds", 300.0f, 55.0f);
+	guideWard->m_transform.m_localPosition = Vector3(-450.0f, 0.0f, 0.0f);
 	//// アニメーション
-	colorAnimation = std::make_unique<UIColorVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
-	ward->SetUIAnimation(std::move(colorAnimation));
-	ward->PlayAnimation();
-
-	//wordAnimation = new ColorSpriteAnimation(ward->GetSpriteRender(), false, timeList, targetAlphaList);
-	//ward->AddSpriteAnimation(wordAnimation);
-	//ward->PlaySpriteAnimation();
-	//ward->GetSpriteRender()->SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
-
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
+		guideWard->AddAnimation(Hash32("guideWardColorAnimation"), std::move(colorAnimation));
+		guideWard->PlayAnimation();
+	}
+	
 	//// 設定
-	ward = m_uiCanvas->CreateUI<UIIcon>();
-	ward->Initialize("Assets/modelData/menu/settei.dds", 300.0f, 55.0f, Vector3(-450.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	auto settingWard = m_uiCanvas->CreateUI<UIIcon>(3);
+	settingWard->Initialize("Assets/modelData/menu/settei.dds", 300.0f, 55.0f);
+	settingWard->m_transform.m_localPosition = Vector3(-450.0f, -100.0f, 0.0f);
 	//// アニメーション
-	colorAnimation = std::make_unique<UIColorVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
-	ward->SetUIAnimation(std::move(colorAnimation));
-	ward->PlayAnimation();
-
-	//wordAnimation = new ColorSpriteAnimation(ward->GetSpriteRender(), false, timeList, targetAlphaList);
-	//ward->AddSpriteAnimation(wordAnimation);
-	//ward->PlaySpriteAnimation();
-	//ward->GetSpriteRender()->SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
-
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
+		settingWard->AddAnimation(Hash32("settingWardColorAnimation"), std::move(colorAnimation));
+		settingWard->PlayAnimation();
+	}
+	
 	//// おわり
-	ward = m_uiCanvas->CreateUI<UIIcon>();
-	ward->Initialize("Assets/modelData/menu/owaru.dds", 300.0f, 55.0f, Vector3(-450.0f, -200.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	auto endWard = m_uiCanvas->CreateUI<UIIcon>(4);
+	endWard->Initialize("Assets/modelData/menu/owaru.dds", 300.0f, 55.0f);
+	endWard->m_transform.m_localPosition = Vector3(-450.0f, -200.0f, 0.0f);
 	//// アニメーション
-	colorAnimation = std::make_unique<UIColorVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
-	ward->SetUIAnimation(std::move(colorAnimation));
-	ward->PlayAnimation();
-
-	//wordAnimation = new ColorSpriteAnimation(ward->GetSpriteRender(), false, timeList, targetAlphaList);
-	//ward->AddSpriteAnimation(wordAnimation);
-	//ward->PlaySpriteAnimation();
-	//ward->GetSpriteRender()->SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
-
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
+		endWard->AddAnimation(Hash32("endWardColorAnimation"), std::move(colorAnimation));
+		endWard->PlayAnimation();
+	}
+	
 	//// 羽ペン
-	m_penPosition = Vector3(-250.0f, 120.0f, 0.0f);
-	m_hanePen = m_uiCanvas->CreateUI<UIIcon>();
-	m_hanePen->Initialize("Assets/modelData/menu/hane.dds", 80.0f, 106.0f, m_penPosition, Vector3::One, Quaternion::Identity);
+	// @ todo for test もしかしたら線とペンの位置が動かないかも...m_ooPositionの変数を参照して直してくれな まかせたぞ！！
+	m_hanePen = m_uiCanvas->CreateUI<UIIcon>(5);
+	m_hanePen->Initialize("Assets/modelData/menu/hane.dds", 80.0f, 106.0f);
+	m_hanePen->m_transform.m_localPosition = Vector3(-250.0f, 120.0f, 0.0f);
 	//// アニメーション
-	colorAnimation = std::make_unique<UIColorVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
-	ward->SetUIAnimation(std::move(colorAnimation));
-	ward->PlayAnimation();
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
+		m_hanePen->AddAnimation(Hash32("hanePenColorAnimation"), std::move(colorAnimation));
+		m_hanePen->PlayAnimation();
+	}
+	
 
-	//menuAnimation = new ColorSpriteAnimation(m_hanePen->GetSpriteRender(), false, timeList, targetAlphaList);
-	//m_hanePen->AddSpriteAnimation(menuAnimation);
-	//m_hanePen->PlaySpriteAnimation();
-	//m_hanePen->GetSpriteRender()->SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
-
-	//// 線
+	//// 線 
 	m_senPosition = Vector3(-450.0f, 65.0f, 0.0f);
-	m_sen = m_uiCanvas->CreateUI<UIIcon>();
-	m_sen->Initialize("Assets/modelData/menu/sen.dds", 250.0f, 11.0f, m_senPosition, Vector3::One, Quaternion::Identity);
+	m_sen = m_uiCanvas->CreateUI<UIIcon>(6);
+	m_sen->Initialize("Assets/modelData/menu/sen.dds", 250.0f, 11.0f);
+	m_sen->m_transform.m_localPosition = Vector3(-450.0f, 65.0f, 0.0f);
 	//// アニメーション
-	colorAnimation = std::make_unique<UIColorVector4Animation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
-	ward->SetUIAnimation(std::move(colorAnimation));
-	ward->PlayAnimation();
-
-	//menuAnimation = new ColorSpriteAnimation(m_sen->GetSpriteRender(), false, timeList, targetAlphaList);
-	//m_sen->AddSpriteAnimation(menuAnimation);
-	//m_sen->PlaySpriteAnimation();
-	//m_sen->GetSpriteRender()->SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
-
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
+		m_sen->AddAnimation(Hash32("senTranslateAnimation"),std::move(colorAnimation));
+		m_sen->PlayAnimation();
+	}
 	return true;
 }
 
@@ -447,7 +413,7 @@ void TitleSelectMenu::Update()
 		}
 	}
 	else {
-		if (m_selectMenu->IsCompleted()) {
+		if (m_selectMenu->IsComplted()) {
 			m_isChange = true;
 		}
 	}
@@ -470,19 +436,20 @@ bool TitleSelectMenu::CanChange(int& request)
 		{
 		case enSelectMenuType_GameStart:
 		{
-			// TODO: プレイ人数選択にしたい
+			// プレイ人数選択
 			//TitleScene::SetStartGame(true);
 			request = enTitleMenuType_Play;
 			return true;
 		}
 		case enSelectMenuType_Operation:
 		{
+			//コントローラーの説明が見れる
 			request = enTitleMenuType_Cotrol;
 			return true;
 		}
 		case enSelectMenuType_Setting:
 		{
-			// 設定画面は未実装
+			// おばけの性格を変更できる
 			request = enTitleMenuType_Setting;
 			return true;
 		}
@@ -524,52 +491,68 @@ bool TitlePlayerSelectMenu::Start()
 	m_uiCanvas = std::make_unique<UICanvas>();
 
 	// プレイヤー人数
-	auto* playerBack = m_uiCanvas->CreateUI<UIIcon>();
-	playerBack->Initialize("Assets/modelData/menu/player_num.dds", 1700.0f, 1050.0f, Vector3::Zero, Vector3::One, Quaternion::Identity);
+	auto* playerBack = m_uiCanvas->CreateUI<UIIcon>(0);
+	playerBack->Initialize("Assets/modelData/menu/player_num.dds", 1700.0f, 1050.0f);
+	playerBack->m_transform.m_localPosition = Vector3::Zero;
 
-	//
+	// おばけとプレイヤーナンバーの初期化
 	for (int i = 0; i < MAX_PLAYER_NUM; i++)
 	{
 		// おばけ
-		m_playerObake[i] = m_uiCanvas->CreateUI<UIIcon>();
-		m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].playerPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight, titlePlayerSpriteInfoList[i].playerPosition,Vector3::One,Quaternion::Identity);
+		m_playerObake[i] = m_uiCanvas->CreateUI<UIIcon>(1);
+		m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].playerPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight);
+		m_playerObake[i]->m_transform.m_localPosition = Vector3(titlePlayerSpriteInfoList[i].playerPosition);
 		// プレイヤーナンバー
-		m_playerNumber[i] = m_uiCanvas->CreateUI<UIIcon>();
-		m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].iconPath.c_str(), titleIconSpriteInfoList[i].npcWidth, titleIconSpriteInfoList[i].npcHight, titleIconSpriteInfoList[i].iconPosition,Vector3::One,Quaternion::Identity);
+		m_playerNumber[i] = m_uiCanvas->CreateUI<UIIcon>(2);
+		m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].iconPath.c_str(), titleIconSpriteInfoList[i].npcWidth, titleIconSpriteInfoList[i].npcHight);
+		m_playerNumber[i]->m_transform.m_localPosition = Vector3(titleIconSpriteInfoList[i].iconPosition);
 	}
 
 
 	// おばけ
-	m_playerObake[0] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerObake[0]->Initialize("Assets/modelData/menu/obake_hansup.dds", 300.0f, 300.0f, Vector3(-250.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_playerObake[0] = m_uiCanvas->CreateUI<UIIcon>(3);
+	m_playerObake[0]->Initialize("Assets/modelData/menu/obake_hansup.dds", 300.0f, 300.0f);
+	m_playerObake[0]->m_transform.m_localPosition = Vector3(-250.0f, -100.0f, 0.0f);
+	
 	// プレイヤーナンバー
-	m_playerNumber[0] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerNumber[0]->Initialize("Assets/modelData/UI/player/1P.dds", 125.0f, 75.0f, Vector3(-250.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_playerNumber[0] = m_uiCanvas->CreateUI<UIIcon>(4);
+	m_playerNumber[0]->Initialize("Assets/modelData/UI/player/1P.dds", 125.0f, 75.0f);
+	m_playerNumber[0]->m_transform.m_localPosition = Vector3(-250.0f, 100.0f, 0.0f);
 
 	// おばけ
-	m_playerObake[1] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerObake[1]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3(50.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_playerObake[1] = m_uiCanvas->CreateUI<UIIcon>(5);
+	m_playerObake[1]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f);
+	m_playerObake[1]->m_transform.m_localPosition = Vector3(50.0f, -100.0f, 0.0f);
+	
 	// プレイヤーナンバー
-	m_playerNumber[1] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerNumber[1]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f, Vector3(50.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_playerNumber[1] = m_uiCanvas->CreateUI<UIIcon>(6);
+	m_playerNumber[1]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f);
+	m_playerNumber[1]->m_transform.m_localPosition = Vector3(50.0f, 100.0f, 0.0f);
 
 	// おばけ
-	m_playerObake[2] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerObake[2]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3(350.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_playerObake[2] = m_uiCanvas->CreateUI<UIIcon>(7);
+	m_playerObake[2]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f);
+	m_playerObake[2]->m_transform.m_localPosition = Vector3(350.0f, -100.0f, 0.0f);
+
 	// プレイヤーナンバー
-	m_playerNumber[2] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerNumber[2]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f, Vector3(350.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_playerNumber[2] = m_uiCanvas->CreateUI<UIIcon>(8);
+	m_playerNumber[2]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f);
+	m_playerNumber[2]->m_transform.m_localPosition = Vector3(350.0f, 100.0f, 0.0f);
 
 	// おばけ
-	m_playerObake[3] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerObake[3]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f, Vector3(650.0f, -100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_playerObake[3] = m_uiCanvas->CreateUI<UIIcon>(9);
+	m_playerObake[3]->Initialize("Assets/modelData/menu/karioba.dds", 300.0f, 300.0f);
+	m_playerObake[3]->m_transform.m_localPosition = Vector3(650.0f, -100.0f, 0.0f);
+	
 	// プレイヤーナンバー
-	m_playerNumber[3] = m_uiCanvas->CreateUI<UIIcon>();
-	m_playerNumber[3]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f, Vector3(650.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_playerNumber[3] = m_uiCanvas->CreateUI<UIIcon>(10);
+	m_playerNumber[3]->Initialize("Assets/modelData/UI/player/npc.dds", 200.0f, 110.0f);
+	m_playerNumber[3]->m_transform.m_localPosition = Vector3(650.0f, 100.0f, 0.0f);
 
 	// もどる
-	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>();
-	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f, Vector3(-665.0f, -300.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>(11);
+	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f);
+	m_backObake->m_transform.m_localPosition = Vector3(-665.0f, -300.0f, 0.0f);
 
 	return true;
 }
@@ -594,23 +577,30 @@ void TitlePlayerSelectMenu::Update()
 		if (m_isPlayerConected[i])
 		{
 			// おばけの手が上がる
-			m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].upPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight, titlePlayerSpriteInfoList[i].playerPosition, Vector3::One, Quaternion::Identity);
+			m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].upPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight);
+			m_playerObake[i]->m_transform.m_localPosition = Vector3(titlePlayerSpriteInfoList[i].playerPosition);
+			
 			// プレイヤー人数が増える
-			m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].selectedIconPath.c_str(), titleIconSpriteInfoList[i].npcWidth, titleIconSpriteInfoList[i].npcHight, titleIconSpriteInfoList[i].iconPosition, Vector3::One, Quaternion::Identity);
+			m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].selectedIconPath.c_str(), titleIconSpriteInfoList[i].npcWidth, titleIconSpriteInfoList[i].npcHight);
+			m_playerNumber[i]->m_transform.m_localPosition = Vector3(titleIconSpriteInfoList[i].iconPosition);
 		}
 		else {
 			// おばけの手がさがる
-			m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].playerPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight, titlePlayerSpriteInfoList[i].playerPosition, Vector3::One, Quaternion::Identity);
+			m_playerObake[i]->Initialize(titlePlayerSpriteInfoList[i].playerPath.c_str(), titlePlayerSpriteInfoList[i].width, titlePlayerSpriteInfoList[i].hight);
+			m_playerObake[i]->m_transform.m_localPosition = Vector3(titlePlayerSpriteInfoList[i].playerPosition);
+
 			// プレイヤー人数が減る
-			m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].iconPath.c_str(), titleIconSpriteInfoList[i].npcWidth, titleIconSpriteInfoList[i].npcHight, titleIconSpriteInfoList[i].iconPosition, Vector3::One, Quaternion::Identity);
+			m_playerNumber[i]->Initialize(titleIconSpriteInfoList[i].iconPath.c_str(), titleIconSpriteInfoList[i].npcWidth, titleIconSpriteInfoList[i].npcHight);
+			m_playerNumber[i]->m_transform.m_localPosition = Vector3(titleIconSpriteInfoList[i].iconPosition);
 		}
 	}
 
-	// インゲームに行く
-	if (g_pad[0]->IsTrigger(enButtonA))
-	{
-		TitleScene::SetStartGame(true);
-	}
+	//// インゲームに行く
+	//if (g_pad[0]->IsTrigger(enButtonA))
+	//{
+	//	//TitleScene::SetStartGame(true);
+	//	request = enTitleMenuType_StartTab;
+	//}
 
 	// 戻る
 	if (!m_isBack)
@@ -631,6 +621,14 @@ void TitlePlayerSelectMenu::Render(RenderContext& rc)
 
 bool TitlePlayerSelectMenu::CanChange(int& request)
 {
+	// スタートタブ
+	if (g_pad[0]->IsTrigger(enButtonA))
+	{
+		//TitleScene::SetStartGame(true);
+		request = enTitleMenuType_StartTab;
+		return true;
+	}
+
 	if (m_isBack) {
 		request = enTitleMenuType_Select;
 		return true;
@@ -659,11 +657,14 @@ bool TitleControlGuide::Start()
 {
 	m_uiCanvas = std::make_unique<UICanvas>();
 	// 操作方法
-	auto* controlGuide = m_uiCanvas->CreateUI<UIIcon>();
-	controlGuide->Initialize("Assets/modelData/menu/contlloer.dds", 1700.0f, 1050.0f, Vector3::Zero, Vector3::One, Quaternion::Identity);
+	auto* controlGuide = m_uiCanvas->CreateUI<UIIcon>(1);
+	controlGuide->Initialize("Assets/modelData/menu/contlloer.dds", 1700.0f, 1050.0f);
+	controlGuide->m_transform.m_localPosition = Vector3::Zero;
+
 	// もどる
-	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>();
-	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f, Vector3(-665.0f, -300.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>(2);
+	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f);
+	m_backObake->m_transform.m_localPosition = Vector3(-665.0f, -300.0f, 0.0f);
 
 	return true;
 }
@@ -712,23 +713,27 @@ bool TitleSetting::Start()
 {
 	m_uiCanvas = std::make_unique<UICanvas>();
 	// npcのタイプ設定
-	auto* controlGuide = m_uiCanvas->CreateUI<UIIcon>();
-	controlGuide->Initialize("Assets/modelData/menu/seikaku.dds", 1700.0f, 1050.0f, Vector3::Zero, Vector3::One, Quaternion::Identity);
+	auto* controlGuide = m_uiCanvas->CreateUI<UIIcon>(0);
+	controlGuide->Initialize("Assets/modelData/menu/seikaku.dds", 1700.0f, 1050.0f);
+	controlGuide->m_transform.m_localPosition = Vector3::Zero;
 
 	//npc
 	for (int i = 0; i < NPC_TYPE_NUM; i++)
 	{
 		// おばけ
-		m_npcTypeObake[i] = m_uiCanvas->CreateUI<UIIcon>();
-		m_npcTypeObake[i]->Initialize(titleNPCTypeSpriteInfoList[i].typePath.c_str(), titleNPCTypeSpriteInfoList[i].width, titleNPCTypeSpriteInfoList[i].hight, titleNPCTypeSpriteInfoList[i].npcPosition, Vector3::One, Quaternion::Identity);
+		m_npcTypeObake[i] = m_uiCanvas->CreateUI<UIIcon>(1);
+		m_npcTypeObake[i]->Initialize(titleNPCTypeSpriteInfoList[i].typePath.c_str(), titleNPCTypeSpriteInfoList[i].width, titleNPCTypeSpriteInfoList[i].hight);
+		m_npcTypeObake[i]->m_transform.m_localPosition = Vector3(titleNPCTypeSpriteInfoList[i].npcPosition);
+
 		// 性格
-		m_npcTypeIcon[i] = m_uiCanvas->CreateUI<UIIcon>();
-		m_npcTypeIcon[i]->Initialize(titleNPCIconSpriteInfoList[i].npcIconPath.c_str(), titleNPCIconSpriteInfoList[i].width, titleNPCIconSpriteInfoList[i].hight, titleNPCIconSpriteInfoList[i].npcIconPosition, Vector3::One, Quaternion::Identity);
-	}
+		m_npcTypeIcon[i] = m_uiCanvas->CreateUI<UIIcon>(2);
+		m_npcTypeIcon[i]->Initialize(titleNPCIconSpriteInfoList[i].npcIconPath.c_str(), titleNPCIconSpriteInfoList[i].width, titleNPCIconSpriteInfoList[i].hight);
+	}	m_npcTypeIcon[i]->m_transform.m_localposition = Vector3(titleNPCIconSpriteInfoList[i].npcIconPosition);
 
 	// もどる
-	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>();
-	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f, Vector3(-665.0f, -300.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>(3);
+	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f);
+	m_backObake->m_transform.m_localPosition = Vector3(-665.0f, -300.0f, 0.0f);
 
 	return true;
 }
@@ -764,11 +769,13 @@ void TitleSetting::Update()
 		if (m_isNPCConected[i])
 		{
 			// おばけの手が上がる
-			m_npcTypeObake[i]->Initialize(titleNPCTypeSpriteInfoList[i].selectedTypePath.c_str(), titleNPCTypeSpriteInfoList[i].width, titleNPCTypeSpriteInfoList[i].hight, titleNPCTypeSpriteInfoList[i].npcPosition, Vector3::One, Quaternion::Identity);
+			m_npcTypeObake[i]->Initialize(titleNPCTypeSpriteInfoList[i].selectedTypePath.c_str(), titleNPCTypeSpriteInfoList[i].width, titleNPCTypeSpriteInfoList[i].hight);
+			m_npcTypeObake[i]->m_transform.m_localPosition = Vector3(titleNPCTypeSpriteInfoList[i].npcPosition);
 		}
 		else {
 			// おばけの手がさがる
-			m_npcTypeObake[i]->Initialize(titleNPCTypeSpriteInfoList[i].typePath.c_str(), titleNPCTypeSpriteInfoList[i].width, titleNPCTypeSpriteInfoList[i].hight, titleNPCTypeSpriteInfoList[i].npcPosition, Vector3::One, Quaternion::Identity);
+			m_npcTypeObake[i]->Initialize(titleNPCTypeSpriteInfoList[i].typePath.c_str(), titleNPCTypeSpriteInfoList[i].width, titleNPCTypeSpriteInfoList[i].hight);
+			m_npcTypeObake[i]->m_transform.m_localPosition = Vector3(titleNPCTypeSpriteInfoList[i].npcPosition);
 		}
 	}
 
@@ -817,6 +824,235 @@ bool TitleSetting::CanChange(int& request)
 	
 	return false;
 }
+
+
+
+
+/**************************************************/
+
+
+SelectTab::SelectTab()
+{
+}
+
+SelectTab::~SelectTab()
+{
+}
+
+
+bool SelectTab::Start()
+{
+	m_uiCanvas = std::make_unique<UICanvas>();
+
+
+	// 簡易的にフェードを付ける
+	auto* simpleFade = m_uiCanvas->CreateUI<UIIcon>(0);
+	simpleFade->Initialize("Assets/modelData/tab/fade_tab.dds", 1920.0f, 1080.0f);
+	simpleFade->m_transform.m_localPosition = Vector3::Zero;
+
+	// タブの背景画像
+	auto* backTab = m_uiCanvas->CreateUI<UIIcon>(1);
+	backTab->Initialize("Assets/modelData/tab/back_tab.dds", 1000.0f, 500.0f);
+	backTab->m_transform.m_localPosition = Vector3::Zero;
+	// アニメーション
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
+		backTab->AddAnimation(Hash32("backTabColorAnimation"),std::move(colorAnimation));
+		backTab->PlayAnimation();
+	}
+	
+	//// 選択ボタン1
+	//auto* button = m_uiCanvas->CreateUI<UIIcon>();
+	m_yesButton = m_uiCanvas->CreateUI<UIIcon>(2);
+	m_yesButton->Initialize("Assets/modelData/tab/button_tab.dds", 400.0f, 153.0f);
+	m_yesButton->m_transform.m_localPosition = Vector3(-250.0f, -90.0f, 0.0f);
+	// アニメーション
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.2f, EasingType::EaseIn, LoopMode::Once);
+		m_yesButton->AddAnimation(Hash32("m_yesButtonColorAnimation"),std::move(colorAnimation));
+		m_yesButton->PlayAnimation();
+		m_yesButton->m_uiAnimationList.clear();
+	}
+	//選択中のスケールアニメーション
+	{
+		auto scaleAnimation = std::make_unique<UIVector3Animation>();
+		scaleAnimation->SetParameter(Vector3::One, Vector3(1.2f, 1.2f, 1.2f), 0.2f, EasingType::EaseIn, LoopMode::Once);
+		//m_yesButton->SetUIAnimation(std::move(scaleAnimation));
+	}
+
+	//// 選択ボタン2
+	m_noButton = m_uiCanvas->CreateUI<UIIcon>(3);
+	m_noButton->Initialize("Assets/modelData/tab/button_tab.dds", 400.0f, 153.0f, Vector3( 250.0f, -90.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	// アニメーション
+	{
+		// colorAnimation = std::make_unique<UIColorVector4Animation>();
+		// colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
+		// m_button[1]->SetUIAnimation(std::move(colorAnimation));
+		//m_button[1]->PlayAnimation();
+	}
+	//選択中のスケールアニメーション
+	{
+		auto scaleAnimation = std::make_unique<UIVector3Animation>();
+		scaleAnimation->SetParameter(Vector3::One, Vector3(1.2f, 1.2f, 1.2f), 0.2f, EasingType::EaseIn, LoopMode::Once);
+		//m_noButton->SetUIAnimation(std::move(scaleAnimation));
+	}
+
+
+	//// プレイする？
+	auto* wardTab = m_uiCanvas->CreateUI<UIIcon>(4);
+	wardTab->Initialize("Assets/modelData/tab/play_tab.dds", 800.0f, 60.0f, Vector3(0.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	// アニメーション
+	colorAnimation = std::make_unique<UIColorAnimation>();
+	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
+	//wardTab->SetUIAnimation(std::move(colorAnimation));
+	wardTab->PlayAnimation();
+
+	//// 左 いいえ
+	wardTab = m_uiCanvas->CreateUI<UIIcon>(4);
+	wardTab->Initialize("Assets/modelData/tab/iie_tab.dds", 150.0f, 46.0f, Vector3(-250.0f, -90.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	// アニメーション
+	colorAnimation = std::make_unique<UIColorAnimation>();
+	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
+	//wardTab->SetUIAnimation(std::move(colorAnimation));
+	wardTab->PlayAnimation();
+
+	//// 右 はい
+	wardTab = m_uiCanvas->CreateUI<UIIcon>(4);
+	wardTab->Initialize("Assets/modelData/tab/hai_tab.dds", 100.0f, 44.0f, Vector3(250.0f, -90.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	// アニメーション
+	colorAnimation = std::make_unique<UIColorAnimation>();
+	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
+	//wardTab->SetUIAnimation(std::move(colorAnimation));
+	wardTab->PlayAnimation();
+
+	//// 選択している枠
+	m_wakuTabPosition = Vector3(-250.0f, -90.0f, 0.0f);
+	m_wakuTabScale = Vector3::One;
+	m_wakuTab = m_uiCanvas->CreateUI<UIIcon>(5);
+	m_wakuTab->Initialize("Assets/modelData/tab/waku_tab.dds", 400.0f, 153.0f, m_wakuTabPosition, m_wakuTabScale, Quaternion::Identity);
+	// カラーアニメーション
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 0.2f, EasingType::EaseIn, LoopMode::Once);
+		//m_wakuTab->SetUIAnimation(std::move(colorAnimation));
+	}
+	//スケールアニメーション
+	{
+		m_wakuTabuScaleAnimation = std::make_unique<UIScaleAnimation>();
+		m_wakuTabuScaleAnimation->SetParameter(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.2f, 1.2f, 1.2f), 0.2f, EasingType::EaseIn, LoopMode::Once);
+		//m_wakuTab->SetUIAnimation(std::move(m_wakuTabuScaleAnimation));
+	}
+	m_wakuTab->PlayAnimation();
+	
+
+	return true;
+}
+
+void SelectTab::Update()
+{
+	// ゲームをスタートするか選択する
+	int oldIndex = m_currentTabSelectindex;
+	UpdateSelectTabIndex();
+	
+
+	// 枠の座標を変える
+	m_wakuTab->m_transform.m_localPosition = m_wakuTabPosition + (Vector3(500.0f, 0.0f, 0.0f) * m_currentTabSelectindex);
+
+	// 選択に変更があったか
+	if (oldIndex != m_currentTabSelectindex)
+	{
+		m_yesButton->m_transform.m_localScale = Vector3::One;
+		m_noButton->m_transform.m_localScale = Vector3::One;
+		m_wakuTab->m_transform.m_localScale = Vector3::One;
+		m_yesButton->StopSpriteAnimation();
+		m_noButton->StopSpriteAnimation();
+		m_wakuTab->StopSpriteAnimation();
+		if (m_currentTabSelectindex == enSelectTab_Yes)
+		{
+			m_yesButton->PlayAnimation();
+			m_wakuTab->PlayAnimation();
+		}
+		else if (m_currentTabSelectindex == enSelectTab_No)
+		{
+			m_noButton->PlayAnimation();
+			m_wakuTab->PlayAnimation();
+		}
+	}
+
+
+	//if (!m_isPlayAnimation) {
+	//	if (g_pad[0]->IsTrigger(enButtonA)) {
+	//		m_yesButton->PlayAnimation();
+	//		m_isPlayAnimation = true;
+	//	}
+	//}
+	//else {
+	//	if (m_yesButton->IsCompleted()) {
+	//		//m_isChange = true;
+	//	}
+	//}
+
+	m_uiCanvas->Update();
+}
+
+void SelectTab::Render(RenderContext& rc)
+{
+	m_uiCanvas->Render(rc);
+}
+
+bool SelectTab::CanChange(int& reqest)
+{
+	// itranaikkamo
+
+	/*if (m_isBack) {
+		request = enTitleMenuType_Select;
+		return true;
+	}*/
+
+	if (m_isChange)
+	{
+		switch (m_currentTabSelectindex)
+		{
+		case enSelectTab_No:
+			reqest = enTitleMenuType_Play;
+			break;
+		case enSelectTab_Yes:
+			TitleScene::SetStartGame(true);
+			break;
+		default:
+			K2_ASSERT(false, "未実装");
+			break;
+		}
+	}
+
+	return false;
+}
+
+
+void SelectTab::UpdateSelectTabIndex()
+{
+	if (g_pad[0]->IsTrigger(enButtonLeft))
+	{
+		--m_currentTabSelectindex;
+		// 最小値
+		if (m_currentTabSelectindex < enSelectTab_No)
+		{
+			m_currentTabSelectindex = enSelectTab_No; //範囲外にならないように調整
+		}
+	}
+	else if (g_pad[0]->IsTrigger(enButtonRight))
+	{
+		++m_currentTabSelectindex;
+		// 最大値
+		if (m_currentTabSelectindex >= enSelectTab_Yes)
+		{
+			m_currentTabSelectindex = enSelectTab_Yes; //範囲外にならないように調整
+		}
+	}
+}
+
 
 
 
@@ -937,7 +1173,7 @@ bool TitleScene::RequestScene(uint32_t& id, float& waitTime)
 
 void TitleScene::ChangeTitleMenu()
 {
-	ITtitleMenu* titleMenu = nullptr;
+	ITitleMenu* titleMenu = nullptr;
 	switch (m_currentMenu)
 	{
 	case enTitleMenuType_Start:
@@ -953,6 +1189,11 @@ void TitleScene::ChangeTitleMenu()
 	case enTitleMenuType_Play:
 	{
 		titleMenu = new TitlePlayerSelectMenu;
+		break;
+	}
+	case enTitleMenuType_StartTab:
+	{
+		titleMenu = new SelectTab();
 		break;
 	}
 	case enTitleMenuType_Cotrol:
@@ -971,5 +1212,5 @@ void TitleScene::ChangeTitleMenu()
 	}
 	}
 	titleMenu->Start();
-	m_titleMenu = std::unique_ptr<ITtitleMenu>(titleMenu);
+	m_titleMenu = std::unique_ptr<ITitleMenu>(titleMenu);
 }

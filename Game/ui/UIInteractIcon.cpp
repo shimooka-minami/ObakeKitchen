@@ -91,7 +91,7 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 
 	// 吹き出し
 	Vector3 backGroundPosition = type == enInteractType_Cooking ? Vector3::Zero : Vector3(100.0f, 0.0f, 0.0f);
-	auto* backGround = m_uiCanvas->CreateUI<UIIcon>();
+	auto backGround = m_uiCanvas->CreateUI<UIIcon>(0);
 	backGround->Initialize(backPath.c_str(), 100.0f, 100.0f, backGroundPosition, Vector3::One, Quaternion::Identity);
 	{
 		/*auto* render = backGround->GetSpriteRender();
@@ -99,15 +99,16 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 		backGround->AddSpriteAnimation(translateSpriteAnimation);
 		backGround->PlaySpriteAnimation();*/
 
-		auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
+		/** TODO:　動作チェックテスト */
+		auto translateAnimation = std::make_unique<UIVector3Animation>();
 		translateAnimation->SetParameter(START_VEC, END_VEC, 2.0f, EasingType::Linear, LoopMode::PingPong);
-		backGround->SetUIAnimation(std::move(translateAnimation));
+		//backGround->SetUIAnimation(std::move(translateAnimation));
 		backGround->PlayAnimation();
 	}
 
 	// インタラクトアイコン
 	Vector3 interactPosition = type == enInteractType_Cooking ? Vector3(-5.0f, 3.0f, 0.0f) : Vector3(100.0f, 5.0f, 0.0f);
-	auto* interactIcon = m_uiCanvas->CreateUI<UIIcon>();
+	auto interactIcon = m_uiCanvas->CreateUI<UIIcon>(1);
 	interactIcon->Initialize(path.c_str(), 55.0f, 55.0f, interactPosition, Vector3::One, Quaternion::Identity);
 	{
 		/*auto* render = interactIcon->GetSpriteRender();
@@ -115,15 +116,15 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 		interactIcon->AddSpriteAnimation(translateSpriteAnimation);
 		interactIcon->PlaySpriteAnimation();*/
 
-		auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
+		auto translateAnimation = std::make_unique<UIVector3Animation>();
 		translateAnimation->SetParameter(START_VEC, END_VEC, 2.0f, EasingType::Linear, LoopMode::PingPong);
-		interactIcon->SetUIAnimation(std::move(translateAnimation));
+		//interactIcon->SetUIAnimation(std::move(translateAnimation));
 		interactIcon->PlayAnimation();
 	}
 
 	// Aボタン
 	Vector3 buttonPosition = type == enInteractType_Cooking ? Vector3(35.0f, -33.0f, 0.0f) : Vector3(135.0f, -33.0f, 0.0f);
-	m_aButton = m_uiCanvas->CreateUI<UIIcon>();
+	m_aButton = m_uiCanvas->CreateUI<UIIcon>(2);
 	m_aButton->Initialize(buttonPath.c_str(), 30.0f, 30.0f, buttonPosition, Vector3::One, Quaternion::Identity);
 	{
 		/*auto* render = m_aButton->GetSpriteRender();
@@ -131,9 +132,9 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 		m_aButton->AddSpriteAnimation(translateSpriteAnimation);
 		m_aButton->PlaySpriteAnimation();*/
 
-		auto translateAnimation = std::make_unique<UIOffsetVector3Animation>();
+		auto translateAnimation = std::make_unique<UITranslateAniamtion>();
 		translateAnimation->SetParameter(START_VEC, END_VEC, 2.0f, EasingType::Linear, LoopMode::PingPong);
-		m_aButton->SetUIAnimation(std::move(translateAnimation));
+		//m_aButton->SetUIAnimation(std::move(translateAnimation));
 		m_aButton->PlayAnimation();
 	}
 	

@@ -6,19 +6,25 @@
 #include "UIAnimation.h"
 #include "UIBase.h"
 
-UIColorVector4Animation::UIColorVector4Animation() {
+
+UIColorAnimation::UIColorAnimation()
+{
 	SetFunc([&](Vector4 v) {
 		m_ui->m_color = v;
 		});
 }
 
+
+
+
 /*******************************************************/
 
 
-UIScaleVector3Animation::UIScaleVector3Animation() {
+UIScaleAnimation::UIScaleAnimation()
+{
 	SetFunc([&](Vector3 s) {
 		m_ui->m_transform.m_localScale = s;
-		m_ui->m_transform.UpdateTransform();
+		//m_ui->m_transform.UpdateTransform();
 		});
 }
 
@@ -28,11 +34,11 @@ UIScaleVector3Animation::UIScaleVector3Animation() {
 /*******************************************************/
 
 
-UITranslateVector3Aniamtion::UITranslateVector3Aniamtion()
+UITranslateAniamtion::UITranslateAniamtion()
 {
 	SetFunc([&](Vector3 s) {
 		m_ui->m_transform.m_localPosition = s;
-		m_ui->m_transform.UpdateTransform();
+		//m_ui->m_transform.UpdateTransform();
 		});
 }
 
@@ -42,11 +48,11 @@ UITranslateVector3Aniamtion::UITranslateVector3Aniamtion()
 /*******************************************************/
 
 
-UIOffsetVector3Animation::UIOffsetVector3Animation()
+UITranslateOffsetAnimation::UITranslateOffsetAnimation()
 {
 	SetFunc([&](Vector3 offset) {
 		m_ui->m_transform.m_localPosition.Add(offset);
-		m_ui->m_transform.UpdateTransform();
+		//m_ui->m_transform.UpdateTransform();
 		});
 }
 
@@ -54,15 +60,16 @@ UIOffsetVector3Animation::UIOffsetVector3Animation()
 
 
 /*******************************************************/
-
 
 
 UIRotationAnimation::UIRotationAnimation()
 {
-	SetFunc([&](float s) {
-		Quaternion q;
-		q.SetRotationDegY(s);
-		m_ui->m_transform.m_localRotation = q;
-		m_ui->m_transform.UpdateTransform();
+	SetFunc([&](float s)
+		{
+			/*Quaternion q;
+			q.SetRotationDegY(s);
+			m_ui->m_transform.m_localRotation = q;
+			m_ui->m_transform.UpdateTransform();*/
+			m_ui->m_transform.m_localRotation.SetRotationDegZ(s);
 		});
 }

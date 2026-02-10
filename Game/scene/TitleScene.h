@@ -7,6 +7,7 @@
 
 class Player;
 class UICanvas;
+class UIImage;
 class UIIcon;
 
 
@@ -24,17 +25,18 @@ enum EnTitleMenuType
 	enTitleMenuType_Start,
 	enTitleMenuType_Select,
 	enTitleMenuType_Play,
+	enTitleMenuType_StartTab,
 	enTitleMenuType_Cotrol,
 	enTitleMenuType_Setting,
 	enTitleMenuType_Num,
 };
 
 
-class ITtitleMenu : Noncopyable
+class ITitleMenu : Noncopyable
 {
 public:
-	ITtitleMenu() {}
-	virtual ~ITtitleMenu() {}
+	ITitleMenu() {}
+	virtual ~ITitleMenu() {}
 
 	virtual bool Start() = 0;
 	virtual void Update() = 0;
@@ -43,7 +45,7 @@ public:
 };
 
 
-class TitleStartMenu : public ITtitleMenu
+class TitleStartMenu : public ITitleMenu
 {
 private:
 	std::unique_ptr<UICanvas> m_uiCanvas = nullptr;
@@ -65,10 +67,10 @@ public:
 
 
 /** タイトル表示の後の説明・プレイ人数などの設定を表示する */
-class TitleSelectMenu : public ITtitleMenu
+class TitleSelectMenu : public ITitleMenu
 {
 private:
-	enum enSelectMenuType
+	enum EnSelectMenuType
 	{
 		enSelectMenuType_GameStart,
 		enSelectMenuType_Operation,
@@ -104,7 +106,7 @@ public:
 
 
 /** プレイヤー選択 */
-class TitlePlayerSelectMenu : public ITtitleMenu
+class TitlePlayerSelectMenu : public ITitleMenu
 {
 private:
 	std::unique_ptr<UICanvas> m_uiCanvas;
@@ -126,7 +128,7 @@ public:
 
 
 /** 操作画面 */
-class TitleControlGuide : public ITtitleMenu
+class TitleControlGuide : public ITitleMenu
 {
 private:
 	std::unique_ptr<UICanvas> m_uiCanvas;
@@ -147,7 +149,7 @@ public:
 
 
 /** 設定画面 */
-class TitleSetting : public ITtitleMenu
+class TitleSetting : public ITitleMenu
 {
 	enum EnNPCType
 	{
@@ -181,6 +183,54 @@ public:
 };
 
 
+/** タブ画面 */
+class SelectTab : public ITitleMenu
+{
+private:
+	enum EnSelectTab
+	{
+		enSelectTab_No,
+		enSelectTab_Yes,
+		enSelectTabt_Num
+	};
+
+private:
+	std::unique_ptr<UICanvas> m_uiCanvas;
+
+	int m_currentTabSelectindex = enSelectTab_No;
+
+	bool m_isChange = false;
+	bool m_isPlayAnimation = false;
+
+	//std::vector<UIIcon*> m_button;
+	std::shared_ptr<UICanvas> m_canvas;
+
+	Vector3 m_wakuTabPosition;
+	Vector3 m_wakuTabScale;
+	UIIcon* m_wakuTab;
+	//UIIcon* m_wakuTab;
+	
+	// @todo for test
+	UIIcon* m_yesButton;
+	UIIcon* m_noButton;
+
+	std::unique_ptr<UIVector3Animation> m_wakuTabuScaleAnimation = nullptr;
+
+public:
+	SelectTab();
+	~SelectTab();
+
+	bool Start() override;
+	void Update() override;
+	void Render(RenderContext& rc) override;
+	bool CanChange(int& reqest) override;
+
+
+private:
+	void UpdateSelectTabIndex();
+};
+
+
 /** タイトルシーン */
 class TitleScene : public IScene
 {
@@ -196,7 +246,7 @@ private:
 	std::unique_ptr<SpriteRender> m_titleRender;
 
 	int m_currentMenu = enTitleMenuType_Start;
-	std::unique_ptr<ITtitleMenu> m_titleMenu = nullptr;
+	std::unique_ptr<ITitleMenu> m_titleMenu = nullptr;
 
 	bool m_isRequestNext = false;
 

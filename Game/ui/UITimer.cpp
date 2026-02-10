@@ -24,15 +24,15 @@ bool UITimer::Start()
 	m_uiCanvas->m_transform.m_localPosition = Vector3(800.0f, -450.0f, 0.0f);
 
 	// 制限時間
-	auto* uiBackground = m_uiCanvas->CreateUI<UIIcon>();
+	auto* uiBackground = m_uiCanvas->CreateUI<UIIcon>(0);
 	uiBackground->Initialize("Assets/modelData/UI/limitTime.dds", 128.0f, 30.0f, Vector3(-200.0f,0.0f,0.0f),Vector3::One, Quaternion::Identity);
 
 	// 数字
-	m_uiDigit = m_uiCanvas->CreateUI<UIDigit>();
+	m_uiDigit = m_uiCanvas->CreateUI<UIDigit>(1);
 	m_uiDigit->Initialize("Assets/modelData/UI/suji", 3, 0, 50.0f, 50.0f, Vector3(0.0f, 0.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
 	// 砂時計
-	m_uiHourGlass = m_uiCanvas->CreateUI<UIIcon>();
+	m_uiHourGlass = m_uiCanvas->CreateUI<UIIcon>(2);
 	m_uiHourGlass->Initialize("Assets/modelData/UI/timer.dds", 80.0f, 80.0f, Vector3(50.0f, 0.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	// UIアニメーションの追加
 	{
@@ -46,14 +46,14 @@ bool UITimer::Start()
 		RotationSpriteAnimation* rotationSpriteAnimation = new RotationSpriteAnimation(render, true, m_timeList, m_rotationList);
 		m_uiHourGlass->AddSpriteAnimation(rotationSpriteAnimation);*/
 
-		/*auto translateAnimation = std::make_unique<UIVector3Animation>();
-		translateAnimation->SetParameter(Vector3(-1500.0f, 450.0f, 0.0f), Vector3(-560.0f, 450.0f, 0.0f), 0.5f, EasingType::Linear, LoopMode::Loop);
-		uiStageClear->SetUIAnimation(std::move(translateAnimation));
-		uiStageClear->PlayAnimation();*/
-
+		auto translateAnimation = std::make_unique<UIVector3Animation>();
+		//translateAnimation->SetParameter(Vector3(-1500.0f, 450.0f, 0.0f), Vector3(-560.0f, 450.0f, 0.0f), 0.5f, EasingType::Linear, LoopMode::Loop);
+		//uiStageClear->SetUIAnimation(std::move(translateAnimation));
+		//uiStageClear->PlayAnimation();
+		
 		auto rotationAnimation = std::make_unique<UIRotationAnimation>();
 		rotationAnimation->SetParameter(30.0f, -30.0f, 0.1f, EasingType::Linear, LoopMode::Loop);
-		m_uiHourGlass->SetUIAnimation(std::move(rotationAnimation));
+		//m_uiHourGlass->SetUIAnimation(std::move(rotationAnimation));
 		m_uiHourGlass->PlayAnimation();
 	}
 
@@ -107,7 +107,7 @@ void UITimer::Update()
 			{
 				auto render = std::make_unique<UIVector4Animation>();
 				render->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Loop);
-				m_uiDigit->SetUIAnimation(std::move(render));
+				//m_uiDigit->SetUIAnimation(std::move(render));
 			}
 			m_uiHourGlass->PlayAnimation();
 			m_uiDigit->PlayAnimation();

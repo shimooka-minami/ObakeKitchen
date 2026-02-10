@@ -25,14 +25,14 @@ bool UIScore::Start()
 	m_uiCanvas = new UICanvas();
 
 	// @todo for test // 背景
-	auto* uiBack = m_uiCanvas->CreateUI<UIIcon>();
+	auto* uiBack = m_uiCanvas->CreateUI<UIIcon>(0);
 	uiBack->Initialize("Assets/modelData/UI/back.dds", 400.0f, 120.0f, Vector3(-750.0f, -440.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
-	m_uiDigit = m_uiCanvas->CreateUI<UIDigit>();
+	m_uiDigit = m_uiCanvas->CreateUI<UIDigit>(1);
 	m_uiDigit->Initialize("Assets/modelData/UI/suji", 4, 0, 50.0f, 50.0f, Vector3(-650.0f, -450.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
 	// コイン
-	auto* uiCoin = m_uiCanvas->CreateUI<UIIcon>();
+	auto* uiCoin = m_uiCanvas->CreateUI<UIIcon>(2);
 	uiCoin->Initialize("Assets/modelData/UI/coin.dds", 80.0f, 80.0f, Vector3(-880.0f, -450.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
 	
@@ -49,7 +49,7 @@ bool UIScore::Start()
 
 	// 追加されるスコア表示のUIを作る
 	m_uiAddScoreCanvas = new UICanvas();
-	m_uiAddScoreDigit = m_uiAddScoreCanvas->CreateUI<UIDigit>();
+	m_uiAddScoreDigit = m_uiAddScoreCanvas->CreateUI<UIDigit>(3);
 	m_uiAddScoreDigit->Initialize("Assets/modelData/UI/suji", 3, 0, 50.0f, 50.0f, Vector3(-650.0f, -350.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	m_uiAddScoreDigit->SetNumber(0);
 	// UIアニメーション追加

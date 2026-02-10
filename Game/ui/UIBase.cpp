@@ -6,11 +6,11 @@
 #include "UIBase.h"
 
 
-void UIBase::SetUIAnimation(std::unique_ptr<UIAnimationBase> animation)
-{
-	animation->SetUI(this);
-	m_uiAnimationList.push_back(std::move(animation));
-}
+//  void UIBase::SetUIAnimation(std::unique_ptr<UIAnimationBase> animation)
+//  {
+//  	animation->SetUI(this);
+//  	//m_uiAnimationList.emplace(std::move(animation));
+//  }
 //  void UIBase::PlayAnimation()
 //  {
 //  	for (auto& animation : m_spriteAnimationList)
@@ -62,11 +62,6 @@ UIImage::~UIImage()
 {
 }
 
-bool UIImage::Start()
-{
-	return true;
-}
-
 
 void UIImage::Update()
 {
@@ -93,17 +88,8 @@ UIGauge::~UIGauge()
 }
 
 
-bool UIGauge::Start()
-{
-	return true;
-}
-
-
 void UIGauge::Update()
 {
-	// @todo for test
-	float m_uiGargeMid = 0.0f;
-
 	m_transform.UpdateTransform();
 	m_spriteRender.SetPosition(m_transform.m_position);
 	m_spriteRender.SetScale(m_transform.m_scale);
@@ -146,21 +132,16 @@ UIIcon::~UIIcon()
 {
 }
 
-
-bool UIIcon::Start()
-{
-	return true;
-}
-
-
 void UIIcon::Update()
 {
-	// @too for test
-	for (auto& animation : m_uiAnimationList)
-	{
-		//UpdateAnimation();
-		animation->Update();
-	}
+	//// @too for test
+	//for (auto& animation : m_uiAnimationList)
+	//{
+	//	//UpdateAnimation();
+	//	animation->Update();
+	//}
+
+	UpdateAnimation();
 
 	m_spriteRender.SetMulColor(m_color);
 	m_transform.UpdateTransform();
@@ -183,17 +164,19 @@ void UIIcon::Render(RenderContext& rc)
 }
 
 
-void UIIcon::Initialize(const char* assetName, const float width, const float height, const Vector3& position, const Vector3& scale, const Quaternion& rotation)
+void UIIcon::Initialize(const char* assetName, const float width, const float height)
 {
-	m_transform.m_localPosition = position;
-	m_transform.m_localScale = scale;
-	m_transform.m_localRotation = rotation;
+	//m_transform.m_localPosition = position;
+	//m_transform.m_localScale = scale;
+	//m_transform.m_localRotation = rotation;
+
+	//m_spriteRender.Init(assetName, width, height);
+	//m_spriteRender.SetPosition(position);
+	//m_spriteRender.SetScale(scale);
+	//m_spriteRender.SetRotation(rotation);
+	//m_spriteRender.Update();
 
 	m_spriteRender.Init(assetName, width, height);
-	m_spriteRender.SetPosition(position);
-	m_spriteRender.SetScale(scale);
-	m_spriteRender.SetRotation(rotation);
-	m_spriteRender.Update();
 }
 
 
@@ -212,12 +195,6 @@ UIDigit::~UIDigit()
 }
 
 
-bool UIDigit::Start()
-{
-	return true;
-}
-
-
 void UIDigit::Update()
 {
 	if (m_number != m_requestNumber) {
@@ -227,6 +204,7 @@ void UIDigit::Update()
 		}
 	}
 
+	UpdateAnimation();
 
 	m_transform.UpdateTransform();
 	for (int i = 0; i < m_renderList.size(); ++i)
@@ -238,9 +216,9 @@ void UIDigit::Update()
 		spriteRender->Update();
 	}
 
-	for (auto& animation : m_uiAnimationList) {
+	/*for (auto& animation : m_uiAnimationList) {
 		animation->Update();
-	}
+	}*/
 }
 
 
@@ -266,12 +244,12 @@ void UIDigit::Initialize(const char* assetName, const int digit, const int numbe
 
 	for (int i = 0; i < digit; i++)
 	{
-		//SpriteRender* spriteRender = new SpriteRender;
-		////spriteRender->Init(assetName, widht, height);
-		//spriteRender->SetPosition(position);
-		//spriteRender->SetScale(scale);
-		//spriteRender->SetRotation(rotation);
-		//m_renderList.push_back(spriteRender);
+		SpriteRender* spriteRender = new SpriteRender;
+		spriteRender->Init(assetName, widht, height);
+		spriteRender->SetPosition(position);
+		spriteRender->SetScale(scale);
+		spriteRender->SetRotation(rotation);
+		m_renderList.push_back(spriteRender);
 		UpdateNumber(i+1, m_number);	// 桁なので＋１する
 	}
 }
@@ -311,9 +289,7 @@ void UIDigit::UpdateNumber(const int targetDigit, const int number)
 
 	// 対象の桁の数字
 	const int targetDigitNumber = GetDigit(targetDigit);
-	// Assets/modelData/UI/suji + "0.dds" ここを変更できるようにする
 	std::string assetNname = m_assetPath + "/0.dds";
-	// Assets/modelData/UI/suji/0.dds
 	// 数字の部分を桁の数字で変える
 	assetNname[assetNname.size() - 5] = '0' + targetDigitNumber;
 	nextRender->Init(assetNname.c_str(), w, h);
@@ -352,20 +328,14 @@ UICanvas::UICanvas()
 
 UICanvas::~UICanvas()
 {
-	for(auto* ui : m_uiList) {
-		// トランスフォームの親子関係を解除
-		m_transform.RemoveChild(&ui->m_transform);
-		// キャンバス上にあるUIを削除
-		delete ui;
-		ui = nullptr;
-	}
+	//for(auto* ui : m_uiList) {
+	//	// トランスフォームの親子関係を解除
+	//	m_transform.RemoveChild(&ui->m_transform);
+	//	// キャンバス上にあるUIを削除
+	//	delete ui;
+	//	ui = nullptr;
+	//}
 	m_uiList.clear();
-}
-
-
-bool UICanvas::Start()
-{
-	return true;
 }
 
 
@@ -373,16 +343,15 @@ void UICanvas::Update()
 {
 	m_transform.UpdateTransform();
 
-	for (auto* ui : m_uiList) {
-		ui->Update();
+	for (auto& ui : m_uiList) {
+		ui.second->Update();
 	}
 }
 
-
 void UICanvas::Render(RenderContext& rc)
 {
-	for (auto* ui : m_uiList) {
-		ui->Render(rc);
+	for (auto& ui : m_uiList) {
+		ui.second->Render(rc);
 	}
 }
 

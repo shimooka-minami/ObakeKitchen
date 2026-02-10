@@ -7,21 +7,23 @@
 #include <memory>
 #include <vector>
 
-class UIAnimationBase;
+//class UIAnimationBase;
 
+/** 基底クラス */
 class UIBase : public Noncopyable
 {
 public:
 	Transform m_transform;
 	Vector4 m_color = Vector4::White;
 	
-	bool isStart = false;
-	bool isUpdate = true;
+	/*bool isStart = false;
+	bool isUpdate = true;*/
 	bool isDraw = true;
 
 public:
 	// deleteがいらない
-	std::vector<std::unique_ptr<UIAnimationBase>> m_uiAnimationList;
+	//std::vector<std::unique_ptr<UIAnimationBase>> m_uiAnimationList;
+	std::unordered_map<uint32_t, std::unique_ptr<UIAnimationBase>> m_uiAnimationList;
 
 
 public:
@@ -35,7 +37,7 @@ public:
 		m_uiAnimationList.clear();
 	}
 
-	virtual bool Start() = 0;
+	//virtual bool Start() = 0;
 	virtual void Update() = 0;
 	virtual void Render(RenderContext& rc) = 0;
 
@@ -43,41 +45,92 @@ public:
 public:
 	void UpdateAnimation()
 	{
-		for (auto& ui : m_uiAnimationList) {
+		/*for (auto& ui : m_uiAnimationList) {
 			ui.get()->Update();
-		}
+		}*/
+		ForEachAnimation([](UIAnimationBase* animation)
+			{
+				animation->Update();
+			});
 	}
 	void PlayAnimation()
 	{
-		for (auto& animation : m_uiAnimationList) {
+		/*for (auto& animation : m_uiAnimationList) {
 			animation.get()->Play();
-		}
+		}*/
+		ForEachAnimation([](UIAnimationBase* animation)
+			{
+				animation->Play();
+			});
 	}
 	void IsPlayAnimation() {
-		for (auto& ui : m_uiAnimationList) {
+		/*for (auto& ui : m_uiAnimationList) {
 			ui.get()->IsPlay();
+		}*/
+		ForEachAnimation([](UIAnimationBase* animation)
+			{
+				animation->Play();
+			});
+	}
+	bool IsPlayAniamtion()
+	{
+		auto it = std::find_if(m_uiAnimationList.begin(), m_uiAnimationList.end(), [&](const auto& animationPair)
+			{
+				auto* animation = animationPair.second.get();
+				if (animation->IsPlay()) {
+					return true;
+				}
+				return false;
+			});
+		return it != m_uiAnimationList.end();
+	}
+	void StopSpriteAnimation()
+	{
+		ForEachAnimation([](UIAnimationBase* animation)
+			{
+				animation->Stop();
+			});
+	}
+	bool IsComplted() const
+	{
+		// すべて再生済みか
+		auto it = std::find_if(m_uiAnimationList.begin(), m_uiAnimationList.end(), [&](const auto& animationPair)
+			{
+				auto* animation = animationPair.second.get();
+				return !animation->IsPlay();
+			});
+		return it != m_uiAnimationList.end();
+	}
+
+
+	void AddAnimation(const uint32_t key, std::unique_ptr<UIAnimationBase> animation) 
+	{
+		animation->SetUI(this);
+		m_uiAnimationList.emplace(key, std::move(animation));
+	}
+
+	void RemoveAnimation(const uint32_t key)
+	{
+		m_uiAnimationList.erase(key);
+	}
+
+	void ForEachAnimation(const std::function<void(UIAnimationBase*)>& func)
+	{
+		for (auto& animation : m_uiAnimationList)
+		{
+			func(animation.second.get());
 		}
 	}
-	  void StopSpriteAnimation()
-	  {
-	  	/*for (auto& animation : m_spriteAnimationList) {
-	  		animation.get()->Stop();
-	  	}*/
-	  }
-	  bool IsCompleted() const
-	  {
-		  for (const auto& animation : m_uiAnimationList) {
-			  if (animation->IsPlay()) {
-				  return false;
-			  }
-		  }
-	  	/*for (auto& animation : m_uiAnimationList) {
-	  		return animation.get()->IsCompleted();
-	  	}*/
-		  return true;
-	  }
 
-	void SetUIAnimation(std::unique_ptr<UIAnimationBase>animation);
+	UIAnimationBase* FindAnimaion(const uint32_t key)
+	{
+		auto it = m_uiAnimationList.find(key);
+		if (it != m_uiAnimationList.end())
+		{
+			return it->second.get();
+		}
+		return nullptr;
+	}
 };
 
 
@@ -100,7 +153,6 @@ protected:
 
 
 public:
-	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
 
@@ -125,7 +177,6 @@ private:
 
 
 public:
-	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
 
@@ -148,13 +199,12 @@ public:
 
 
 public:
-	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
 
 
 public:
-	void Initialize(const char* assetName, const float width, const float height, const Vector3& position, const Vector3& scale, const Quaternion& rotation);
+	void Initialize(const char* assetName, const float width, const float height);
 };
 
 
@@ -177,9 +227,13 @@ private:
 
 
 public:
-	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
+
+	void SetText(const wchar_t* text)
+	{
+		m_fontRender.SetText(text);
+	}
 };
 
 
@@ -200,7 +254,6 @@ private:
 
 
 public:
-	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
 };
@@ -222,7 +275,6 @@ private:
 	/** 数字表示に必要な画像が入った */
 	std::string m_assetPath;
 
-	// あとでかえて
 	int w;
 	int h;
 
@@ -234,7 +286,6 @@ public:
 
 
 public:
-	virtual bool Start() override;
 	virtual void Update() override;
 	virtual void Render(RenderContext& rc) override;
 
@@ -254,9 +305,6 @@ public:
 
 	/** 数字を設定 */
 	void SetNumber(const int number) { m_requestNumber = number; }
-
-	// @todo for test
-	//void SetCustomChar(int targetDigit, const std::string& assetPath);
 
 	std::vector<SpriteRender*>& GetSpriteRenderList() { return m_renderList; }
 
@@ -302,7 +350,8 @@ private:
 	/**
 	 * NOTE: 各UI自体に親子関係持たせたいけど使わない可能性があるので、一旦ここだけにしてみる
 	 */
-	std::vector<UIBase*> m_uiList;
+	//std::vector<UIBase*> m_uiList;
+	std::unordered_map<uint32_t, std::unique_ptr<UIBase>> m_uiList;
 
 
 public:
@@ -310,18 +359,42 @@ public:
 	~UICanvas();
 
 
-	bool Start();
-	void Update();
-	void Render(RenderContext& rc);
+	void Update() override;
+	void Render(RenderContext& rc) override;
 
 
 public:
 	template <typename T>
+	T* CreateUI(const uint32_t key)
+	{
+		auto ui = std::make_unique<T>();
+		ui->m_transform.SetParent(&m_transform);
+		m_uiList.emplace(key, std::move(ui));
+		return static_cast<T*>(m_uiList[key].get());
+	}
+
+	void RemoveUI(const uint32_t key)
+	{
+		m_uiList.erase(key);
+	}
+
+	template <typename T>
+	T* FindUI(const uint32_t key)
+	{
+		auto it = m_uiList.find(key);
+		if (it != m_uiList.end())
+		{
+			return dynamic_cast<T*>(it->second.get());
+		}
+		return nullptr;
+	}
+
+	/*template <typename T>
 	T* CreateUI()
 	{
 		T* ui = new T();
 		ui->m_transform.SetParent(&m_transform);
 		m_uiList.push_back(ui);
 		return ui;
-	}
+	}*/
 };
