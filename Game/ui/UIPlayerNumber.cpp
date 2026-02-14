@@ -61,5 +61,6 @@ void UIPlayerNumber::Initialize(const int number)
 	m_uiCanvas = new UICanvas();
 	m_uiCanvas->m_transform.m_localPosition = Vector3(0.0f, 0.0f, 0.0f);
 	auto* icon = m_uiCanvas->CreateUI<UIIcon>(0);
-	icon->Initialize(path.c_str(), 50.0f, 50.0f, Vector3::Zero, Vector3::One, Quaternion::Identity);
+	icon->Initialize(path.c_str(), 50.0f, 50.0f);
+	icon->m_transform.m_localPosition = Vector3::Zero;
 }

@@ -7,6 +7,7 @@
 #include "UIBase.h"
 
 #include "core/TimeKeeper.h"
+#include <util/CRC32.h>
 
 UITimer::UITimer()
 {
@@ -25,7 +26,8 @@ bool UITimer::Start()
 
 	// 制限時間
 	auto* uiBackground = m_uiCanvas->CreateUI<UIIcon>(0);
-	uiBackground->Initialize("Assets/modelData/UI/limitTime.dds", 128.0f, 30.0f, Vector3(-200.0f,0.0f,0.0f),Vector3::One, Quaternion::Identity);
+	uiBackground->Initialize("Assets/modelData/UI/limitTime.dds", 128.0f, 30.0f);
+	uiBackground->m_transform.m_localPosition = Vector3(-200.0f, 0.0f, 0.0f);
 
 	// 数字
 	m_uiDigit = m_uiCanvas->CreateUI<UIDigit>(1);
@@ -33,7 +35,8 @@ bool UITimer::Start()
 
 	// 砂時計
 	m_uiHourGlass = m_uiCanvas->CreateUI<UIIcon>(2);
-	m_uiHourGlass->Initialize("Assets/modelData/UI/timer.dds", 80.0f, 80.0f, Vector3(50.0f, 0.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_uiHourGlass->Initialize("Assets/modelData/UI/timer.dds", 80.0f, 80.0f);
+	m_uiHourGlass->m_transform.m_localPosition = Vector3(50.0f, 0.0f, 0.0f);
 	// UIアニメーションの追加
 	{
 		/*auto* render = m_uiHourGlass->GetSpriteRender();
@@ -53,7 +56,7 @@ bool UITimer::Start()
 		
 		auto rotationAnimation = std::make_unique<UIRotationAnimation>();
 		rotationAnimation->SetParameter(30.0f, -30.0f, 0.1f, EasingType::Linear, LoopMode::Loop);
-		//m_uiHourGlass->SetUIAnimation(std::move(rotationAnimation));
+		m_uiHourGlass->AddAnimation(Hash32("m_uiHourGlassRotationAnimation"),std::move(rotationAnimation));
 		m_uiHourGlass->PlayAnimation();
 	}
 

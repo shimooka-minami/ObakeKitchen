@@ -7,6 +7,7 @@
 
 class UICanvas;
 class UIIcon;
+class UIImage;
 
 
 class UIInteractIcon : public IGameObject

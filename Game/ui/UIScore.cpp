@@ -26,15 +26,16 @@ bool UIScore::Start()
 
 	// @todo for test // 背景
 	auto* uiBack = m_uiCanvas->CreateUI<UIIcon>(0);
-	uiBack->Initialize("Assets/modelData/UI/back.dds", 400.0f, 120.0f, Vector3(-750.0f, -440.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	uiBack->Initialize("Assets/modelData/UI/back.dds", 400.0f, 120.0f);
+	uiBack->m_transform.m_localPosition = Vector3(-750.0f, -440.0f, 0.0f);
 
 	m_uiDigit = m_uiCanvas->CreateUI<UIDigit>(1);
 	m_uiDigit->Initialize("Assets/modelData/UI/suji", 4, 0, 50.0f, 50.0f, Vector3(-650.0f, -450.0f, 0.0f), Vector3::One, Quaternion::Identity);
 
 	// コイン
 	auto* uiCoin = m_uiCanvas->CreateUI<UIIcon>(2);
-	uiCoin->Initialize("Assets/modelData/UI/coin.dds", 80.0f, 80.0f, Vector3(-880.0f, -450.0f, 0.0f), Vector3::One, Quaternion::Identity);
-
+	uiCoin->Initialize("Assets/modelData/UI/coin.dds", 80.0f, 80.0f);
+	uiCoin->m_transform.m_localPosition = Vector3(-880.0f, -450.0f, 0.0f);
 	
 
 

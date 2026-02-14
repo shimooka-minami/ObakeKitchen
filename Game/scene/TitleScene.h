@@ -85,6 +85,8 @@ private:
 	UIIcon* m_hanePen;
 	UIIcon* m_sen;
 
+	//std::unique_ptr<UIColorAnimation> m_menuColorAnimation = nullptr;
+
 	int m_currentSelectIndex = enSelectMenuType_GameStart;
 	bool m_isChange = false;
 	bool m_isPlayAnimation = false;
@@ -205,16 +207,12 @@ private:
 	//std::vector<UIIcon*> m_button;
 	std::shared_ptr<UICanvas> m_canvas;
 
-	Vector3 m_wakuTabPosition;
-	Vector3 m_wakuTabScale;
 	UIIcon* m_wakuTab;
 	//UIIcon* m_wakuTab;
 	
 	// @todo for test
 	UIIcon* m_yesButton;
 	UIIcon* m_noButton;
-
-	std::unique_ptr<UIVector3Animation> m_wakuTabuScaleAnimation = nullptr;
 
 public:
 	SelectTab();

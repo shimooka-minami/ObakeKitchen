@@ -182,7 +182,7 @@ bool TitleStartMenu::Start()
 	startButtonIcon->m_transform.m_localPosition = Vector3(0.0f, -150.0f, 0.0f);
 	{
 		auto colorAnimaiton = std::make_unique<UIColorAnimation>();
-		colorAnimaiton->SetParameter(Vector4(0.6f, 0.6f, 0.6f, 0.4f), Vector4(0.8f, 0.8f, 0.8f, 1.0f), 1.5f, EasingType::Linear, LoopMode::PingPong);
+		colorAnimaiton->SetParameter(Vector4(0.6f, 0.6f, 0.6f, 0.4f), Vector4(0.8f, 0.8f, 0.8f, 1.0f), 1.5f, EasingType::Linear, LoopMode::Loop);
 		startButtonIcon->AddAnimation(Hash32("startButtonColorAnimation"), std::move(colorAnimaiton));
 		startButtonIcon->PlayAnimation();
 	}
@@ -192,17 +192,17 @@ bool TitleStartMenu::Start()
 	m_titleIcon->Initialize("Assets/modelData/title/kanban.dds", 500.0f, 657.0f);
 	m_titleIcon->m_transform.m_localPosition = Vector3(-600.0f, 250.0f, 0.0f);
 	{
-		auto translateAnimation = std::make_unique<UITranslateOffsetAnimation>();
-		translateAnimation->SetParameter(Vector3::Zero, Vector3(0.0f, 40.0f, 0.0f), 1.5f, EasingType::Linear, LoopMode::Once);
+		auto translateAnimation = std::make_unique<UITranslateAniamtion>();
+		translateAnimation->SetParameter(Vector3(-600.0f,250.0f,0.0f), Vector3(-600.0f, 1040.0f, 0.0f), 1.5f, EasingType::Linear, LoopMode::Once);
+		translateAnimation->Stop();
 		m_titleIcon->AddAnimation(Hash32("titleTranslateAnimation"), std::move(translateAnimation));
-		//m_titleIcon->PlayAnimation();
 	}
 	{
-		auto colorAnimation = std::make_unique<UIColorAnimation>();
-		colorAnimation->SetParameter(Vector4::White, Vector4(1.0f, 1.0f, 1.0f, 0.8f), 0.7f, EasingType::Linear, LoopMode::Once);
-		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.8f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 0.1f, EasingType::Linear, LoopMode::Once);
-		m_titleIcon->AddAnimation(Hash32("titleColorAnimation"), std::move(colorAnimation));
-		m_titleIcon->PlayAnimation();
+		//  auto colorAnimation = std::make_unique<UIColorAnimation>();
+		//  colorAnimation->SetParameter(Vector4::White, Vector4(1.0f, 1.0f, 1.0f, 0.8f), 0.7f, EasingType::Linear, LoopMode::Once);
+		//  colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.8f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 0.1f, EasingType::Linear, LoopMode::Once);
+		//  m_titleIcon->AddAnimation(Hash32("titleColorAnimation"), std::move(colorAnimation));
+		//m_titleIcon->PlayAnimation();
 	}
 
 	return true;
@@ -211,20 +211,6 @@ bool TitleStartMenu::Start()
 
 void TitleStartMenu::Update()
 {
-	/*if (!m_titleIcon->IsCompleted()) {
-		if (g_pad[0]->IsTrigger(enButtonA)) {
-			m_titleIcon->PlayAnimation();
-		}
-	}
-	else {
-		m_isChange = true;
-	}*/
-
-	/*if (g_pad[0]->IsPress(enButtonA)) {
-		m_isChange = true;
-		m_titleIcon->PlayAnimation();
-	}*/
-
 	if (m_isChange) {
 		m_uiCanvas->Update();
 		return;
@@ -241,8 +227,6 @@ void TitleStartMenu::Update()
 			m_isChange = true;
 		}
 	}
-
-	
 
 	m_uiCanvas->Update();
 }
@@ -286,12 +270,14 @@ bool TitleSelectMenu::Start()
 	m_selectMenu = m_uiCanvas->CreateUI<UIIcon>(0);
 	m_selectMenu->Initialize("Assets/modelData/menu/menu.dds", 800.0f, 1050.0f);
 	m_selectMenu->m_transform.m_localPosition = Vector3(-450.0f, 0.0f, 0.0f);
+	m_selectMenu->m_color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	//// アニメーション
 	{
 		auto colorAnimation = std::make_unique<UIColorAnimation>();
 		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
+		colorAnimation->Stop();
 		m_selectMenu->AddAnimation(Hash32("menuColorAnimation"), std::move(colorAnimation));
-		m_selectMenu->PlayAnimation();
+		//m_selectMenu->PlayAnimation();
 		//m_selectMenu->m_uiAnimationList.clear();
 	}
 	
@@ -352,7 +338,7 @@ bool TitleSelectMenu::Start()
 	//// アニメーション
 	{
 		auto colorAnimation = std::make_unique<UIColorAnimation>();
-		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Once);
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::Loop);
 		m_hanePen->AddAnimation(Hash32("hanePenColorAnimation"), std::move(colorAnimation));
 		m_hanePen->PlayAnimation();
 	}
@@ -396,6 +382,8 @@ void TitleSelectMenu::Update()
 		}
 	}
 
+
+	// @todo
 	// 下線の座標を変える
 	m_sen->m_transform.m_localPosition = m_senPosition + (Vector3(0.0f, -100.f, 0.0f) * m_currentSelectIndex);
 	// 羽ペンの座標を変える
@@ -408,6 +396,7 @@ void TitleSelectMenu::Update()
 
 	if (!m_isPlayAnimation) {
 		if (g_pad[0]->IsTrigger(enButtonA)) {
+			m_selectMenu->m_color.w = 0.0f;
 			m_selectMenu->PlayAnimation();
 			m_isPlayAnimation = true;
 		}
@@ -728,8 +717,8 @@ bool TitleSetting::Start()
 		// 性格
 		m_npcTypeIcon[i] = m_uiCanvas->CreateUI<UIIcon>(2);
 		m_npcTypeIcon[i]->Initialize(titleNPCIconSpriteInfoList[i].npcIconPath.c_str(), titleNPCIconSpriteInfoList[i].width, titleNPCIconSpriteInfoList[i].hight);
-	}	m_npcTypeIcon[i]->m_transform.m_localposition = Vector3(titleNPCIconSpriteInfoList[i].npcIconPosition);
-
+		m_npcTypeIcon[i]->m_transform.m_localPosition = Vector3(titleNPCIconSpriteInfoList[i].npcIconPosition);
+	}
 	// もどる
 	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>(3);
 	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f);
@@ -862,8 +851,7 @@ bool SelectTab::Start()
 		backTab->PlayAnimation();
 	}
 	
-	//// 選択ボタン1
-	//auto* button = m_uiCanvas->CreateUI<UIIcon>();
+	//// はいボタン
 	m_yesButton = m_uiCanvas->CreateUI<UIIcon>(2);
 	m_yesButton->Initialize("Assets/modelData/tab/button_tab.dds", 400.0f, 153.0f);
 	m_yesButton->m_transform.m_localPosition = Vector3(-250.0f, -90.0f, 0.0f);
@@ -879,70 +867,89 @@ bool SelectTab::Start()
 	{
 		auto scaleAnimation = std::make_unique<UIVector3Animation>();
 		scaleAnimation->SetParameter(Vector3::One, Vector3(1.2f, 1.2f, 1.2f), 0.2f, EasingType::EaseIn, LoopMode::Once);
-		//m_yesButton->SetUIAnimation(std::move(scaleAnimation));
+		m_yesButton->AddAnimation(Hash32("m_yesButtonScaleAnimation"), std::move(scaleAnimation));
+		m_yesButton->PlayAnimation();
+		m_yesButton->m_uiAnimationList.clear();
 	}
 
-	//// 選択ボタン2
+	//// いいえボタン
 	m_noButton = m_uiCanvas->CreateUI<UIIcon>(3);
-	m_noButton->Initialize("Assets/modelData/tab/button_tab.dds", 400.0f, 153.0f, Vector3( 250.0f, -90.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	m_noButton->Initialize("Assets/modelData/tab/button_tab.dds", 400.0f, 153.0f);
+	m_noButton->m_transform.m_localPosition = Vector3(250.0f, -90.0f, 0.0f);
 	// アニメーション
 	{
-		// colorAnimation = std::make_unique<UIColorVector4Animation>();
-		// colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
-		// m_button[1]->SetUIAnimation(std::move(colorAnimation));
-		//m_button[1]->PlayAnimation();
+		 auto colorAnimation = std::make_unique<UIColorAnimation>();
+		 colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
+		 m_noButton->AddAnimation(Hash32("m_noButtonColorAnimation"), std::move(colorAnimation));
+		 m_noButton->PlayAnimation();
+		 m_noButton->m_uiAnimationList.clear();
 	}
 	//選択中のスケールアニメーション
 	{
 		auto scaleAnimation = std::make_unique<UIVector3Animation>();
 		scaleAnimation->SetParameter(Vector3::One, Vector3(1.2f, 1.2f, 1.2f), 0.2f, EasingType::EaseIn, LoopMode::Once);
-		//m_noButton->SetUIAnimation(std::move(scaleAnimation));
+		m_noButton->AddAnimation(Hash32("m_noButtonScaleAnimation"), std::move(scaleAnimation));
+		m_noButton->m_uiAnimationList.clear();
 	}
 
 
 	//// プレイする？
-	auto* wardTab = m_uiCanvas->CreateUI<UIIcon>(4);
-	wardTab->Initialize("Assets/modelData/tab/play_tab.dds", 800.0f, 60.0f, Vector3(0.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	auto* playWardTab = m_uiCanvas->CreateUI<UIIcon>(4);
+	playWardTab->Initialize("Assets/modelData/tab/play_tab.dds", 800.0f, 60.0f);
+	playWardTab->m_transform.m_localPosition = Vector3(0.0f, 100.0f, 0.0f);
 	// アニメーション
-	colorAnimation = std::make_unique<UIColorAnimation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
-	//wardTab->SetUIAnimation(std::move(colorAnimation));
-	wardTab->PlayAnimation();
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
+		playWardTab->AddAnimation(Hash32("playWardTabColorAnimation"), std::move(colorAnimation));
+		playWardTab->PlayAnimation();
+		playWardTab->m_uiAnimationList.clear();
+	}
 
 	//// 左 いいえ
-	wardTab = m_uiCanvas->CreateUI<UIIcon>(4);
-	wardTab->Initialize("Assets/modelData/tab/iie_tab.dds", 150.0f, 46.0f, Vector3(-250.0f, -90.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	auto* noWardTab = m_uiCanvas->CreateUI<UIIcon>(4);
+	noWardTab->Initialize("Assets/modelData/tab/iie_tab.dds", 150.0f, 46.0f);
+	noWardTab->m_transform.m_localPosition = Vector3(-250.0f, -90.0f, 0.0f);
 	// アニメーション
-	colorAnimation = std::make_unique<UIColorAnimation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
-	//wardTab->SetUIAnimation(std::move(colorAnimation));
-	wardTab->PlayAnimation();
-
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
+		noWardTab->AddAnimation(Hash32("noWardTabColorAnimation"), std::move(colorAnimation));
+		noWardTab->PlayAnimation();
+		noWardTab->m_uiAnimationList.clear();
+	}
 	//// 右 はい
-	wardTab = m_uiCanvas->CreateUI<UIIcon>(4);
-	wardTab->Initialize("Assets/modelData/tab/hai_tab.dds", 100.0f, 44.0f, Vector3(250.0f, -90.0f, 0.0f), Vector3::One, Quaternion::Identity);
+	auto* yesWardTab = m_uiCanvas->CreateUI<UIIcon>(4);
+	yesWardTab->Initialize("Assets/modelData/tab/hai_tab.dds", 100.0f, 44.0f);
+	yesWardTab->m_transform.m_localPosition = Vector3(250.0f, -90.0f, 0.0f);
 	// アニメーション
-	colorAnimation = std::make_unique<UIColorAnimation>();
-	colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
-	//wardTab->SetUIAnimation(std::move(colorAnimation));
-	wardTab->PlayAnimation();
-
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::EaseIn, LoopMode::Once);
+		yesWardTab->AddAnimation(Hash32("yesWardTabColorAnimation"), std::move(colorAnimation));
+		yesWardTab->PlayAnimation();
+		yesWardTab->m_uiAnimationList.clear();
+	}
+	
 	//// 選択している枠
-	m_wakuTabPosition = Vector3(-250.0f, -90.0f, 0.0f);
-	m_wakuTabScale = Vector3::One;
 	m_wakuTab = m_uiCanvas->CreateUI<UIIcon>(5);
-	m_wakuTab->Initialize("Assets/modelData/tab/waku_tab.dds", 400.0f, 153.0f, m_wakuTabPosition, m_wakuTabScale, Quaternion::Identity);
+	m_wakuTab->Initialize("Assets/modelData/tab/waku_tab.dds", 400.0f, 153.0f);
+	m_wakuTab->m_transform.m_localPosition = Vector3(-250.0f, -90.0f, 0.0f);
 	// カラーアニメーション
 	{
 		auto colorAnimation = std::make_unique<UIColorAnimation>();
 		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 0.2f, EasingType::EaseIn, LoopMode::Once);
-		//m_wakuTab->SetUIAnimation(std::move(colorAnimation));
+		m_wakuTab->AddAnimation(Hash32("m_wakuTabColorAnimation"), std::move(colorAnimation));
+		m_wakuTab->PlayAnimation();
+		m_wakuTab->m_uiAnimationList.clear();
 	}
 	//スケールアニメーション
 	{
-		m_wakuTabuScaleAnimation = std::make_unique<UIScaleAnimation>();
-		m_wakuTabuScaleAnimation->SetParameter(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.2f, 1.2f, 1.2f), 0.2f, EasingType::EaseIn, LoopMode::Once);
-		//m_wakuTab->SetUIAnimation(std::move(m_wakuTabuScaleAnimation));
+		auto scaleAnimation = std::make_unique<UIScaleAnimation>();
+		scaleAnimation->SetParameter(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.2f, 1.2f, 1.2f), 0.2f, EasingType::EaseIn, LoopMode::Once);
+		m_wakuTab->AddAnimation(Hash32("m_wakuTabScaleAnimation"), std::move(scaleAnimation));
+		m_wakuTab->PlayAnimation();
+		m_wakuTab->m_uiAnimationList.clear();
 	}
 	m_wakuTab->PlayAnimation();
 	
@@ -958,7 +965,7 @@ void SelectTab::Update()
 	
 
 	// 枠の座標を変える
-	m_wakuTab->m_transform.m_localPosition = m_wakuTabPosition + (Vector3(500.0f, 0.0f, 0.0f) * m_currentTabSelectindex);
+	m_wakuTab->m_transform.m_localPosition = m_wakuTab->m_transform.m_localPosition + (Vector3(500.0f, 0.0f, 0.0f) * m_currentTabSelectindex);
 
 	// 選択に変更があったか
 	if (oldIndex != m_currentTabSelectindex)
