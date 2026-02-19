@@ -230,7 +230,7 @@ bool GameScene::Start()
 				uiInteractIcon->Initialize(enInteractType_Cooking, transform.position);
 				m_deleteList.push_back(uiInteractIcon);
 
-				// �����X�y�[�X��UI�C���^���N�g
+				// 料理場のUI
 				CoockingSpacePair pair;
 				pair.m_coockingSpace = cookingSpace;
 				pair.m_uiInteracIcon = uiInteractIcon;
@@ -310,22 +310,24 @@ bool GameScene::Start()
 				uiInteractIcon->Initialize(enInteractType_Plate, transform.position);
 				m_deleteList.push_back(uiInteractIcon);
 			}
-			/*if (j.contains("PlateBoxExportComponent")) {
+			if (j.contains("PlateBoxExportComponent")) {
 				PlateBoxExportInfo info = ParsePlateBoxComponet(j["PlateBoxExportComponent"]);
 				if (plateSpace) {
 					plateSpace->SetAssetPath(info.assetsPath);
-				}
-			}*/
-			// お皿箱インタラクト
-			auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
-			uiInteractIcon->Initialize(enInteractType_Delivery, transform.position);
-			m_deleteList.push_back(uiInteractIcon);
+					// お皿箱インタラクト
+					auto* uiInteractIcon = NewGO<UIInteractIcon>(0, "uiInteractIcon");
+					uiInteractIcon->Initialize(enInteractType_Plate, transform.position);
+					m_deleteList.push_back(uiInteractIcon);
 
-			// ���M���X�y�[�X��UI�C���^���N�g
-			PlateSpacePair pair;
-			pair.m_plateSpace = plateSpace;
-			pair.m_uiInteracIcon = uiInteractIcon;
-			m_plateSpacePairList.push_back(pair);
+					// お皿箱のUI
+					PlateSpacePair pair;
+					pair.m_plateSpace = plateSpace;
+					pair.m_uiInteracIcon = uiInteractIcon;
+					m_plateSpacePairList.push_back(pair);
+				}
+			}
+
+			return true;
 		}
 		// 食材箱
 		if (IsForwardMatchObjectName(name.c_str(), "BoxReady")) {
@@ -378,7 +380,7 @@ bool GameScene::Start()
 				uiInteractIcon->Initialize(enInteractType_Delivery, transform.position);
 				m_deleteList.push_back(uiInteractIcon);
 
-				// �[�i�X�y�[�X��UI�C���^���N�g
+				// 納品場のUI
 				DeliverySpacePair pair;
 				pair.m_deliverySpace = deliverySpace;
 				pair.m_uiInteracIcon = uiInteractIcon;

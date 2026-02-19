@@ -9,7 +9,7 @@
 
 namespace
 {
-	constexpr float OFFSET_Y = 50.0f;
+	constexpr float OFFSET_Y = 80.0f;
 
 	// 始めの位置
 	const Vector3 START_VEC = { 0.0f, -0.5f, 0.0f };
@@ -57,10 +57,8 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 {
 	// インタラクトアイコン
 	std::string path;
-	std::string pathB;
 	// 吹き出し
 	std::string backPath;
-	std::string backPathB;
 	// Aボタン
 	std::string buttonPath;
 
@@ -84,10 +82,10 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 	}
 
 	m_uiCanvas = std::make_unique<UICanvas>();
-	m_uiCanvas->m_transform.m_localPosition = Vector3(0.0f, 0.0f, 0.0f);
+	m_uiCanvas->m_transform.m_localPosition = Vector3(0.0f, -200.0f, 0.0f);
 
 	// 吹き出しとアイコンで同じアニメーション設定にする
-	std::vector<Vector3> targetTranslateList = { Vector3(0.0f,70.0f,0.0f), Vector3(0.0f,100.0f,0.0f), Vector3(0.0f,70.0f,0.0f) };
+	std::vector<Vector3> targetTranslateList = { Vector3(0.0f,100.0f,0.0f), Vector3(0.0f,130.0f,0.0f), Vector3(0.0f,100.0f,0.0f) };
 	std::vector<float> timeList = { 1.8f, 1.8f };
 
 	// 吹き出し
@@ -97,7 +95,7 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 	backGround->m_transform.m_localPosition = backGroundPosition;
 	{
 		/** TODO:　動作チェックテスト */
-		auto translateAnimation = std::make_unique<UIVector3Animation>();
+		auto translateAnimation = std::make_unique<UITranslateOffsetAnimation>();
 		translateAnimation->SetParameter(START_VEC, END_VEC, 2.0f, EasingType::Linear, LoopMode::PingPong);
 		backGround->AddAnimation(Hash32("backGroundTranslateAnimation"), std::move(translateAnimation));
 		backGround->PlayAnimation();
@@ -109,7 +107,7 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 	interactIcon->Initialize(path.c_str(), 55.0f, 55.0f);
 	interactIcon->m_transform.m_localPosition = interactPosition;
 	{
-		auto translateAnimation = std::make_unique<UIVector3Animation>();
+		auto translateAnimation = std::make_unique<UITranslateOffsetAnimation>();
 		translateAnimation->SetParameter(START_VEC, END_VEC, 2.0f, EasingType::Linear, LoopMode::PingPong);
 		interactIcon->AddAnimation(Hash32("interactIconTranslateAnimation"), std::move(translateAnimation));
 		interactIcon->PlayAnimation();
@@ -121,11 +119,12 @@ void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& positi
 	m_aButton->Initialize(buttonPath.c_str(), 30.0f, 30.0f);
 	m_aButton->m_transform.m_localPosition = buttonPosition;
 	{
-		auto translateAnimation = std::make_unique<UITranslateAniamtion>();
+		auto translateAnimation = std::make_unique<UITranslateOffsetAnimation>();
 		translateAnimation->SetParameter(START_VEC, END_VEC, 2.0f, EasingType::Linear, LoopMode::PingPong);
 		m_aButton->AddAnimation(Hash32("m_aButtonTranslateAnimation"),std::move(translateAnimation));
 		m_aButton->PlayAnimation();
 	}
 	
 	m_position = position;
+	m_uiCanvas->Update();
 }

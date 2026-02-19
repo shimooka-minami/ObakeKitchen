@@ -84,12 +84,17 @@ private:
 	UIIcon* m_selectMenu;
 	UIIcon* m_hanePen;
 	UIIcon* m_sen;
+	UIIcon* m_startWard;
+	UIIcon* m_guideWard;
+	UIIcon* m_settingWard;
+	UIIcon* m_endWard;
 
 	//std::unique_ptr<UIColorAnimation> m_menuColorAnimation = nullptr;
 
 	int m_currentSelectIndex = enSelectMenuType_GameStart;
 	bool m_isChange = false;
 	bool m_isPlayAnimation = false;
+	bool m_isSelected = false;
 
 	Vector3 m_senPosition;
 	Vector3 m_penPosition;
@@ -203,6 +208,7 @@ private:
 
 	bool m_isChange = false;
 	bool m_isPlayAnimation = false;
+	bool m_isBack = false;
 
 	//std::vector<UIIcon*> m_button;
 	std::shared_ptr<UICanvas> m_canvas;

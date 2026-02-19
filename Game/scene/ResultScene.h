@@ -8,6 +8,7 @@
 class UICanvas;
 class UIIcon;
 class UIScore;
+class UIDigit;
 
 /** リザルトシーン */
 class ResultScene : public IScene
@@ -20,6 +21,7 @@ private:
 	UICanvas* m_uiCanvas = nullptr;
 	UIIcon* m_uiIcon = nullptr;
 	UIScore* m_uiScore = nullptr;
+	UIDigit* m_uiDigit = nullptr;
 	std::array<UIIcon*, 3> m_starList;
 
 	bool isRequestNext = false;

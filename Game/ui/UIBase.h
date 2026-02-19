@@ -45,9 +45,6 @@ public:
 public:
 	void UpdateAnimation()
 	{
-		/*for (auto& ui : m_uiAnimationList) {
-			ui.get()->Update();
-		}*/
 		ForEachAnimation([](UIAnimationBase* animation)
 			{
 				animation->Update();
@@ -55,21 +52,16 @@ public:
 	}
 	void PlayAnimation()
 	{
-		/*for (auto& animation : m_uiAnimationList) {
-			animation.get()->Play();
-		}*/
 		ForEachAnimation([](UIAnimationBase* animation)
 			{
 				animation->Play();
 			});
 	}
-	void IsPlayAnimation() {
-		/*for (auto& ui : m_uiAnimationList) {
-			ui.get()->IsPlay();
-		}*/
+	void ResetAnimation()
+	{
 		ForEachAnimation([](UIAnimationBase* animation)
 			{
-				animation->Play();
+				animation->Reset();
 			});
 	}
 	bool IsPlayAniamtion()

@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "UIScore.h"
 #include "UIBase.h"
+#include "util/CRC32.h"
 //#include "SpriteAnimation.h"
 
 
@@ -37,16 +38,7 @@ bool UIScore::Start()
 	uiCoin->Initialize("Assets/modelData/UI/coin.dds", 80.0f, 80.0f);
 	uiCoin->m_transform.m_localPosition = Vector3(-880.0f, -450.0f, 0.0f);
 	
-
-
-	// @todo for test
-	//auto* uiDigit = m_uiCanvas->CreateUI<UIDigit>();
-	//uiDigit->Initialize("Assets/modelData/UI/suji", 5, 0, 50.0f, 50.0f, Vector3(-400.0f, 100.0f, 0.0f), Vector3::One, Quaternion::Identity);
-
 	m_uiDigit->SetNumber(0);
-
-	// 右から3番目の桁(=targetDigit = 3) を":"に変更
-	//uiDigit->SetCustomChar(3, "coron.dds");
 
 	// 追加されるスコア表示のUIを作る
 	m_uiAddScoreCanvas = new UICanvas();
@@ -55,22 +47,18 @@ bool UIScore::Start()
 	m_uiAddScoreDigit->SetNumber(0);
 	// UIアニメーション追加
 	{
-		std::vector<float> timeList = { 1.0f };
-		std::vector<Vector4> targetColorList = { Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f) };
-		auto& spriteRenderList = m_uiAddScoreDigit->GetSpriteRenderList();
-		for (int i = 0; i < spriteRenderList.size(); ++i) {
-		/*	auto* render = spriteRenderList[i];
-			render->SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
-			std::vector<Vector3> targetPositionList = { Vector3(-650.0f - (50.0f * i), -400.0f, 0.0f), Vector3(-650.0f - (50.0f * i), -350.0f, 0.0f) };
-			TranslateSpriteAnimation* translateSpriteAnimation = new TranslateSpriteAnimation(render, false, timeList, targetPositionList );
-			m_uiAddScoreDigit->AddSpriteAnimation(translateSpriteAnimation);
-			ColorSpriteAnimation* alphaSpriteAnimation = new ColorSpriteAnimation(render, false, timeList, targetColorList);
-			m_uiAddScoreDigit->AddSpriteAnimation(alphaSpriteAnimation);*/
-
-			auto render = std::make_unique<UIVector4Animation>();
-			//render->SetParameter();
-		}
+		auto translateAnimation = std::make_unique<UITranslateAniamtion>();
+		translateAnimation->SetParameter(Vector3(-650.0f, -400.0f, 0.0f), Vector3(-650.0f, -350.0f, 0.0f), 0.8f, EasingType::EaseIn, LoopMode::Once);
+		m_uiAddScoreDigit->AddAnimation(Hash32("m_uiAddScoreDigitTranslateAnimation"), std::move(translateAnimation));
+		m_uiAddScoreDigit->StopSpriteAnimation();
 	}
+	{
+		auto colorAnimation = std::make_unique<UIColorAnimation>();
+		colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 0.8f, EasingType::EaseIn, LoopMode::Once);
+		m_uiAddScoreDigit->AddAnimation(Hash32("m_uiAddScoreDigitColorAnimation"), std::move(colorAnimation));
+		m_uiAddScoreDigit->StopSpriteAnimation();
+	}
+	m_uiAddScoreDigit->isDraw = false;
 
 	return true;
 }
@@ -78,9 +66,22 @@ bool UIScore::Start()
 
 void UIScore::Update()
 {
+	// @todo for play
+	if (g_pad[0]->IsTrigger(enButtonY))
+	{
+		m_requestAddScore = 100;
+	}
+
 	if (m_requestAddScore != 0) {
+		m_uiAddScoreDigit->isDraw = true;
 		m_addScore = m_requestAddScore;
-		//////m_uiAddScoreDigit->PlaySpriteAnimation();
+		m_uiAddScoreDigit->ResetAnimation();
+		m_uiAddScoreDigit->PlayAnimation();
+	}
+
+	if (!m_uiAddScoreDigit->IsPlayAniamtion())
+	{
+		m_uiAddScoreDigit->isDraw = false;
 	}
 
 	// スコアを設定

@@ -59,7 +59,7 @@ public:
         m_easingType = type;
         m_loopMode = loopMode;
         m_currentTime = 0.0f;
-        m_isPlaying = true;
+        m_isPlaying = false;
         m_direction = 1;
     }
 
@@ -74,6 +74,12 @@ public:
         m_isPlaying = false;
     }
 
+    /** リセット */
+    void Reset() {
+        m_currentTime = 0.0f;
+        m_direction = 1;
+    }
+
     /** 更新 */
     void Update(float deltaTime) 
     {
@@ -81,10 +87,17 @@ public:
         if (!m_isPlaying) return;
 
         // 時間を進める
-        m_currentTime += m_loopMode == LoopMode::Loop ? deltaTime * m_direction : deltaTime;
-
-       /* if (m_loopMode == LoopMode::PingPong) m_currentTime += deltaTime * m_direction;
-        else m_currentTime += deltaTime;*/
+        //m_currentTime += m_loopMode == LoopMode::Loop ? deltaTime * m_direction : deltaTime;
+        if (m_loopMode == LoopMode::Loop)
+        {
+            m_currentTime += deltaTime * m_direction;
+        }
+        else if (m_loopMode == LoopMode::PingPong) {
+            m_currentTime += deltaTime * m_direction;
+        }
+        else {
+            m_currentTime += deltaTime;
+        }
 
         // 終了判定とループ処理
         if (m_currentTime >= m_duration) {

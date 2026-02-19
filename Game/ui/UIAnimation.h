@@ -26,6 +26,7 @@ public:
 	virtual void Play() = 0;
 	virtual void Stop() = 0;
 	virtual bool IsPlay() = 0;
+	virtual void Reset() = 0;
 	
 
 	void SetUI(UIBase* ui) { m_ui = ui; }
@@ -51,6 +52,11 @@ protected:
 	
 		void Update() override
 		{
+			// もし再生していないなら処理しない
+			if (!IsPlay()) {
+				return; 
+			}
+
 			m_curve.Update(g_gameTime->GetFrameDeltaTime());
 			
 			//イージングされた現在の値を取得し、登録された関数を実行
@@ -70,7 +76,13 @@ protected:
 		{
 			m_curve.Stop();
 		}
-	
+
+		/** リセット */
+		void Reset() override
+		{
+			m_curve.Reset();
+		}
+
 		/** 再生中か */
 		bool IsPlay() override
 		{
@@ -149,6 +161,13 @@ public:
 		m_curve.Stop();
 	}
 
+
+	/** リセット */
+	void Reset() override
+	{
+		m_curve.Reset();
+	}
+
 	/** UIアニメーションの情報を設定 */
 	void SetParameter(Vector2 start, Vector2 end, float timeSec, EasingType type, LoopMode loopMode)
 	{
@@ -225,6 +244,12 @@ public:
 		m_curve.Stop();
 	}
 
+	/** リセット */
+	void Reset() override
+	{
+		m_curve.Reset();
+	}
+
 	void SetParameter(Vector3 start, Vector3 end, float timeSec, EasingType type, LoopMode loopMode)
 	{
 		m_start = start;
@@ -296,6 +321,12 @@ public:
 		m_curve.Stop();
 	}
 
+	/** リセット */
+	void Reset() override
+	{
+		m_curve.Reset();
+	}
+
 	void SetParameter(Vector4 start, Vector4 end, float timeSec, EasingType type, LoopMode loopMode)
 	{
 		m_start = start;
@@ -321,109 +352,8 @@ public:
 
 
 
-/*****************************************/
+/*************************************************/
 
-
-//{//class UIQuaternionAnimation : public UIAnimationBase
-
-//protected:
-//	Curve<float> m_curve;
-//	/** カーブ用のパラメーター */
-//	float m_start = 0.0f;
-//	float m_end = 0.0f;
-//	float m_timeSec = 0.0f;
-//	EasingType m_type = EasingType::Linear;
-//	LoopMode m_loopMode = LoopMode::Once;
-//
-//	UIAnimationApplyFunc<float> m_applyFunc;
-//
-//public:
-//	UIQuaternionAnimation() {}
-//	~UIQuaternionAnimation() {}
-//
-//	void Update() override
-//	{
-//		m_curve.Update(g_gameTime->GetFrameDeltaTime());
-//		
-//		float currentAngle = m_curve.GetCurrentValue(); 
-//
-//		Quaternion tmpRot;
-//		tmpRot.SetRotationDegZ(currentAngle);
-//		
-//		//消しといて
-//		//m_applyFunc(m_curve.GetCurrentQuaternionValue());
-//
-//		/*if (m_ui) {
-//			m_ui->m_transform.m_localRotation = tmpRot;
-//			m_ui->m_transform.UpdateTransform();
-//		}*/
-//	}
-//
-//	void Play() override
-//	{
-//		m_curve.Play(m_start, m_end, m_timeSec, m_type, m_loopMode);
-//	}
-//
-//	bool IsPlay() override
-//	{
-//		return m_curve.IsPlaying();
-//	}
-//
-//	void SetParameter(float start, float end, float timeSec, EasingType type, LoopMode loopMode)
-//	{
-//		m_start = start;
-//		m_end = end;
-//		m_timeSec = timeSec;
-//		m_type = type;
-//		m_loopMode = loopMode;
-//		m_curve.Play(start, end, timeSec, type, loopMode);
-//	}
-//
-//
-//	float GetCurrendtValue()
-//	{
-//		return m_curve.GetCurrentValue();
-//	}
-//
-//	void SetFunc(const UIAnimationApplyFunc<float>& func)
-//	{
-//		m_applyFunc = func;
-//	}
-//};
-
-
-
-
-/*******************************/
-
-
-//  /** 色変更 */
-//  class UIColorAnimation : public UIVector2Animation
-//  {
-//  public:
-//  	UIColorAnimation();
-//  	~UIColorAnimation() {}
-//  
-//  	void Update() override
-//  	{
-//  		m_curve.Update(g_gameTime->GetFrameDeltaTime());
-//  		m_applyFunc(m_curve.GetCurrentValue());
-//  	}
-//  };
-
-///** 色変更 */
-//class UIColorVector3Animation : public UIVector3Animation
-//{
-//public:
-//	UIColorVector3Animation();
-//	~UIColorVector3Animation() {}
-//
-//	void Update() override
-//	{
-//		m_curve.Update(g_gameTime->GetFrameDeltaTime());
-//		m_applyFunc(m_curve.GetCurrentValue());
-//	}
-//};
 
 /** カラーアニメーション */
 class UIColorAnimation : public UIVector4Animation
@@ -457,51 +387,6 @@ public:
   };
 
 
-//class UIScaleVector3Animation : public UIVector3Animation
-//{
-//public:
-//	UIScaleVector3Animation();
-//	~UIScaleVector3Animation() {}
-//
-//	void Update() override
-//	{
-//		m_curve.Update(g_gameTime->GetFrameDeltaTime());
-//		m_applyFunc(m_curve.GetCurrentValue());
-//	}
-//};
-
-
-//  class UIScaleVector4Animation : public UIVector4Animation
-//  {
-//  public:
-//  	UIScaleVector4Animation();
-//  	~UIScaleVector4Animation() {}
-//  
-//  	void Update() override
-//  	{
-//  		m_curve.Update(g_gameTime->GetFrameDeltaTime());
-//  		m_applyFunc(m_curve.GetCurrentValue());
-//  	}
-//  };
-
-
-
-
-//  /** 座標変更 */
-//  class UITranslateAniamtion : public UIVector2Animation
-//  {
-//  public:
-//  	UITranslateAniamtion();
-//  	~UITranslateAniamtion() {}
-//  
-//  	void Update() override
-//  	{
-//  		m_curve.Update(g_gameTime->GetFrameDeltaTime());
-//  		m_applyFunc(m_curve.GetCurrentValue());
-//  	}
-//  };
-
-
 /** 座標アニメーション */
 class UITranslateAniamtion : public UIVector3Animation
 {
@@ -515,38 +400,6 @@ public:
 		m_applyFunc(m_curve.GetCurrentValue());
 	}
 };
-
-
-//  /** 座標変更 */
-//  class UITranslateVector4Aniamtion : public UIVector4Animation
-//  {
-//  public:
-//  	UITranslateVector4Aniamtion();
-//  	~UITranslateVector4Aniamtion() {}
-//  
-//  	void Update() override
-//  	{
-//  		m_curve.Update(g_gameTime->GetFrameDeltaTime());
-//  		m_applyFunc(m_curve.GetCurrentValue());
-//  	}
-//  };
-
-
-
-
-//  /** 元座標との差分変更 */
-//  class UIOffsetAnimation : public UIVector2Animation
-//  {
-//  public:
-//  	UIOffsetAnimation();
-//  	~UIOffsetAnimation() {}
-//  
-//  	void Update() override
-//  	{
-//  		m_curve.Update(g_gameTime->GetFrameDeltaTime());
-//  		m_applyFunc(m_curve.GetCurrentValue());
-//  	}
-//  };
 
 /** 元座標との差分アニメーション */
 class UITranslateOffsetAnimation : public UIVector3Animation
@@ -562,20 +415,6 @@ public:
 	}
 };
 
-//  /** 元座標との差分変更 */
-//  class UIOffsetVector4Animation : public UIVector4Animation
-//  {
-//  public:
-//  	UIOffsetVector4Animation();
-//  	~UIOffsetVector4Animation() {}
-//  
-//  	void Update() override
-//  	{
-//  		m_curve.Update(g_gameTime->GetFrameDeltaTime());
-//  		m_applyFunc(m_curve.GetCurrentValue());
-//  	}
-//  };
-
 
 /** 回転アニメーション */
 class UIRotationAnimation : public UIFloatAnimation
@@ -588,12 +427,6 @@ public:
 	{
 		m_curve.Update(g_gameTime->GetFrameDeltaTime());
 		m_applyFunc(m_curve.GetCurrentValue());
-
-		/*Quaternion tmpRot;
-		tmpRot.SetRotationDegZ(m_curve.GetCurrentValue());*/
-
-		//float currentZAngle = m_curve.GetCurrentValue();
-		//m_applyFunc(m_curve.GetCurrentQuaternionValue());
 	}
 
 };

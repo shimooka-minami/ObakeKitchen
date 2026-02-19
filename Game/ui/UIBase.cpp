@@ -213,6 +213,7 @@ void UIDigit::Update()
 		UpdatePosition(i);
 		spriteRender->SetScale(m_transform.m_scale);
 		spriteRender->SetRotation(m_transform.m_rotation);
+		spriteRender->SetMulColor(m_color);
 		spriteRender->Update();
 	}
 
@@ -224,6 +225,10 @@ void UIDigit::Update()
 
 void UIDigit::Render(RenderContext& rc)
 {
+	if (!isDraw)
+	{
+		return;
+	}
 	for (SpriteRender* spriteRender : m_renderList)
 	{
 		spriteRender->Draw(rc);

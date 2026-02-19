@@ -38,6 +38,7 @@ void SceneManager::Update()
 			m_currentScene = nullptr;
 
 			Fade::Get().Enable();
+			return;
 		}
 	}
 
