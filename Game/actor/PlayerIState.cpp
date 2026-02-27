@@ -134,11 +134,11 @@ void HavePlateState::Enter()
 {
 	// プレイヤーの情報を取得
 	Player* player = m_owner->GetOwner();
-	// 食べ物の情報を取得
+	// 皿の情報を取得
 	Plate* targetPlate = m_owner->GetTargetPlate();
-	// 食べ物をプレイヤーの子にする
+	// 皿をプレイヤーの子にする
 	targetPlate->m_transform.SetParent(&player->m_transform);
-	// 食べ物をプレイヤーの前に配置 (持っている表現)
+	// 皿をプレイヤーの前に配置 (持っている表現)
 	Vector3 targetPlatePosition;
 	targetPlatePosition = Vector3::Front * 25.0f;
 	targetPlatePosition.y += 30.0f;
@@ -275,15 +275,15 @@ void DashHaveState::Enter()
 {
 	// プレイヤーの情報を取得
 	Player* player = m_owner->GetOwner();
-	//// 食べ物の情報を取得
-	//Plate* targetFood = m_owner->GetTargetFood();
-	//// 食べ物をプレイヤーの子にする
-	//targetFood->m_transform.SetParent(&player->m_transform);
-	//// 食べ物をプレイヤーの前に配置 (持っている表現)
-	//Vector3 targetFoodPosition;
-	//targetFoodPosition = Vector3::Front * 25.0f;
-	//targetFoodPosition.y += 30.0f;
-	//targetFood->SetPosition(targetFoodPosition);
+	// 食べ物の情報を取得
+	Plate* targetFood = m_owner->GetTargetFood();
+	// 食べ物をプレイヤーの子にする
+	targetFood->m_transform.SetParent(&player->m_transform);
+	// 食べ物をプレイヤーの前に配置 (持っている表現)
+	Vector3 targetFoodPosition;
+	targetFoodPosition = Vector3::Front * 25.0f;
+	targetFoodPosition.y += 30.0f;
+	targetFood->SetPosition(targetFoodPosition);
 
 }
 
@@ -297,12 +297,14 @@ void DashHaveState::Update()
 		const float moveSpeed = m_owner->GetOwnerStatus()->GetSpeed();
 		const float dashSpeed = m_owner->GetOwnerStatus()->GetDashSpeed();
 		const float moveDashSpeed = moveSpeed * dashSpeed;
-		// 移動方向にどれだけ進むかを求める
-		const Vector3 move = moveDirection * moveDashSpeed;
+
 		// NOTE:移動速度を後で入れよう
-		//const Vector3 move = moveDirection * m_owner->GetOwnerStatus()->GetSpeed();
+		const Vector3 move = moveDirection * m_owner->GetOwnerStatus()->GetSpeed();
+		// 移動方向にどれだけ進むかを求める
+		Vector3 dashMove = moveDirection * moveDashSpeed;
+		
 		// 座標設定
-		m_owner->SetMoveVector(move);
+		m_owner->SetMoveVector(dashMove);
 	}
 	else {
 		// 座標設定

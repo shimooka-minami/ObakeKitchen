@@ -13,6 +13,7 @@ StateMachine::StateMachine()
 	AddState<WalkState>(enPlayerWalk);
 	AddState<HavePlateState>(enPlayerHavePlate);
 	AddState<HaveFoodState>(enPlayerHaveFood);
+	AddState<DashHaveState>(enPlayerDashHave);
 	AddState<ThrowState>(enPlayerThrow);
 	AddState<PutState>(enPlayerPut);
 	AddState<CoockingState>(enPlayerCoocking);
@@ -68,7 +69,11 @@ IState* StateMachine::GetChangeState() const
 	//
 
 	// 食材を持っている状態なら
-	if (IsEqualCurrentState(enPlayerHaveFood)) {
+	if (IsEqualCurrentState(enPlayerHaveFood)) {	
+		// 物を持っている時に走る状態に変わるかチェック
+		if (CanChangeDashHave()) {
+			return m_stateList[enPlayerDashHave];
+		}
 		// 料理する状態に変わるかチェック
 		if (CanChangeCooking()) {
 			return m_stateList[enPlayerCoocking];
@@ -82,6 +87,17 @@ IState* StateMachine::GetChangeState() const
 			return nullptr;
 		}
 	}
+	// 食材や皿を持って移動中なら
+	if (IsEqualCurrentState(enPlayerDashHave)) {
+		// 投げれるなら
+		if (CanChangeThrow()) {
+			return m_stateList[enPlayerThrow];
+		}
+		if (m_isDash) {
+			return nullptr;
+		}
+	}
+
 	// 皿を持っている状態なら
 	if (IsEqualCurrentState(enPlayerHavePlate)){
 		// 皿を置くかどうか切り替える
@@ -102,6 +118,9 @@ IState* StateMachine::GetChangeState() const
 	}
 
 	// その他
+	if (CanChangeDashHave()){
+		return m_stateList[enPlayerDashHave];
+	}
 	if (ChangeHaveFood()) {
 		return m_stateList[enPlayerHaveFood];
 	}
@@ -138,12 +157,12 @@ bool StateMachine::CanChangeDash() const
 
 bool StateMachine::ChangeHaveFood() const
 {
-	// 料理中は皿をもっていることにする
+	// 料理中は食材をもっていることにする
 	if (IsEqualCurrentState(enPlayerCoocking)) {
 		return true;
 	}
 
-	// 皿が持てる状態か
+	// 食材が持てる状態か
 	bool canHaveFoodState = false;
 	if (IsEqualCurrentState(enPlayerIdle)) {
 		canHaveFoodState = true;
@@ -218,10 +237,24 @@ bool StateMachine::ChangeHavePlate() const
 	return false;
 }
 
+bool StateMachine::CanChangeDashHave() const
+{
+	if (!IsEqualCurrentState(enPlayerHaveFood) && !IsEqualCurrentState(enPlayerHavePlate))
+	{
+		return false;
+	}
+
+	// Bボタンが押されたら走る
+	if (m_isDash) {
+		return true;
+	}
+	return false;
+}
+
 
 bool StateMachine::CanChangeThrow() const
 {
-	if (!IsEqualCurrentState(enPlayerHaveFood)) {
+	if (!IsEqualCurrentState(enPlayerHaveFood) && !IsEqualCurrentState(enPlayerDashHave)) {
 		return false;
 	}
 	// Aボタンが押されたら食材を投げる

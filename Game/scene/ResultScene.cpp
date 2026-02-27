@@ -34,6 +34,8 @@ bool ResultScene::Start()
 {
 	//m_spriteRender.Init("Assets/modelData/UI/result.dds",1920.0f,1080.0f);
 
+	m_playScheduler = std::make_unique<TaskSchedulerSystem>();
+
 	m_uiCanvas = new UICanvas;
 
 	// 背景
@@ -59,28 +61,28 @@ bool ResultScene::Start()
 	auto* uiBackScore = m_uiCanvas->CreateUI<UIIcon>(2);
 	uiBackScore->Initialize("Assets/modelData/UI/result/score_back.dds", 950.0f, 750.0f);
 	uiBackScore->m_transform.m_localPosition = Vector3(0.0f, -25.0f, 0.0f);
-	
-	// おばけ 左
-	auto* uiGhostLeft = m_uiCanvas->CreateUI<UIIcon>(3);
-	uiGhostLeft->Initialize("Assets/modelData/UI/result/obake_left.dds", 350.0f, 328.0f);
-	uiGhostLeft->m_transform.m_localPosition = Vector3(-725.0f, -200.0f, 0.0f);
-	// おはけ左のアニメーション
-	{
-		auto* render = uiGhostLeft->GetSpriteRender();
-		std::vector<Vector3> targetTranslateList = { Vector3(-725.0f, -200.0f, 0.0f), Vector3(-725.0, 0.0f, 0.0f), Vector3(-725.0f, -200.0f, 0.0f) };
-		std::vector<float> timeList = { 1.8f,1.8f };
+	//
+	//// おばけ 左
+	//auto* uiGhostLeft = m_uiCanvas->CreateUI<UIIcon>(3);
+	//uiGhostLeft->Initialize("Assets/modelData/UI/result/obake_left.dds", 350.0f, 328.0f);
+	//uiGhostLeft->m_transform.m_localPosition = Vector3(-725.0f, -200.0f, 0.0f);
+	//// おはけ左のアニメーション
+	//{
+	//	auto* render = uiGhostLeft->GetSpriteRender();
+	//	std::vector<Vector3> targetTranslateList = { Vector3(-725.0f, -200.0f, 0.0f), Vector3(-725.0, 0.0f, 0.0f), Vector3(-725.0f, -200.0f, 0.0f) };
+	//	std::vector<float> timeList = { 1.8f,1.8f };
 
-		auto translateAnimation = std::make_unique<UITranslateAniamtion>();
-		translateAnimation->SetParameter(Vector3(-1500.0f, 450.0f, 0.0f), Vector3(-560.0f, 450.0f, 0.0f), 1.8f, EasingType::EaseIn, LoopMode::Loop);
-		uiGhostLeft->AddAnimation(Hash32("uiGhostLeftTranslateAnimation"),std::move(translateAnimation));
-		uiGhostLeft->PlayAnimation();
+	//	auto translateAnimation = std::make_unique<UITranslateAniamtion>();
+	//	translateAnimation->SetParameter(Vector3(-725.0f, -200.0f, 0.0f), Vector3(-725.0f, 0.0f, 0.0f), 1.8f, EasingType::EaseIn, LoopMode::Loop);
+	//	uiGhostLeft->AddAnimation(Hash32("uiGhostLeftTranslateAnimation"),std::move(translateAnimation));
+	//	//uiGhostLeft->PlayAnimation();
 
-		/*TranslateSpriteAnimation* translateSpriteAnimation = new TranslateSpriteAnimation(render, true, timeList, targetTranslateList );
-		uiGhostLeft->AddSpriteAnimation(translateSpriteAnimation);
-		uiGhostLeft->PlaySpriteAnimation();*/
-	}
+	//	/*TranslateSpriteAnimation* translateSpriteAnimation = new TranslateSpriteAnimation(render, true, timeList, targetTranslateList );
+	//	uiGhostLeft->AddSpriteAnimation(translateSpriteAnimation);
+	//	uiGhostLeft->PlaySpriteAnimation();*/
+	//}
 	// おばけ 右
-	auto* uiGhostRight = m_uiCanvas->CreateUI<UIIcon>(4);
+	auto* uiGhostRight = m_uiCanvas->CreateUI<UIIcon>(3);
 	uiGhostRight->Initialize("Assets/modelData/UI/result/obake_right.dds", 350.0f, 328.0f);
 	uiGhostRight->m_transform.m_localPosition = Vector3(725.0f, 200.0f, 0.0f);
 	// おはけ右のアニメーション
@@ -90,163 +92,219 @@ bool ResultScene::Start()
 		std::vector<float> timeList = { 1.8f,1.8f };
 
 		auto translateAnimation = std::make_unique<UITranslateAniamtion>();
-		translateAnimation->SetParameter(Vector3(725.0f, 200.0f, 0.0f), Vector3(725.0, 0.0f, 0.0f), 1.8f, EasingType::EaseIn, LoopMode::Loop);
+		translateAnimation->SetParameter(Vector3(725.0f, 200.0f, 0.0f), Vector3(725.0, 0.0f, 0.0f), 1.8f, EasingType::EaseIn, LoopMode::PingPong);
 		uiGhostRight->AddAnimation(Hash32("uiGhostRightTranslateAnimation"),std::move(translateAnimation));
 		uiGhostRight->PlayAnimation();
 	}
 
 	// 星の窪み1
-	auto* uiBackStarA = m_uiCanvas->CreateUI<UIIcon>(5);
+	auto* uiBackStarA = m_uiCanvas->CreateUI<UIIcon>(4);
 	uiBackStarA->Initialize("Assets/modelData/UI/result/star_back.dds", 250.0f, 250.0f);
 	uiBackStarA->m_transform.m_localPosition = Vector3(-300.0f, 150.0f, 0.0f);
 	// 星の窪み2
-	auto* uiBackStarB = m_uiCanvas->CreateUI<UIIcon>(6);
+	auto* uiBackStarB = m_uiCanvas->CreateUI<UIIcon>(5);
 	uiBackStarB->Initialize("Assets/modelData/UI/result/star_back.dds", 250.0f, 250.0f);
 	uiBackStarB->m_transform.m_localPosition = Vector3(0.0f, 150.0f, 0.0f);
 	// 星の窪み3
-	auto* uiBackStarC = m_uiCanvas->CreateUI<UIIcon>(7);
+	auto* uiBackStarC = m_uiCanvas->CreateUI<UIIcon>(6);
 	uiBackStarC->Initialize("Assets/modelData/UI/result/star_back.dds", 250.0f, 250.0f);
 	uiBackStarC->m_transform.m_localPosition = Vector3(300.0f, 150.0f, 0.0f);
+
+	// エフェクト
+	m_starEffectList[0] = m_uiCanvas->CreateUI<UIIcon>(13);
+	m_starEffectList[0]->Initialize("Assets/modelData/UI/result/star_effect.dds", 290.0f, 290.0f);
+	m_starEffectList[0]->m_transform.m_localPosition = Vector3(-300.0f, 150.0f, 0.0f);
+	m_starEffectList[0]->isDraw = false;
+	// アニメーション
+	{
+		const int score = Score::GetInstance()->GetScore();
+		if (score >= 500) {
+			m_playScheduler->AddTimer(2.3f, [&]()
+				{
+					m_starEffectList[0]->isDraw = true;
+					auto colorAnimation = std::make_unique<UIColorAnimation>();
+					colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::PingPong);
+					m_starEffectList[0]->AddAnimation(Hash32("m_starEffectList[0]ColorAnimation"), std::move(colorAnimation));
+					m_starEffectList[0]->PlayAnimation();
+				}, false);
+		}
+	}
 	// 星1
-	m_starList[0] = m_uiCanvas->CreateUI<UIIcon>(8);
+	m_starList[0] = m_uiCanvas->CreateUI<UIIcon>(7);
 	m_starList[0]->Initialize("Assets/modelData/UI/result/star.dds", 250.0f, 250.0f);
 	m_starList[0]->m_transform.m_localPosition = Vector3(-300.0f, 150.0f, 0.0f);
+	m_starList[0]->isDraw = false;
 	// 星のアニメーション
 	{
-		/*auto* render = m_starList[0]->GetSpriteRender();
-		std::vector<Vector2> scaleList = { Vector2(0.0f,0.0f), Vector2(0.0f,0.0f), Vector2(2.0f,2.0f), Vector2(1.0f,1.0f) };
-		std::vector<float> timeList = { 1.0f, 0.2f, 0.2f };*/
-
-		auto scaleAnimation = std::make_unique<UIScaleAnimation>();
-		scaleAnimation->SetParameter(Vector3(0.0f, 0.0f,0.0f), Vector3(2.0f, 2.0f,0.0f),1.0f, EasingType::Linear, LoopMode::Once);
-		scaleAnimation->SetParameter(Vector3(2.0f, 2.0f,0.0f), Vector3(1.0f, 1.0f,0.0f), 0.2f, EasingType::Linear, LoopMode::Once);
-		m_starList[0]->AddAnimation(Hash32("m_starList[0]ScaleAnimation"),std::move(scaleAnimation));
-		//m_starList[0]->PlayAnimation();
-
-		/*ScaleSpriteAnimation* scaleSpriteAnimation = new ScaleSpriteAnimation(render, false, timeList, scaleList);
-		m_starList[0]->AddSpriteAnimation(scaleSpriteAnimation);
-		m_starList[0]->m_transform.m_localScale = Vector3::Zero;*/
+		const int score = Score::GetInstance()->GetScore();
+		if (score >= 500) {
+			m_playScheduler->AddTimer(0.6f, [&]()
+				{
+					auto scaleAnimation = std::make_unique<UIScaleAnimation>();
+					scaleAnimation->SetParameter(Vector3(0.0f, 0.0f, 0.0f), Vector3(2.0f, 2.0f, 0.0f), 0.25f, EasingType::EaseIn, LoopMode::Once);
+					m_starList[0]->AddAnimation(Hash32("m_starList[0]ScaleAnimation"), std::move(scaleAnimation));
+					m_starList[0]->isDraw = true;
+					m_starList[0]->PlayAnimation();
+				});
+			m_playScheduler->AddTimer(0.9f, [&]()
+				{
+					m_starList[0]->RemoveAnimation(Hash32("m_starList[0]ScaleAnimation"));
+					auto scaleAnimation = std::make_unique<UIScaleAnimation>();
+					scaleAnimation->SetParameter(Vector3(2.0f, 2.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), 0.3f, EasingType::EaseOut, LoopMode::Once);
+					m_starList[0]->AddAnimation(Hash32("m_starList[0]ScaleAnimation"), std::move(scaleAnimation));
+					m_starList[0]->PlayAnimation();
+				}, false);
+		}
+	}
+	
+	// エフェクト
+	m_starEffectList[1] = m_uiCanvas->CreateUI<UIIcon>(14);
+	m_starEffectList[1]->Initialize("Assets/modelData/UI/result/star_effect.dds", 290.0f, 290.0f);
+	m_starEffectList[1]->m_transform.m_localPosition = Vector3(00.0f, 150.0f, 0.0f);
+	m_starEffectList[1]->isDraw = false;
+	// アニメーション
+	{
+		const int score = Score::GetInstance()->GetScore();
+		if (score >= 1000) {
+			m_playScheduler->AddTimer(2.3f, [&]()
+				{
+					m_starEffectList[1]->isDraw = true;
+					auto colorAnimation = std::make_unique<UIColorAnimation>();
+					colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::PingPong);
+					m_starEffectList[1]->AddAnimation(Hash32("m_starEffectList[1]ColorAnimation"), std::move(colorAnimation));
+					m_starEffectList[1]->PlayAnimation();
+				}, false);
+		}
 	}
 	// 星2
-	m_starList[1] = m_uiCanvas->CreateUI<UIIcon>(9);
+	m_starList[1] = m_uiCanvas->CreateUI<UIIcon>(8);
 	m_starList[1]->Initialize("Assets/modelData/UI/result/star.dds", 250.0f, 250.0f);
 	m_starList[1]->m_transform.m_localPosition = Vector3(0.0f, 150.0f, 0.0f);
+	m_starList[1]->isDraw = false;
 	// 星のアニメーション
 	{
-		auto* render = m_starList[1]->GetSpriteRender();
-		std::vector<Vector2> scaleList = { Vector2(0.0f,0.0f), Vector2(0.0f,0.0f), Vector2(2.0f,2.0f), Vector2(1.0f,1.0f) };
-		std::vector<float> timeList = { 1.0f, 0.2f, 0.2f };
+		const int score = Score::GetInstance()->GetScore();
+		if (score >= 1000) {
+			m_playScheduler->AddTimer(1.2f, [&]()
+				{
+					auto scaleAnimation = std::make_unique<UIScaleAnimation>();
+					scaleAnimation->SetParameter(Vector3(0.0f, 0.0f, 0.0f), Vector3(2.0f, 2.0f, 0.0f), 0.25f, EasingType::EaseIn, LoopMode::Once);
+					m_starList[1]->AddAnimation(Hash32("m_starList[1]ScaleAnimation"), std::move(scaleAnimation));
+					m_starList[1]->isDraw = true;
+					m_starList[1]->PlayAnimation();
+				});
+			m_playScheduler->AddTimer(1.5f, [&]()
+				{
+					m_starList[1]->RemoveAnimation(Hash32("m_starList[1]ScaleAnimation"));
+					auto scaleAnimation = std::make_unique<UIScaleAnimation>();
+					scaleAnimation->SetParameter(Vector3(2.0f, 2.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), 0.3f, EasingType::EaseOut, LoopMode::Once);
+					m_starList[1]->AddAnimation(Hash32("m_starList[1]ScaleAnimation"), std::move(scaleAnimation));
+					m_starList[1]->PlayAnimation();
+				}, false);
+		}
+	}
 
-		auto scaleAnimation = std::make_unique<UIScaleAnimation>();
-		scaleAnimation->SetParameter(Vector3(0.0f, 0.0f,0.0f), Vector3(2.0f, 2.0f,0.0f), 1.0f, EasingType::Linear, LoopMode::Once);
-		scaleAnimation->SetParameter(Vector3(2.0f, 2.0f,0.0f), Vector3(1.0f, 1.0f,0.0f), 0.2f, EasingType::Linear, LoopMode::Once);
-		m_starList[1]->AddAnimation(Hash32("m_starList[1]ScaleAnimation"),std::move(scaleAnimation));
-		m_starList[1]->PlayAnimation();
-
-		/*auto* render = m_starList[1]->GetSpriteRender();
-		std::vector<Vector2> scaleList = { Vector2(0.0f,0.0f), Vector2(0.0f,0.0f), Vector2(2.0f,2.0f), Vector2(1.0f,1.0f) };
-		std::vector<float> timeList = { 1.3f, 0.2f, 0.2f };
-		ScaleSpriteAnimation* scaleSpriteAnimation = new ScaleSpriteAnimation(render, false, timeList, scaleList);
-		m_starList[1]->AddSpriteAnimation(scaleSpriteAnimation);
-		m_starList[1]->m_transform.m_localScale = Vector3::Zero;*/
+	// エフェクト
+	m_starEffectList[2] = m_uiCanvas->CreateUI<UIIcon>(15);
+	m_starEffectList[2]->Initialize("Assets/modelData/UI/result/star_effect.dds", 290.0f, 290.0f);
+	m_starEffectList[2]->m_transform.m_localPosition = Vector3(300.0f, 150.0f, 0.0f);
+	m_starEffectList[2]->isDraw = false;
+	// アニメーション
+	{
+		const int score = Score::GetInstance()->GetScore();
+		if (score >= 1500) {
+			m_playScheduler->AddTimer(2.3f, [&]()
+				{
+					m_starEffectList[2]->isDraw = true;
+					auto colorAnimation = std::make_unique<UIColorAnimation>();
+					colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, EasingType::Linear, LoopMode::PingPong);
+					m_starEffectList[2]->AddAnimation(Hash32("m_starEffectList[2]ColorAnimation"), std::move(colorAnimation));
+					m_starEffectList[2]->PlayAnimation();
+				}, false);
+		}
 	}
 	// 星3
-	m_starList[2] = m_uiCanvas->CreateUI<UIIcon>(10);
+	m_starList[2] = m_uiCanvas->CreateUI<UIIcon>(9);
 	m_starList[2]->Initialize("Assets/modelData/UI/result/star.dds", 250.0f, 250.0f);
 	m_starList[2]->m_transform.m_localPosition = Vector3(300.0f, 150.0f, 0.0f);
+	m_starList[2]->isDraw = false;
 	// 星のアニメーション
 	{
-		auto* render = m_starList[2]->GetSpriteRender();
-		std::vector<Vector2> scaleList = { Vector2(0.0f,0.0f), Vector2(0.0f,0.0f), Vector2(2.0f,2.0f), Vector2(1.0f,1.0f) };
-		std::vector<float> timeList = { 1.0f, 0.2f, 0.2f };
-
-		auto scaleAnimation = std::make_unique<UIScaleAnimation>();
-		scaleAnimation->SetParameter(Vector3(0.0f, 0.0f,0.0f), Vector3(2.0f, 2.0f,0.0f), 1.0f, EasingType::Linear, LoopMode::Once);
-		scaleAnimation->SetParameter(Vector3(2.0f, 2.0f,0.0f), Vector3(1.0f, 1.0f,0.0f), 0.2f, EasingType::Linear, LoopMode::Once);
-		m_starList[2]->AddAnimation(Hash32("m_starList[2]ScaleAnimation"),std::move(scaleAnimation));
-		m_starList[2]->PlayAnimation();
-
-		/*auto* render = m_starList[2]->GetSpriteRender();
-		std::vector<Vector2> scaleList = { Vector2(0.0f,0.0f), Vector2(0.0f,0.0f), Vector2(2.0f,2.0f), Vector2(1.0f,1.0f) };
-		std::vector<float> timeList = { 1.6f, 0.2f, 0.2f };
-		ScaleSpriteAnimation* scaleSpriteAnimation = new ScaleSpriteAnimation(render, false, timeList, scaleList);
-		m_starList[2]->AddSpriteAnimation(scaleSpriteAnimation);
-		m_starList[2]->m_transform.m_localScale = Vector3::Zero*/;
+		const int score = Score::GetInstance()->GetScore();
+		if (score >= 1500) {
+			m_playScheduler->AddTimer(1.8f, [&]()
+				{
+					auto scaleAnimation = std::make_unique<UIScaleAnimation>();
+					scaleAnimation->SetParameter(Vector3(0.0f, 0.0f, 0.0f), Vector3(2.0f, 2.0f, 0.0f), 0.25f, EasingType::EaseIn, LoopMode::Once);
+					m_starList[2]->AddAnimation(Hash32("m_starList[1]ScaleAnimation"), std::move(scaleAnimation));
+					m_starList[2]->isDraw = true;
+					m_starList[2]->PlayAnimation();
+				});
+			m_playScheduler->AddTimer(2.1f, [&]()
+				{
+					m_starList[2]->RemoveAnimation(Hash32("m_starList[1]ScaleAnimation"));
+					auto scaleAnimation = std::make_unique<UIScaleAnimation>();
+					scaleAnimation->SetParameter(Vector3(2.0f, 2.0f, 0.0f), Vector3(1.0f, 1.0f, 0.0f), 0.3f, EasingType::EaseOut, LoopMode::Once);
+					m_starList[2]->AddAnimation(Hash32("m_starList[1]ScaleAnimation"), std::move(scaleAnimation));
+					m_starList[2]->PlayAnimation();
+				}, false);
+		}
 	}
 
 	// リザルトスコアテキスト
-	auto* uiText = m_uiCanvas->CreateUI<UIIcon>(11);
-	uiText->Initialize("Assets/modelData/UI/score_text.dds", 300.0f, 44.0f);
-	uiText->m_transform.m_localPosition = Vector3(-250.0f, -150.0f, 0.0f);
+	m_uiText = m_uiCanvas->CreateUI<UIIcon>(10);
+	m_uiText->Initialize("Assets/modelData/UI/score_text.dds", 300.0f, 44.0f);
+	m_uiText->m_transform.m_localPosition = Vector3(-250.0f, -150.0f, 0.0f);
+	m_uiText->isDraw = false;
 	{
-		auto* render = uiText->GetSpriteRender();
-		std::vector<Vector4> targetColorList = { Vector4(0.0f,0.0f,0.0f,0.0f),Vector4(0.0f,0.0f,0.0f,0.0f),Vector4(0.0f,0.0f,0.0f,1.0f) };
-		std::vector<float> timeList = { 1.9f,1.0f };
-		
-		auto colorAnimation = std::make_unique<UIColorAnimation>();
-		colorAnimation->SetParameter(Vector4(0.0f, 0.0f, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 0.0f, 1.0f), 1.9f, EasingType::Linear, LoopMode::Once);
-		uiText->AddAnimation(Hash32("uiTextColorAnimation"),std::move(colorAnimation));
-		uiText->PlayAnimation();
-
-
-	/*	std::vector<float> timeList = { 1.9f, 0.1f };
-		std::vector<Vector4> targetColorList = { Vector4(0.0f,0.0f,0.0f,0.0f), Vector4(0.0f, 0.0f, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 0.0f, 1.0f) };
-		auto* render = uiText->GetSpriteRender();
-		render->SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
-		ColorSpriteAnimation* alphaSpriteAnimation = new ColorSpriteAnimation(render, false, timeList, targetColorList);
-		uiText->AddSpriteAnimation(alphaSpriteAnimation);*/
+		m_playScheduler->AddTimer(2.5f, [&]()
+			{
+				m_uiText->isDraw = true;
+				auto colorAnimation = std::make_unique<UIColorAnimation>();
+				colorAnimation->SetParameter(Vector4(0.0f, 0.0f, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 0.0f, 1.0f), 1.0f, EasingType::EaseOut, LoopMode::Once);
+				m_uiText->AddAnimation(Hash32("m_uiTextColorAnimation"), std::move(colorAnimation));
+				m_uiText->PlayAnimation();
+			}, false);		
 	}
-	//uiText->PlaySpriteAnimation();
 
 	// スコアの数字
-	m_uiDigit = m_uiCanvas->CreateUI<UIDigit>(12);
+	m_uiDigit = m_uiCanvas->CreateUI<UIDigit>(11);
 	m_uiDigit->Initialize("Assets/modelData/UI/suji", 4, 0, 80.0f, 80.0f, Vector3(370.0f, -150.0f, 0.0f), Vector3::One, Quaternion::Identity);
 	m_uiDigit->SetNumber(Score::GetInstance()->GetScore());
+	m_uiDigit->isDraw = false;
 	// UIアニメーション追加
 	{
-		auto& spriteRenderList = m_uiDigit->GetSpriteRenderList();
-		for (int i = 0; i < spriteRenderList.size(); ++i) {
-			auto* render = spriteRenderList[i];
-			render->SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
-			auto colorAnimation = std::make_unique<UIColorAnimation>();
-			colorAnimation->SetParameter(Vector4(0.0f, 0.0f, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 0.0f, 1.0f), 1.9f, EasingType::Linear, LoopMode::Once);
-			m_uiDigit->AddAnimation(Hash32("uiDigitColorAnimation")+i,std::move(colorAnimation));
-			m_uiDigit->PlayAnimation();
-		}
-
-		/*std::vector<float> timeList = { 1.9f, 0.1f };
-		std::vector<Vector4> targetColorList = {Vector4(0.0f,0.0f,0.0f,0.0f), Vector4(0.0f, 0.0f, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 0.0f, 1.0f) };
-		auto& spriteRenderList = uiDigit->GetSpriteRenderList();
-		for (int i = 0; i < spriteRenderList.size(); ++i) {
-			auto* render = spriteRenderList[i];
-			render->SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
-			ColorSpriteAnimation* alphaSpriteAnimation = new ColorSpriteAnimation(render, false, timeList, targetColorList);
-			uiDigit->AddSpriteAnimation(alphaSpriteAnimation);
-		}
-		uiDigit->PlaySpriteAnimation();*/
+		m_playScheduler->AddTimer(2.5f, [&]()
+			{
+				m_uiDigit->isDraw = true;
+				auto& spriteRenderList = m_uiDigit->GetSpriteRenderList();
+				for (int i = 0; i < spriteRenderList.size(); ++i) {
+					auto* render = spriteRenderList[i];
+					render->SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
+					auto colorAnimation = std::make_unique<UIColorAnimation>();
+					colorAnimation->SetParameter(Vector4(0.0f, 0.0f, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 0.0f, 1.0f), 1.0f, EasingType::EaseOut, LoopMode::Once);
+					m_uiDigit->AddAnimation(Hash32("m_uiDigitColorAnimation") + i, std::move(colorAnimation));
+					m_uiDigit->PlayAnimation();
+				}
+			}, false);
 	}
 
-	const int score = Score::GetInstance()->GetScore();
-	// @todo for あとで外部パラメーターにする
-	// 星1
-	if (score >= 500) {
-		//m_starList[0]->PlaySpriteAnimation();
-		m_starList[0]->PlayAnimation();
-		//m_starList[0]->m_transform.m_localScale = Vector3::One;
+	// もどる
+	m_backObake = m_uiCanvas->CreateUI<UIIcon>(12);
+	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f);
+	m_backObake->m_transform.m_localPosition = Vector3(-720.0f, -340.0f, 0.0f);
+	m_backObake->isDraw = false;
+	// アニメーション
+	{
+		m_playScheduler->AddTimer(2.8f, [&]()
+			{
+				m_backObake->isDraw = true;
+				auto colorAnimation = std::make_unique<UIColorAnimation>();
+				colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f), 2.0f, EasingType::Linear, LoopMode::Once);
+				m_backObake->AddAnimation(Hash32("m_backObakeColorAnimation"), std::move(colorAnimation));
+				m_backObake->PlayAnimation();
+			}, false);
 	}
-	// 星2
-	if (score >= 1000) {
-		//m_starList[1]->PlaySpriteAnimation();
-		m_starList[1]->PlayAnimation();
-		//m_starList[1]->m_transform.m_localScale = Vector3::One;
-	}
-	// 星3
-	if (score >= 1500) {
-		//m_starList[2]->PlaySpriteAnimation();
-		m_starList[2]->PlayAnimation();
-		//m_starList[2]->m_transform.m_localScale = Vector3::One;
-	}
-
 	return true;
 }
 
@@ -260,6 +318,8 @@ void ResultScene::Update()
 		}
 	}
 	//m_spriteRender.Update();
+	
+	m_playScheduler->Update(g_gameTime->GetFrameDeltaTime());
 
 	m_uiDigit->PlayAnimation();
 	m_uiCanvas->Update();

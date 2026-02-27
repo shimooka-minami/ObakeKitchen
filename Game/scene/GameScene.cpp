@@ -33,6 +33,7 @@
 #include "ui/UITimer.h"
 #include "ui/UIPlayerNumber.h"
 #include "ui/UIInteractIcon.h"
+#include "ui/UIInteractOnPlateIcon.h"
 
 
 namespace
@@ -286,6 +287,20 @@ bool GameScene::Start()
 			const std::string assetPath = ParseStaticMeshExportComponent(j["StaticMeshExportComponent"]);
 			staticGimmick->Initialize(assetPath.c_str(), transform.position, transform.scale, transform.rotation);
 			m_deleteList.push_back(staticGimmick);
+
+			// @todo for test
+			// お皿に近づいたらAボタンのUIを表示したい
+			//Plate* plate = nullptr;
+			//{
+			//	auto* uiInteractOnPlateIcon = NewGO<UIInteractOnPlateIcon>(0, "UIInteractOnPlateIcon");
+			//	uiInteractOnPlateIcon->Initialize();
+			//	m_deleteList.push_back(uiInteractOnPlateIcon);
+
+			//	OnPlatePair pair;
+			//	pair.m_plate = plate;
+			//	pair.m_uiInteractOnPlateIcon = uiInteractOnPlateIcon;
+			//	m_onPlarePairList.push_back(pair);
+			//}
 		}
 		// お皿箱
 		if (IsForwardMatchObjectName(name.c_str(), "Prop_KitchenCabinet_03")) {
@@ -406,7 +421,7 @@ bool GameScene::Start()
 
 	// @todo for test 
 	// 仮で制限時間を入れる
-	m_timeKeeper->SetLimitTime(40);
+	m_timeKeeper->SetLimitTime(150);
 
 	// スコア管理の生成
 	Score::CreateInstance();
@@ -480,6 +495,37 @@ void GameScene::Update()
 			deliverySpacePair.m_uiInteracIcon->SetDrawAButton(false);
 		}
 	}
+
+	// @todo for test
+	// お皿とプレイヤーの距離感によってAボタンを表示
+	//for (auto& OnPlatePair : m_onPlarePairList)
+	//{
+	//	if(OnPlatePair.m_plate->IsNearPlaer())
+	//}
+	auto plateList = FindGOs<Plate>("plate");
+	if (plateList.size() > 0) {
+
+		for (int i = 0; i < plateList.size(); ++i) {
+			UIInteractOnPlateIcon* icon = nullptr;
+			// アイコンが作られてない
+			if (m_onPlareIconList.size() <= i) {
+				icon = NewGO<UIInteractOnPlateIcon>(0, "uiInteractOnPlateIcon");
+				icon->Initialize();
+				m_onPlareIconList.push_back(icon);
+			} else {
+				icon = m_onPlareIconList[i];
+			}
+			icon->SetPosition(plateList[i]->m_transform.m_position);
+			icon->SetDrawAButton(plateList[i]->IsNearPlayer());
+		}
+
+		if (m_onPlareIconList.size() > plateList.size()) {
+			for (int i = plateList.size() - 1; i < m_onPlareIconList.size(); ++i) {
+				m_onPlareIconList[i]->SetDrawAButton(false);
+			}
+		}
+	}
+
 
 	// 制限時間をこえたら次のシーン
 	if (m_timeKeeper->IsTimeOver())

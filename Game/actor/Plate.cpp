@@ -50,6 +50,8 @@ void Plate::Update()
 	// モデルの座標を更新する
 	m_modelRender.SetPosition(m_transform.m_position);
 	m_modelRender.Update();
+
+	m_isNearPlayer = false;
 }
 
 
@@ -146,7 +148,7 @@ bool FoodPlate::Start()
 	m_characterController.Init(GetStatus()->GetRadius(), GetStatus()->GetHeight(), m_transform.m_position, enCollsiionAttr_Food);
 	// 物体ではない当たり判定の初期化
 	m_ghostBody = std::make_unique<SphereGhostBody>();
-	m_ghostBody->Create(this, m_transform.m_position, GetStatus()->GetRadius(), enCollisionType_Food);  //
+	m_ghostBody->Create(this, m_transform.m_position, GetStatus()->GetRadius() * 5.0f, enCollisionType_Food);  // ちょっと大きくしてみた
 
 	CollisionHitManager::Get().RegisterCollisionObject(enCollisionType_Food, this, m_ghostBody->GetCollider());
 	return true;

@@ -6,6 +6,7 @@
 #include "UIInteractIcon.h"
 #include "UIBase.h"
 #include <util/CRC32.h>
+#include "UIInteractOnPlateIcon.h"
 
 namespace
 {
@@ -51,7 +52,6 @@ void UIInteractIcon::Render(RenderContext& rc)
 {
 	m_uiCanvas->Render(rc);
 }
-
 
 void UIInteractIcon::Initialize(const EnInteractType type, const Vector3& position)
 {

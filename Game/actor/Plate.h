@@ -16,6 +16,8 @@ protected:
 	/** 物体ではない当たり判定(GhostBody) */
 	std::unique_ptr<SphereGhostBody> m_ghostBody = nullptr;
 
+	bool m_isNearPlayer = false;
+
 
 public:
 	Plate();
@@ -34,6 +36,9 @@ public:
 
 	/** 既に料理が載っているか */
 	bool IsFull() const { return m_transform.GetChild() != nullptr; }
+
+	void SetNearPlayer(const bool isNear) { m_isNearPlayer = isNear; }
+	bool IsNearPlayer() const { return m_isNearPlayer; }
 
 public:
 	/** 皿を置く */

@@ -34,7 +34,7 @@ public:
 
 
 public:
-	// @todo for あとでコメント
+	// 表示する画像 
 	void Initialize(const EnInteractType type, const Vector3& position);
 
 

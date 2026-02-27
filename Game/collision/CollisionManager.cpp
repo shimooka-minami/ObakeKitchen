@@ -319,33 +319,31 @@ bool CollisionHitManager::UpdateHitPlate(CollisionPair& pair)
 		return false;
 	}
 
-	// プレイヤーの前に皿がない場合
-	if (!player->GetStateMachine()->IsForwardPlate())
-	{
-		if (plate->m_transform.HasParent()) {
-			return false;
-		}
 
-		// 近くにある（プレイヤーと皿が接触しているときの処理）
-		player->GetStateMachine()->SetNearPlate(true);
-
-		Vector3 playerDirection = player->GetStateMachine()->GetDirection();
-		Vector3 plateDirection = plate->m_transform.m_position - player->m_transform.m_position;
-		plateDirection.Normalize();
-
-		// 内積を入れる変数
-		float dot;
-		// 内積の計算 プレイヤーから皿の方向
-		dot = playerDirection.Dot(plateDirection);
-		// 内積からacosで角度(円周率)を求めている
-		float angle = acos(dot);
-
-		// 円周率を角度に変換したとき、プレイヤーと皿の角度が30度以上なら
-		player->GetStateMachine()->SetForwardPlate(angle <= Math::DegToRad(30.0f));
-
-		// フードクラスをターゲットに設定
-		player->GetStateMachine()->SetTargetPlate(plate);
+	if (plate->m_transform.HasParent()) {
+		return false;
 	}
+	// 皿の近くにプレイヤーがいる
+	plate->SetNearPlayer(true);
+	// 近くにある（プレイヤーと皿が接触しているときの処理）
+	player->GetStateMachine()->SetNearPlate(true);
+
+	Vector3 playerDirection = player->GetStateMachine()->GetDirection();
+	Vector3 plateDirection = plate->m_transform.m_position - player->m_transform.m_position;
+	plateDirection.Normalize();
+
+	// 内積を入れる変数
+	float dot;
+	// 内積の計算 プレイヤーから皿の方向
+	dot = playerDirection.Dot(plateDirection);
+	// 内積からacosで角度(円周率)を求めている
+	float angle = acos(dot);
+
+	// 円周率を角度に変換したとき、プレイヤーと皿の角度が30度以上なら
+	player->GetStateMachine()->SetForwardPlate(angle <= Math::DegToRad(30.0f));
+
+	// フードクラスをターゲットに設定
+	player->GetStateMachine()->SetTargetPlate(plate);
 
 	return true;
 }

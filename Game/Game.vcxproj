@@ -243,6 +243,7 @@
     <ClCompile Include="core\ParameterManager.cpp" />
     <ClCompile Include="core\SaveData.cpp" />
     <ClCompile Include="core\SceneLoader.cpp" />
+    <ClCompile Include="core\TaskSchedulerSystem.cpp" />
     <ClCompile Include="core\TimeKeeper.cpp" />
     <ClCompile Include="core\TransformHelper.cpp" />
     <ClCompile Include="effect\EffectManager.cpp" />
@@ -273,6 +274,7 @@
     <ClCompile Include="ui\UIAnimation.cpp" />
     <ClCompile Include="ui\UIBase.cpp" />
     <ClCompile Include="ui\UIInteractIcon.cpp" />
+    <ClCompile Include="ui\UIInteractOnPlateIcon.cpp" />
     <ClCompile Include="ui\UIPlayerNumber.cpp" />
     <ClCompile Include="ui\UIScore.cpp" />
     <ClCompile Include="ui\UITimer.cpp" />
@@ -299,6 +301,7 @@
     <ClInclude Include="core\ParameterManager.h" />
     <ClInclude Include="core\SaveData.h" />
     <ClInclude Include="core\SceneLoader.h" />
+    <ClInclude Include="core\TaskSchedulerSystem.h" />
     <ClInclude Include="core\TimeKeeper.h" />
     <ClInclude Include="core\TransformHelper.h" />
     <ClInclude Include="effect\EffectManager.h" />
@@ -327,6 +330,7 @@
     <ClInclude Include="ui\UIAnimation.h" />
     <ClInclude Include="ui\UIBase.h" />
     <ClInclude Include="ui\UIInteractIcon.h" />
+    <ClInclude Include="ui\UIInteractOnPlateIcon.h" />
     <ClInclude Include="ui\UIPlayerNumber.h" />
     <ClInclude Include="ui\UIScore.h" />
     <ClInclude Include="ui\UITimer.h" />

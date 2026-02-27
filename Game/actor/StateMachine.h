@@ -16,6 +16,7 @@ enum enPlayerState
 	enPlayerDash,
 	enPlayerHaveFood,
 	enPlayerHavePlate,
+	enPlayerDashHave,
 	enPlayerThrow,
 	enPlayerPut,
 	enPlayerCoocking,
@@ -63,6 +64,8 @@ private:
 
 	/** ダッシュできるかどうか */
 	bool m_isDash = false;
+	/** 物を持った状態で走れるようにする */   // @todo for test
+	bool m_actionButtonB = false;
 	/** 皿を持つと投げるの両立 */
 	bool m_actionButtonA = false;
 
@@ -128,6 +131,8 @@ private:
 	bool ChangeHaveFood() const;
 	/** 皿を持った状態に変更できるか */
 	bool ChangeHavePlate() const;
+	/** 物を持った時に走れる状態に変更できるか */
+	bool CanChangeDashHave() const; 
 	/** 皿を持ったままに変更する */
 	bool CanChangeThrow() const;
 	/** 皿を置く状態に変更する */

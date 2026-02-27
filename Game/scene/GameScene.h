@@ -16,6 +16,8 @@ class UITimer;
 class UIPlayerNumber;
 class UIInteractIcon;
 
+class UIInteractOnPlateIcon; // @todo for test
+
 class CoockingSpace;
 class DeliverySpace;
 class PlateSpace;
@@ -47,17 +49,22 @@ private:
 		UIInteractIcon* m_uiInteracIcon = nullptr;
 	};
 
-	// お皿とUIの紐づけ
+	// お皿箱とUIの紐づけ
 	struct PlateSpacePair
 	{
 		PlateSpace* m_plateSpace = nullptr;
 		UIInteractIcon* m_uiInteracIcon = nullptr;
 	};
 
+
 	// 各スペースのポインタ
 	std::vector<CoockingSpacePair> m_coockingSpacePairList;
 	std::vector<DeliverySpacePair> m_deliverySpacePairList;
 	std::vector<PlateSpacePair> m_plateSpacePairList;
+
+	// @todo for test
+	std::vector<UIInteractOnPlateIcon*> m_onPlareIconList;
+
 
 
 private:
@@ -79,7 +86,7 @@ private:
 	/** NewGOしたオブジェクトを削除するために対象を覚えるリスト */
 	std::vector<IGameObject*> m_deleteList;
 
-	// @todo for test
+	// ポイントライトのポインタ
 	std::vector<SPointLight*> m_pointLightList;
 
 
