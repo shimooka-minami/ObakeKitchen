@@ -96,7 +96,11 @@ SceneManagerObject::~SceneManagerObject()
 bool SceneManagerObject::Start()
 {
 	// 最初のシーンを設定
+#if defined(_DEBUG)
 	SceneManager::GetInstance()->CreateScene(BootScene::ID());
+#else
+	SceneManager::GetInstance()->CreateScene(StartupScene::ID());
+#endif
 	return true;
 }
 

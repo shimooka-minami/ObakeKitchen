@@ -124,6 +124,8 @@ void NPCController::Initialize()
     RegisterState(enAIState_CoockingSpaceMove, EnterCoockingSpaceMove, UpdateCoockingSpaceMove, ExitCoockingSpaceMove, CheckCoockingSpaceMove);
     // 納品場へ移動
     RegisterState(enAIState_DeliverySpaceMove, EnterDeliverySpaceMove, UpdateDeliverySpaceMove, ExitDeliverySpaceMove, CheckDeliverySpaceMove);
+    // 料理する
+    RegisterState(enAIState_Coocking, EnterCoocking, UpdateCoocking, ExitCoocking, CheckCoocking);
 }
 
 
@@ -258,6 +260,7 @@ void NPCController::UpdateTargetFoodMove(NPCController* npc)
     Vector3 distance = npc->m_targetPosition - npc->m_target->m_transform.m_position;
     // 方向
     Vector3 direction = distance;
+    direction.y = 0.0f;
     direction.Normalize();
     // 移動
     npc->m_target->GetStateMachine()->SetDirection(direction);
@@ -275,9 +278,10 @@ void NPCController::ExitTargetFoodMove(NPCController* npc)
 int NPCController::CheckTargetFoodMove(NPCController* npc)
 {
     Vector3 vec = npc->m_targetPosition - npc->m_target->m_transform.m_position;
+    vec.y = 0.0f;
     float distance = vec.Length();
     // 一定の距離(TODO:この数値を別のところからとってくるようにする)
-    if (distance < 8.0f) {
+    if (distance < 10.0f) {
         return enAIState_PickupFood;
     }
 
@@ -364,6 +368,7 @@ void NPCController::UpdateCoockingSpaceMove(NPCController* npc)
     Vector3 distance = npc->m_targetPosition - npc->m_target->m_transform.m_position;
     // 方向
     Vector3 direction = distance;
+    direction.y = 0.0f;
     direction.Normalize();
     // 移動
     npc->m_target->GetStateMachine()->SetDirection(direction);
@@ -380,8 +385,8 @@ void NPCController::ExitCoockingSpaceMove(NPCController* npc)
 int NPCController::CheckCoockingSpaceMove(NPCController* npc)
 {
     Vector3 distance = npc->m_targetPosition - npc->m_target->m_transform.m_position;
-    if (distance.Length() < 5.0f) {
-        return enAIState_Idle;
+    if (distance.Length() < 60.0f) {
+        return enAIState_Coocking;
     }
     return enAIState_Invalid;
 }
@@ -455,6 +460,7 @@ void NPCController::UpdateDeliverySpaceMove(NPCController* npc)
     Vector3 distance = npc->m_targetPosition - npc->m_target->m_transform.m_position;
     // 方向
     Vector3 direction = distance;
+    direction.y = 0.0f;
     direction.Normalize();
     // 移動
     npc->m_target->GetStateMachine()->SetDirection(direction);
@@ -471,7 +477,7 @@ void NPCController::ExitDeliverySpaceMove(NPCController* npc)
 int NPCController::CheckDeliverySpaceMove(NPCController* npc)
 {
     Vector3 distance = npc->m_targetPosition - npc->m_target->m_transform.m_position;
-    if (distance.Length() < 8.0f) {
+    if (distance.Length() < 190.0f) {
         return enAIState_Idle;
     }
     // 納品が完了した

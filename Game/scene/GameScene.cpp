@@ -124,8 +124,7 @@ namespace
 		return info;
 	}
 
-	// @todo for test
-	static UICanvas* canvasTest = nullptr;
+	constexpr float SPACE_RADIUS = 100.0f;
 }
 
 
@@ -223,7 +222,7 @@ bool GameScene::Start()
 				cookingSpace->m_transform.SetParent(&staticGimmick->m_transform);
 				cookingSpace->m_transform.m_localPosition = info.position;
 				cookingSpace->m_transform.UpdateTransform();
-				cookingSpace->SetRadius(info.radius);
+				cookingSpace->SetRadius(SPACE_RADIUS);
 				m_deleteList.push_back(cookingSpace);
 
 				// 料理インタラクト
@@ -317,7 +316,7 @@ bool GameScene::Start()
 				plateSpace->m_transform.SetParent(&staticGimmick->m_transform);
 				plateSpace->m_transform.m_localPosition = info.position;
 				plateSpace->m_transform.UpdateTransform();
-				plateSpace->SetRadius(info.radius);
+				plateSpace->SetRadius(SPACE_RADIUS);
 				m_deleteList.push_back(plateSpace);
 
 				// 料理インタラクト
@@ -359,7 +358,7 @@ bool GameScene::Start()
 				foodSpace->m_transform.SetParent(&staticGimmick->m_transform);
 				foodSpace->m_transform.m_localPosition = info.position;
 				foodSpace->m_transform.UpdateTransform();
-				foodSpace->SetRadius(info.radius);
+				foodSpace->SetRadius(SPACE_RADIUS);
 				m_deleteList.push_back(foodSpace);
 			}
 			if (j.contains("FoodBoxExportComponent")) {
@@ -387,7 +386,7 @@ bool GameScene::Start()
 				deliverySpace->m_transform.SetParent(&staticGimmick->m_transform);
 				deliverySpace->m_transform.m_localPosition = info.position;
 				deliverySpace->m_transform.UpdateTransform();
-				deliverySpace->SetRadius(info.radius);
+				deliverySpace->SetRadius(SPACE_RADIUS);
 				m_deleteList.push_back(deliverySpace);
 
 				// 料理インタラクト

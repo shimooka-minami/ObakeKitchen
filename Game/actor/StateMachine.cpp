@@ -95,6 +95,8 @@ IState* StateMachine::GetChangeState() const
 		}
 		if (m_isDash) {
 			return nullptr;
+		} else {
+			return m_stateList[enPlayerHaveFood];
 		}
 	}
 

@@ -22,7 +22,7 @@ bool CoockingSpace::Start()
 {
 	// 丸い判定を作る
 	m_ghostBody = std::make_unique<SphereGhostBody>();
-	m_ghostBody->Create(this, m_transform.m_position, 10.0f/*m_radius*/, enCollisionType_CookingSpace);	// @todo for サイズはradiusに変更予定
+	m_ghostBody->Create(this, m_transform.m_position, m_radius, enCollisionType_CookingSpace);
 	UpdateTransform();
 
 	// 初期化完了

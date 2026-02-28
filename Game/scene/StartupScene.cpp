@@ -35,7 +35,7 @@ namespace
 	};
 	static const StartupInformation bootInfoList[] = {
 		StartupInformation("Assets/modelData/title/notitle.dds", 2.5f, 0.5f, enSoundKind_None),
-		StartupInformation("Assets/modelData/title/attension.dds", 2.5f, 0.5f, enSoundKind_None),
+		//StartupInformation("Assets/modelData/title/attension.dds", 2.5f, 0.5f, enSoundKind_None),
 		StartupInformation("Assets/modelData/title/kawahara.dds", 2.5f, 0.5f, enSoundKind_BootA),
 		StartupInformation("Assets/modelData/title/kbc_games.dds", 2.5f, 0.5f, enSoundKind_BootB),
 	};

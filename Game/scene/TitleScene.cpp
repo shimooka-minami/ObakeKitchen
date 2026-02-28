@@ -306,9 +306,9 @@ bool TitleSelectMenu::Start()
 		m_guideWard->PlayAnimation();
 	}
 	
-	//// 設定
+	//// 遊び方
 	m_settingWard = m_uiCanvas->CreateUI<UIIcon>(3);
-	m_settingWard->Initialize("Assets/modelData/menu/settei.dds", 300.0f, 55.0f);
+	m_settingWard->Initialize("Assets/modelData/menu/guide.dds", 300.0f, 55.0f);
 	m_settingWard->m_transform.m_localPosition = Vector3(-450.0f, -100.0f, 0.0f);
 	//// アニメーション
 	{
@@ -389,12 +389,12 @@ void TitleSelectMenu::Update()
 	// 下線の座標を変える
 	m_sen->m_transform.m_localPosition = m_senPosition + (Vector3(0.0f, -100.f, 0.0f) * m_currentSelectIndex);
 	// 羽ペンの座標を変える
-	float hanePenPosXList[] = { -250.0f,-285.0f,-350.0f,-325.0f };
+	float hanePenPosXList[] = { -250.0f,-285.0f,-325.0f,-325.0f };
 	m_hanePen->m_transform.m_localPosition.x = hanePenPosXList[m_currentSelectIndex];
 	m_hanePen->m_transform.m_localPosition.y = 120.0f +(-100.0f * m_currentSelectIndex);
 
 	// 下線の大きさを文字の大きさに変える
-	float senScaleList[] = { 1.4f, 1.1f, 0.6f, 0.8f };
+	float senScaleList[] = { 1.4f, 1.1f, 0.8f, 0.8f };
 	m_sen->m_transform.m_localScale = Vector3(senScaleList[m_currentSelectIndex], 1.0f, 1.0f);
 
 	if (g_pad[0]->IsTrigger(enButtonA)) {
@@ -424,7 +424,7 @@ void TitleSelectMenu::Update()
 			m_guideWard->AddAnimation(Hash32("guideWardColorAnimation"), std::move(colorAnimation));
 			m_guideWard->PlayAnimation();
 		}
-		// 文字　設定
+		// 文字　遊び方
 		{
 			auto colorAnimation = std::make_unique<UIColorAnimation>();
 			colorAnimation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 0.0f), 1.0f, EasingType::Linear, LoopMode::Once);
@@ -510,10 +510,10 @@ bool TitleSelectMenu::CanChange(int& request)
 			request = enTitleMenuType_Cotrol;
 			return true;
 		}
-		case enSelectMenuType_Setting:
+		case enSelectMenuType_PlayGuide:
 		{
-			// おばけの性格を変更できる
-			request = enTitleMenuType_Setting;
+			// 遊び方がみれる
+			request = enTitleMenuType_Guide;
 			return true;
 		}
 		case enSelectMenuType_End:
@@ -764,35 +764,80 @@ bool TitleControlGuide::CanChange(int& request)
 /**************************************************/
 
 
-TitleSetting::TitleSetting()
+TitlePlayGuide::TitlePlayGuide()
 {
 }
 
-TitleSetting::~TitleSetting()
+TitlePlayGuide::~TitlePlayGuide()
 {
 }
 
-bool TitleSetting::Start()
+bool TitlePlayGuide::Start()
 {
 	m_uiCanvas = std::make_unique<UICanvas>();
-	// npcのタイプ設定
-	auto* controlGuide = m_uiCanvas->CreateUI<UIIcon>(0);
-	controlGuide->Initialize("Assets/modelData/menu/seikaku.dds", 1700.0f, 1050.0f);
-	controlGuide->m_transform.m_localPosition = Vector3::Zero;
 
-	//npc
-	for (int i = 0; i < NPC_TYPE_NUM; i++)
+	// 遊び方 背景
+	auto* playGuide = m_uiCanvas->CreateUI<UIIcon>(1);
+	playGuide->Initialize("Assets/modelData/menu/playGuide.dds", 1700.0f, 1050.0f);
+	playGuide->m_transform.m_localPosition = Vector3::Zero;
+
+	// 遊び方1
+	auto* guid1Icon = m_uiCanvas->CreateUI<UIIcon>(Hash32("Guid1"));
+	guid1Icon->m_transform.m_localPosition = Vector3(180.0f, 0.0f, 0.0f);
+	guid1Icon->Initialize("Assets/modelData/menu/guide/guide1.dds", 700.0f, 700.0f);
+	guid1Icon->isDraw = true;
 	{
-		// おばけ
-		m_npcTypeObake[i] = m_uiCanvas->CreateUI<UIIcon>(1);
-		m_npcTypeObake[i]->Initialize(titleNPCTypeSpriteInfoList[i].typePath.c_str(), titleNPCTypeSpriteInfoList[i].width, titleNPCTypeSpriteInfoList[i].hight);
-		m_npcTypeObake[i]->m_transform.m_localPosition = Vector3(titleNPCTypeSpriteInfoList[i].npcPosition);
-
-		// 性格
-		m_npcTypeIcon[i] = m_uiCanvas->CreateUI<UIIcon>(2);
-		m_npcTypeIcon[i]->Initialize(titleNPCIconSpriteInfoList[i].npcIconPath.c_str(), titleNPCIconSpriteInfoList[i].width, titleNPCIconSpriteInfoList[i].hight);
-		m_npcTypeIcon[i]->m_transform.m_localPosition = Vector3(titleNPCIconSpriteInfoList[i].npcIconPosition);
+		auto animation = std::make_unique<UIColorAnimation>();
+		animation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4::White, 1.0f, EasingType::EaseOut, LoopMode::Once);
+		guid1Icon->AddAnimation(Hash32("Guid1ColorAnimation"), std::move(animation));
+		guid1Icon->PlayAnimation();
 	}
+	// 遊び方2
+	auto* guid2Icon = m_uiCanvas->CreateUI<UIIcon>(Hash32("Guid2"));
+	guid2Icon->m_transform.m_localPosition = Vector3(180.0f, 0.0f, 0.0f);
+	guid2Icon->Initialize("Assets/modelData/menu/guide/guide2.dds", 700.0f, 700.0f);
+	guid2Icon->isDraw = true;
+	{
+		auto animation = std::make_unique<UIColorAnimation>();
+		animation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4::White, 1.0f, EasingType::EaseOut, LoopMode::Once);
+		guid2Icon->AddAnimation(Hash32("Guid2ColorAnimation"), std::move(animation));
+	}
+	// 遊び方3
+	auto* guid3Icon = m_uiCanvas->CreateUI<UIIcon>(Hash32("Guid3"));
+	guid3Icon->m_transform.m_localPosition = Vector3(180.0f, 0.0f, 0.0f);
+	guid3Icon->Initialize("Assets/modelData/menu/guide/guide3.dds", 700.0f, 700.0f);
+	guid3Icon->isDraw = true;
+	{
+		auto animation = std::make_unique<UIColorAnimation>();
+		animation->SetParameter(Vector4(1.0f, 1.0f, 1.0f, 0.0f), Vector4::White, 1.0f, EasingType::EaseOut, LoopMode::Once);
+		guid3Icon->AddAnimation(Hash32("Guid3ColorAnimation"), std::move(animation));
+	}
+
+	//m_uiCanvas->FindUI<UIIcon>(Hash32("Guid0"));
+
+	// 右矢印
+	auto* arrowIcon = m_uiCanvas->CreateUI<UIIcon>(Hash32("RightArrow"));
+	arrowIcon->m_transform.m_localPosition = Vector3(680.0f, -70.0f, 0.0f);
+	arrowIcon->Initialize("Assets/modelData/menu/guide/arrow.dds", 70.0f, 70.0f);
+	{
+		auto animation = std::make_unique<UITranslateAniamtion>();
+		animation->SetParameter(Vector3(680.0f, -70.0f, 0.0f), Vector3(710.0f, -70.0f, 0.0f), 0.35f, EasingType::EaseOut, LoopMode::PingPong);
+		arrowIcon->AddAnimation(Hash32("GuidOffsetAnimation"), std::move(animation));
+		arrowIcon->PlayAnimation();
+	}
+
+	arrowIcon = m_uiCanvas->CreateUI<UIIcon>(Hash32("LeftArrow"));
+	arrowIcon->m_transform.m_localPosition = Vector3(680.0f, -70.0f, 0.0f);
+	arrowIcon->Initialize("Assets/modelData/menu/guide/arrow.dds", 70.0f, 70.0f);
+	arrowIcon->m_transform.m_localRotation.SetRotationDegZ(180.0f);
+	{
+		auto animation = std::make_unique<UITranslateAniamtion>();
+		animation->SetParameter(Vector3(-310.0f, -70.0f, 0.0f), Vector3(-340.0f, -70.0f, 0.0f), 0.35f, EasingType::EaseOut, LoopMode::PingPong);
+		arrowIcon->AddAnimation(Hash32("GuidOffsetAnimation"), std::move(animation));
+		arrowIcon->PlayAnimation();
+	}
+
+
 	// もどる
 	auto* m_backObake = m_uiCanvas->CreateUI<UIIcon>(3);
 	m_backObake->Initialize("Assets/modelData/menu/back_obake.dds", 250.0f, 250.0f);
@@ -801,66 +846,42 @@ bool TitleSetting::Start()
 	return true;
 }
 
-void TitleSetting::Update()
+void TitlePlayGuide::Update()
 {
-	int npcType = m_npcTypeIndex;
+	static const uint32_t guidIconId[] = { Hash32("Guid1"), Hash32("Guid2"), Hash32("Guid3")};
+	const int maxguidIconIdIndex = ARRAYSIZE(guidIconId) - 1;
 
-	if (g_pad[0]->IsTrigger(enButtonRight))
-	{
-		m_isNPCConected[m_npcTypeIndex] = false;
-		npcType++;
-		if (npcType >= NPC_TYPE_NUM) {
-			npcType = NPC_TYPE_NUM - 1;
+	int oldGuidIndex = m_guidIndex;
+	if (g_pad[0]->IsTrigger(enButtonLeft)) {
+		m_guidIndex--;
+		if (m_guidIndex < 0) {
+			m_guidIndex = 0;
 		}
-		m_isNPCConected[npcType] = true;
 	}
-	if (g_pad[0]->IsTrigger(enButtonLeft))
+	else if (g_pad[0]->IsTrigger(enButtonRight))
 	{
-		m_isNPCConected[m_npcTypeIndex] = false;
-		npcType--;
-		if (npcType <= 0) {
-			npcType = 0;
-		}
-		m_isNPCConected[npcType] = true;
-	}
-	m_npcTypeIndex = npcType;
-	//SaveData::GetInstance()->SetContolerConected(0, m_isNPCConected[0]);
-	
-
-	for (int i = 0; i < NPC_TYPE_NUM; i++)
-	{
-		if (m_isNPCConected[i])
-		{
-			// おばけの手が上がる
-			m_npcTypeObake[i]->Initialize(titleNPCTypeSpriteInfoList[i].selectedTypePath.c_str(), titleNPCTypeSpriteInfoList[i].width, titleNPCTypeSpriteInfoList[i].hight);
-			m_npcTypeObake[i]->m_transform.m_localPosition = Vector3(titleNPCTypeSpriteInfoList[i].npcPosition);
-		}
-		else {
-			// おばけの手がさがる
-			m_npcTypeObake[i]->Initialize(titleNPCTypeSpriteInfoList[i].typePath.c_str(), titleNPCTypeSpriteInfoList[i].width, titleNPCTypeSpriteInfoList[i].hight);
-			m_npcTypeObake[i]->m_transform.m_localPosition = Vector3(titleNPCTypeSpriteInfoList[i].npcPosition);
+		m_guidIndex++;
+		if (m_guidIndex >= maxguidIconIdIndex) {
+			m_guidIndex = maxguidIconIdIndex;
 		}
 	}
 
-	// メニュー選択
-	if (g_pad[0]->IsTrigger(enButtonUp))
-	{
-		--m_npcTypeIndex;
-		// 最小値
-		if (m_npcTypeIndex < enNPCType_kind)
-		{
-			m_npcTypeIndex = enNPCType_kind; //範囲外にならないように調整
-		}
+	if (oldGuidIndex != m_guidIndex) {
+
+		auto* icon = m_uiCanvas->FindUI<UIIcon>(guidIconId[oldGuidIndex]);
+		icon->isDraw = false;
+
+		icon = m_uiCanvas->FindUI<UIIcon>(guidIconId[m_guidIndex]);
+		icon->isDraw = true;
+		icon->ResetAnimation();
+		icon->PlayAnimation();
 	}
-	else if (g_pad[0]->IsTrigger(enButtonDown))
-	{
-		++m_npcTypeIndex;
-		// 最大値
-		if (m_npcTypeIndex >= enNPCType_Max)
-		{
-			m_npcTypeIndex = enNPCType_Max - 1; //範囲外にならないように調整
-		}
-	}
+
+	auto* rightArrowIcon = m_uiCanvas->FindUI<UIIcon>(Hash32("RightArrow"));
+	rightArrowIcon->isDraw = m_guidIndex < maxguidIconIdIndex;
+	auto* leftArrowIcon = m_uiCanvas->FindUI<UIIcon>(Hash32("LeftArrow"));
+	leftArrowIcon->isDraw = m_guidIndex != 0;
+
 
 	if (!m_isBack)
 	{
@@ -872,12 +893,12 @@ void TitleSetting::Update()
 	m_uiCanvas->Update();
 }
 
-void TitleSetting::Render(RenderContext& rc)
+void TitlePlayGuide::Render(RenderContext& rc)
 {
 	m_uiCanvas->Render(rc);
 }
 
-bool TitleSetting::CanChange(int& request)
+bool TitlePlayGuide::CanChange(int& request)
 {
 
 	if (m_isBack) {
@@ -1340,9 +1361,9 @@ void TitleScene::ChangeTitleMenu()
 		titleMenu = new TitleControlGuide();
 		break;
 	}
-	case enTitleMenuType_Setting:
+	case enTitleMenuType_Guide:
 	{
-		titleMenu = new TitleSetting();
+		titleMenu = new TitlePlayGuide();
 		break;
 	}
 	default:

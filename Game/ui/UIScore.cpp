@@ -66,11 +66,11 @@ bool UIScore::Start()
 
 void UIScore::Update()
 {
-	// @todo for play
-	if (g_pad[0]->IsTrigger(enButtonY))
-	{
-		m_requestAddScore = 100;
-	}
+	//// @todo for play
+	//if (g_pad[0]->IsTrigger(enButtonY))
+	//{
+	//	m_requestAddScore = 100;
+	//}
 
 	if (m_requestAddScore != 0) {
 		m_uiAddScoreDigit->isDraw = true;

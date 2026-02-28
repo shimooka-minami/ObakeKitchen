@@ -27,7 +27,7 @@ enum EnTitleMenuType
 	enTitleMenuType_Play,
 	enTitleMenuType_StartTab,
 	enTitleMenuType_Cotrol,
-	enTitleMenuType_Setting,
+	enTitleMenuType_Guide,
 	enTitleMenuType_Num,
 };
 
@@ -74,7 +74,7 @@ private:
 	{
 		enSelectMenuType_GameStart,
 		enSelectMenuType_Operation,
-		enSelectMenuType_Setting,
+		enSelectMenuType_PlayGuide,
 		enSelectMenuType_End,
 		enSelectMenuType_Num,
 	};
@@ -155,33 +155,19 @@ public:
 };
 
 
-/** 設定画面 */
-class TitleSetting : public ITitleMenu
+/** 遊び方 */
+class TitlePlayGuide : public ITitleMenu
 {
-	enum EnNPCType
-	{
-		enNPCType_kind,
-		enNPCType_mean,
-		enNPCType_Random,
-		enNPCType_Max,
-	};
-
 private:
 	std::unique_ptr<UICanvas> m_uiCanvas;
-	UIIcon* m_npcTypeObake[NPC_TYPE_NUM];
-	UIIcon* m_npcTypeIcon[NPC_TYPE_NUM];
-	UIIcon* m_backObake;
 
-	int m_npcTypeIndex = enNPCType_kind;
+	int32_t m_guidIndex = 0;
 
-	bool m_isNPCConected[NPC_TYPE_NUM] = {true,false,false};
 	bool m_isBack = false;
-	bool m_isChange = false;
-
 
 public:
-	TitleSetting();
-	~TitleSetting();
+	TitlePlayGuide();
+	~TitlePlayGuide();
 
 	bool Start() override;
 	void Update() override;

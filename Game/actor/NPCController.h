@@ -52,6 +52,7 @@ private:
 		enAIState_PickupFood,			// 対象となる食べ物を拾う
 		enAIState_CoockingSpaceMove,	// 調理場へ移動	
 		enAIState_DeliverySpaceMove,	// 納品場へ移動
+		enAIState_Coocking,				// 料理する
 
 		enAIState_Max,					// 最大数
 		enAIState_Invalid = -1,			// 無効値
