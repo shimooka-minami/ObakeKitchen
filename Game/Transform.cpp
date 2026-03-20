@@ -72,7 +72,7 @@ void Transform::UpdateWorldMatrix()
 	m_worldMatrix.Multiply(world, pos);
 
 	//子も更新
-	for (Transform* child : m_children)
+	for (auto child : m_children)
 	{
 		child->UpdateTransform();
 	}
@@ -104,6 +104,11 @@ void Transform::Release()
 
 void Transform::RemoveChild(Transform* t)
 {
+	if (m_children.size() <= 0)
+	{
+		return;
+	}
+
 	//イテレータ生成
 	std::vector<Transform*>::iterator it = m_children.begin();
 	//vectorを回す

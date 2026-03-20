@@ -12,13 +12,20 @@
 
 #include "score/Score.h"
 
+namespace
+{
+	const float RESULT_SCORE_STAR1 = 200.0f;
+	const float RESULT_SCORE_STAR2 = 400.0f;
+	const float RESULT_SCORE_STAR3 = 600.0f;
+}
+
 
 ResultScene::ResultScene()
 {
 	if (!Score::IsAvailable()) {
 		Score::CreateInstance();
 		// @todo for test
-		Score::GetInstance()->AddScore(1500);
+		Score::GetInstance()->AddScore(600);
 	}
 }
 
@@ -118,7 +125,7 @@ bool ResultScene::Start()
 	// アニメーション
 	{
 		const int score = Score::GetInstance()->GetScore();
-		if (score >= 500) {
+		if (score >= RESULT_SCORE_STAR1) {
 			m_playScheduler->AddTimer(2.3f, [&]()
 				{
 					m_starEffectList[0]->isDraw = true;
@@ -137,7 +144,7 @@ bool ResultScene::Start()
 	// 星のアニメーション
 	{
 		const int score = Score::GetInstance()->GetScore();
-		if (score >= 500) {
+		if (score >= RESULT_SCORE_STAR1) {
 			m_playScheduler->AddTimer(0.6f, [&]()
 				{
 					auto scaleAnimation = std::make_unique<UIScaleAnimation>();
@@ -165,7 +172,7 @@ bool ResultScene::Start()
 	// アニメーション
 	{
 		const int score = Score::GetInstance()->GetScore();
-		if (score >= 1000) {
+		if (score >= RESULT_SCORE_STAR2) {
 			m_playScheduler->AddTimer(2.3f, [&]()
 				{
 					m_starEffectList[1]->isDraw = true;
@@ -184,7 +191,7 @@ bool ResultScene::Start()
 	// 星のアニメーション
 	{
 		const int score = Score::GetInstance()->GetScore();
-		if (score >= 1000) {
+		if (score >= RESULT_SCORE_STAR2) {
 			m_playScheduler->AddTimer(1.2f, [&]()
 				{
 					auto scaleAnimation = std::make_unique<UIScaleAnimation>();
@@ -212,7 +219,7 @@ bool ResultScene::Start()
 	// アニメーション
 	{
 		const int score = Score::GetInstance()->GetScore();
-		if (score >= 1500) {
+		if (score >= RESULT_SCORE_STAR3) {
 			m_playScheduler->AddTimer(2.3f, [&]()
 				{
 					m_starEffectList[2]->isDraw = true;
@@ -231,7 +238,7 @@ bool ResultScene::Start()
 	// 星のアニメーション
 	{
 		const int score = Score::GetInstance()->GetScore();
-		if (score >= 1500) {
+		if (score >= RESULT_SCORE_STAR3) {
 			m_playScheduler->AddTimer(1.8f, [&]()
 				{
 					auto scaleAnimation = std::make_unique<UIScaleAnimation>();

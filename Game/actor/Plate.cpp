@@ -100,10 +100,15 @@ void Plate::Put(const Vector3& direction)
 
 void Plate::AttachFood(FoodPlate* food)
 {
-	////すでに親がいるなら載せない
-	//if (food->m_transform.HasParent()) {
-	//	return;
-	//}
+	// nullチェック
+	if (!food) {
+		return;
+	}
+
+	// すでに親がいるなら載せない
+	if (food->m_transform.HasParent()) {
+		return;
+	}
 
 	// 親子関係を結ぶ
 	food->m_transform.SetParent(&m_transform);
@@ -219,7 +224,10 @@ void FoodPlate::SetPosition(const Vector3& position)
 	m_transform.m_localPosition = position;
 	m_transform.UpdateTransform();
 	m_characterController.SetPosition(m_transform.m_position);
-	m_ghostBody->SetPosition(m_transform.m_position);
+	if (m_ghostBody == nullptr)
+	{
+		m_ghostBody->SetPosition(m_transform.m_position);
+	}
 }
 
 

@@ -207,14 +207,15 @@ void HaveFoodState::Enter()
 	Player* player = m_owner->GetOwner();
 	// 食べ物の情報を取得
 	FoodPlate* targetFood = m_owner->GetTargetFood();
-	// 食べ物をプレイヤーの子にする
-	targetFood->m_transform.SetParent(&player->m_transform);
-	// 食べ物をプレイヤーの前に配置 (持っている表現)
-	Vector3 targetFoodPosition;
-	targetFoodPosition = Vector3::Front * 25.0f;
-	targetFoodPosition.y += 30.0f;
-	targetFood->SetPosition(targetFoodPosition);
-
+	if (targetFood) {
+		// 食べ物をプレイヤーの子にする
+		targetFood->m_transform.SetParent(&player->m_transform);
+		// 食べ物をプレイヤーの前に配置 (持っている表現)
+		Vector3 targetFoodPosition;
+		targetFoodPosition = Vector3::Front * 25.0f;
+		targetFoodPosition.y += 30.0f;
+		targetFood->SetPosition(targetFoodPosition);
+	}
 	//// test
 	//targetFood->SetPosition(Vector3(0, m_owner->GetPosition().y * 30.0f, 0));
 

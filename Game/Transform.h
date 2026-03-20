@@ -65,10 +65,14 @@ public:
 	void SetParent(Transform* p)
 	{
 		if (m_parent) {
-			return;
+			//return;
+			m_parent->RemoveChild(this); // 既存の親から削除
 		}
 		m_parent = p;
-		m_parent->AddChild(this);
+		if (m_parent)
+		{
+			m_parent->AddChild(this);
+		}
 	}
 
 	/** 親トランスフォームがあるか */

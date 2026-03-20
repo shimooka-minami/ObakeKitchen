@@ -16,7 +16,7 @@ class UITimer;
 class UIPlayerNumber;
 class UIInteractIcon;
 
-class UIInteractOnPlateIcon; // @todo for test
+class UIInteractOnPlateIcon; 
 
 class CoockingSpace;
 class DeliverySpace;

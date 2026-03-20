@@ -243,6 +243,10 @@ bool CollisionHitManager::UpdateHitFoodPlate(CollisionPair& pair)
 			return false;
 		}
 
+		if (!player->GetStateMachine()->IsActionButtonA()) {
+			return false;
+		}
+
 		// 近くにある（プレイヤーと皿が接触しているときの処理）
 		player->GetStateMachine()->SetNearFood(true);
 
@@ -278,9 +282,6 @@ bool CollisionHitManager::UpdateHitPlateAndFood(CollisionPair& pair)
 		|| food == nullptr) {
 		return false;
 	}
-
-	//ここまで来たら当たったということ
-	OutputDebugStringA("皿と食材が衝突しました！！\n");
 
 	// そのさらに既に何かが載っているなら、新しい料理は載せない
 	if (plate->IsFull()) {
@@ -372,6 +373,9 @@ bool CollisionHitManager::UpdateHitDeliverySpace(CollisionPair& pair)
 	FoodPlate* targetFood = player->GetStateMachine()->GetTargetFood();
 	if (targetFood == nullptr)
 	{
+		return false;
+	}
+	if (!player->GetStateMachine()->IsActionButtonA()) {
 		return false;
 	}
 	if (targetFood->IsCoocked())
